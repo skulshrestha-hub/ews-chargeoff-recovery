@@ -249,6 +249,50 @@
   }
   .tab.on { color:var(--sofi-blue); }
   .tab-i { font-size:20px; }
+
+  .req-container {
+    max-width:1200px; width:100%;
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px; padding:28px 24px;
+  }
+  .req-heading {
+    font-size:17px; font-weight:700; color:#fff; margin-bottom:16px;
+    padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .req-table-wrap { overflow-x:auto; }
+  .req-table {
+    width:100%; border-collapse:collapse; font-size:13px;
+  }
+  .req-table th {
+    text-align:left; padding:10px 12px; font-size:11px; font-weight:700;
+    text-transform:uppercase; letter-spacing:1px; color:#9B9BB0;
+    border-bottom:2px solid rgba(255,255,255,0.1); white-space:nowrap;
+  }
+  .req-table td {
+    padding:12px 12px; color:#ccc; border-bottom:1px solid rgba(255,255,255,0.05);
+    vertical-align:top; line-height:1.5;
+  }
+  .req-table td:first-child {
+    font-weight:700; color:var(--sofi-blue); width:36px; text-align:center;
+  }
+  .req-table td:nth-child(3) { color:#fff; font-weight:500; min-width:220px; }
+  .req-table tbody tr:hover { background:rgba(255,255,255,0.03); }
+
+  .cat-pill {
+    display:inline-block; font-size:11px; font-weight:700; padding:3px 10px;
+    border-radius:10px; white-space:nowrap;
+  }
+  .cat-vis { background:rgba(0,162,199,0.15); color:var(--sofi-blue); }
+  .cat-pay { background:rgba(46,125,50,0.15); color:#66BB6A; }
+  .cat-conf { background:rgba(124,77,255,0.15); color:#B39DDB; }
+  .cat-ews { background:rgba(211,47,47,0.15); color:#EF5350; }
+  .cat-notif { background:rgba(245,124,0,0.15); color:var(--amber); }
+  .cat-ops { background:rgba(255,255,255,0.1); color:#9B9BB0; }
+  .cat-comm { background:rgba(0,162,199,0.1); color:#4DD0E1; }
+  .cat-audit { background:rgba(255,255,255,0.06); color:#78909C; }
+  .cat-intake { background:rgba(124,77,255,0.15); color:#B39DDB; }
+  .cat-invest { background:rgba(245,124,0,0.15); color:var(--amber); }
+  .cat-rights { background:rgba(46,125,50,0.15); color:#66BB6A; }
 </style>
 </head>
 <body>
@@ -260,12 +304,76 @@
 </div>
 
 <div class="toc">
+  <a href="#requirements">MVP Requirements</a>
   <a href="#logged-in">Logged-In (App)</a>
+  <a href="#phone">Pay by Phone</a>
   <a href="#entry-paths">Guest Portal Entry Paths</a>
   <a href="#guest">Logged-Out (Guest)</a>
   <a href="#dispute">Dispute</a>
   <a href="#notifications">Pre-Charge-Off Notifications</a>
 </div>
+
+<!-- ============================================ -->
+<!-- MVP REQUIREMENTS                              -->
+<!-- ============================================ -->
+
+<div class="section-label" id="requirements">
+  <span class="section-badge logged-in">Requirements</span>
+  <div class="section-title">MVP User Stories & Requirements</div>
+  <div class="section-desc">MVP is split into two milestones. <strong style="color:#fff;">Milestone 1 (Healing):</strong> members can see and pay what they owe. <strong style="color:#fff;">Milestone 2 (Dispute):</strong> members can challenge inaccurate data (required by FCRA before we furnish to EWS). Both must ship by July 31, 2026.</div>
+</div>
+
+<div class="req-container">
+  <h3 class="req-heading">Milestone 1: Account Healing / Repayment</h3>
+  <div class="req-table-wrap">
+    <table class="req-table">
+      <thead>
+        <tr><th>#</th><th>Category</th><th>Requirement</th><th>User Story</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><span class="cat-pill cat-vis">Balance Visibility</span></td><td>Member can view charged-off balance (in-app)</td><td>As a member, I want to see how much I owe so I can decide whether to repay. Balance card in Banking tab shows amount, closure date, and EWS status.</td></tr>
+        <tr><td>2</td><td><span class="cat-pill cat-vis">Balance Visibility</span></td><td>Member can view charged-off balance (guest portal)</td><td>As a member without app access, I want to look up what I owe online. sofi.com/pay lookup by reference number + last 4 SSN, or name + DOB + SSN.</td></tr>
+        <tr><td>3</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay full balance via debit card (in-app)</td><td>As a member, I want to pay my charged-off balance so my EWS record is cleared. Stripe debit card payment, full balance only, routed to recovery GL.</td></tr>
+        <tr><td>4</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay full balance via debit card (guest portal)</td><td>As a member without app access, I want to pay online without logging in. Same Stripe payment on sofi.com/pay, email receipt, no login required.</td></tr>
+        <tr><td>5</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay via phone (agent-assisted)</td><td>As a member, I want to pay over the phone if I can't use the app or website. Agent collects debit card, processes via agent tool, same Stripe backend.</td></tr>
+        <tr><td>6</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay via ACH push (guest portal / in-app)</td><td>As a member, I want to pay via ACH from my external bank. ACH push from external bank accepted, routed to recovery GL.</td></tr>
+        <tr><td>7</td><td><span class="cat-pill cat-conf">Confirmation</span></td><td>Payment confirmation and receipt (all channels)</td><td>As a member, I want a receipt confirming my payment and what happens next. On-screen confirmation + email with amount, date, confirmation number, next steps.</td></tr>
+        <tr><td>8</td><td><span class="cat-pill cat-ews">EWS Reporting</span></td><td>EWS record updated after payment (backend)</td><td>As SoFi, when a member repays, we must update EWS within 10 business days. Healed status submitted via batch file or API.</td></tr>
+        <tr><td>9</td><td><span class="cat-pill cat-notif">Notification</span></td><td>Member notified when EWS record is cleared (email)</td><td>As a member, I want to know when my EWS record has been cleared. Email sent after EWS confirms update.</td></tr>
+        <tr><td>10</td><td><span class="cat-pill cat-ops">Ops Tooling</span></td><td>Agent can look up balance and process payment (internal)</td><td>As an ops agent, I want to look up a member's charged-off account and process payment on their behalf. Agent searches by member identifier, views balance, initiates payment.</td></tr>
+        <tr><td>11</td><td><span class="cat-pill cat-comm">Communications</span></td><td>Pre-charge-off emails include EWS language (email)</td><td>As SoFi, pre-charge-off emails must warn members about EWS consequences. All 57-day reminders mention EWS consequences and sofi.com/pay.</td></tr>
+        <tr><td>12</td><td><span class="cat-pill cat-comm">Communications</span></td><td>Charge-off notification includes sofi.com/pay (email)</td><td>As SoFi, the charge-off notification must tell members how to pay. Day 57 email includes payment URL, dispute phone/mail info.</td></tr>
+        <tr><td>13</td><td><span class="cat-pill cat-comm">Communications</span></td><td>Adverse action notices include EWS contact (letter)</td><td>As SoFi, adverse action notices must include EWS contact info per FCRA Section 615(a).</td></tr>
+        <tr><td>14</td><td><span class="cat-pill cat-ops">Ops Readiness</span></td><td>Agent training and SOPs (internal)</td><td>As SoFi, agents must be trained on healing flows before launch. Agents trained on payment processing and identity verification.</td></tr>
+        <tr><td>15</td><td><span class="cat-pill cat-audit">Audit</span></td><td>Audit trail for all healing actions (internal)</td><td>As SoFi, all healing actions must be logged for compliance. All actions logged and auditable.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="req-heading" style="margin-top:32px;">Milestone 2: Data Dispute</h3>
+  <div class="req-table-wrap">
+    <table class="req-table">
+      <thead>
+        <tr><th>#</th><th>Category</th><th>Requirement</th><th>User Story</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><span class="cat-pill cat-intake">Dispute Intake</span></td><td>Member can file dispute by phone (phone)</td><td>As a member, I want to dispute data SoFi reported to EWS that I believe is wrong. Agent captures disputed data element, reason, supporting docs. Case number provided.</td></tr>
+        <tr><td>2</td><td><span class="cat-pill cat-intake">Dispute Intake</span></td><td>Member can file dispute by mail (mail)</td><td>As a member, I want to submit a written dispute. Written dispute accepted at SoFi Bank, N.A., 2750 East Cottonwood Parkway #300, Cottonwood Heights, UT 84121.</td></tr>
+        <tr><td>3</td><td><span class="cat-pill cat-intake">Dispute Intake</span></td><td>Dispute information discoverable (all channels)</td><td>As a member, I want to learn about my right to dispute from the app or portal. Dispute phone number and mailing address accessible from in-app, guest portal, help center, and agent scripts.</td></tr>
+        <tr><td>4</td><td><span class="cat-pill cat-invest">Investigation</span></td><td>Investigation completed within 30 days (ops)</td><td>As SoFi, we must investigate and resolve disputes within FCRA timelines. Member notified of outcome. Corrected records propagated if dispute upheld. 45 days if additional info provided.</td></tr>
+        <tr><td>5</td><td><span class="cat-pill cat-invest">Investigation</span></td><td>Frivolous dispute determination (ops)</td><td>As SoFi, if a dispute is frivolous, we must notify the member within 5 business days with reasons and missing info.</td></tr>
+        <tr><td>6</td><td><span class="cat-pill cat-invest">Investigation</span></td><td>Indirect dispute handling (ops)</td><td>As SoFi, when we receive an indirect dispute via EWS/CRA, we must investigate, respond with results, and propagate corrections to all nationwide CRAs.</td></tr>
+        <tr><td>7</td><td><span class="cat-pill cat-ews">EWS Reporting</span></td><td>Dispute flag set in EWS contribution data (backend)</td><td>As SoFi, disputed records must be flagged in EWS data during investigation. "Consumer Disputes Debt" indicator set during investigation, removed on resolution.</td></tr>
+        <tr><td>8</td><td><span class="cat-pill cat-ews">EWS Reporting</span></td><td>Corrected data submitted to EWS and all CRAs (backend)</td><td>As SoFi, upheld disputes must be corrected with EWS and all CRAs within required timeframe.</td></tr>
+        <tr><td>9</td><td><span class="cat-pill cat-rights">Member Rights</span></td><td>Consumer statement right communicated (ops)</td><td>As a member, if my dispute is denied, I want to know why and my right to add a personal statement to the record.</td></tr>
+        <tr><td>10</td><td><span class="cat-pill cat-ops">Ops Readiness</span></td><td>Agent training and SOPs for disputes (internal)</td><td>As SoFi, agents must be trained on dispute intake, categories, and FCRA timelines before launch.</td></tr>
+        <tr><td>11</td><td><span class="cat-pill cat-audit">Audit</span></td><td>Audit trail for all dispute actions (internal)</td><td>As SoFi, all dispute activity (intake, investigation, outcome, notifications) must be logged and auditable.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sep"></div>
 
 <!-- ============================================ -->
 <!-- LOGGED-IN                                     -->
@@ -308,6 +416,7 @@
                 This has been reported to <strong>Early Warning Services (EWS)</strong> and may prevent you from opening bank accounts at other institutions for up to 5 years.
               </div>
               <button class="btn btn-primary">Pay $142.50</button>
+              <button class="btn btn-outline" style="margin-top:6px;gap:8px;">&#128222; Pay by Phone</button>
               <div style="text-align:center;margin-top:8px;">
                 <button class="link">Think this is wrong? Dispute this data</button>
               </div>
@@ -373,6 +482,11 @@
             <strong>After you pay:</strong> Your EWS record will be updated within 10 business days. The charge-off will no longer block you from opening accounts at other banks.
           </div>
           <button class="btn btn-primary" style="margin-top:4px;">Pay $142.50</button>
+          <div style="text-align:center;padding:6px 0 0;">
+            <div style="font-size:12px;color:var(--gray-400);margin-bottom:6px;">or</div>
+            <button class="btn btn-outline" style="gap:8px;">&#128222; Pay by Phone: 1-855-456-7634</button>
+            <div style="font-size:11px;color:var(--gray-500);margin-top:6px;line-height:1.4;">Speak to an agent who can process your payment over the phone. Available Mon to Fri, 8am to 8pm ET.</div>
+          </div>
         </div>
       </div>
     </div></div>
@@ -412,6 +526,130 @@
           </div>
           <button class="btn btn-primary">Done</button>
           <button class="btn btn-outline">Download Receipt</button>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ============================================ -->
+<!-- PAY BY PHONE                                  -->
+<!-- ============================================ -->
+
+<div class="section-label" id="phone">
+  <span class="section-badge notif">Agent-Assisted</span>
+  <div class="section-title">Pay by Phone</div>
+  <div class="section-desc">Member calls 1-855-456-7634. Agent verifies identity, looks up charged-off balance, collects debit card info, and processes payment via the same Stripe backend.</div>
+</div>
+
+<div class="flow-row">
+  <div class="screen-wrap">
+    <div class="screen-title">1. Agent Lookup</div>
+    <div class="screen-desc">Agent verifies member identity and pulls up charged-off account.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">AGENT VIEW</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l"></div>
+        <div class="nav-c">Charge-Off Recovery Tool</div>
+        <div class="nav-r"></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="card">
+            <div class="card-t">Member Lookup</div>
+            <div class="form-g">
+              <label class="form-l">Search by</label>
+              <input class="form-i" type="text" value="SSN last 4 + DOB">
+            </div>
+            <div class="form-row">
+              <div class="form-g"><label class="form-l">Last 4 SSN</label><input class="form-i" type="text" value="7823"></div>
+              <div class="form-g"><label class="form-l">DOB</label><input class="form-i" type="text" value="03/15/1990"></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:4px;">Search</button>
+          </div>
+          <div class="info-box">
+            <strong>Identity verification required.</strong> Confirm member's full name, DOB, and last 4 SSN before proceeding.
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">2. Balance & Payment</div>
+    <div class="screen-desc">Agent reads balance to member, collects debit card over the phone.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">AGENT VIEW</span>
+      <div class="ios-bar"><span class="t">9:42</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l">&#8249;</div>
+        <div class="nav-c">Process Payment</div>
+        <div class="nav-r"></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="card" style="border-left:4px solid var(--red);">
+            <div style="font-size:12px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Charged-Off Account</div>
+            <div class="sum-r"><span class="sum-l">Member</span><span class="sum-v">J*** D*** (...7823)</span></div>
+            <div class="sum-r"><span class="sum-l">Account</span><span class="sum-v">Checking (...7823)</span></div>
+            <div class="sum-r"><span class="sum-l">Closed on</span><span class="sum-v">Jan 15, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Balance owed</span><span class="sum-v" style="color:var(--red);font-size:16px;">$142.50</span></div>
+          </div>
+          <div class="card">
+            <div class="card-t">Collect Debit Card</div>
+            <div class="form-g"><label class="form-l">Card number</label><input class="form-i" type="text" value="4532 **** **** 8821"></div>
+            <div class="form-row">
+              <div class="form-g"><label class="form-l">Expiry</label><input class="form-i" type="text" value="09/27"></div>
+              <div class="form-g"><label class="form-l">CVV</label><input class="form-i" type="text" value="***"></div>
+            </div>
+            <div class="form-g"><label class="form-l">Member email (for receipt)</label><input class="form-i" type="email" value="j***n@email.com"></div>
+            <div class="form-h" style="margin-bottom:12px;">&#128274; PCI-compliant. Processed via Stripe. Credit cards not accepted.</div>
+            <button class="btn btn-primary">Process Payment $142.50</button>
+          </div>
+          <div style="text-align:center;"><button class="link">Member wants to dispute instead</button></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">3. Confirmation</div>
+    <div class="screen-desc">Agent confirms payment to member. Receipt emailed. EWS update queued.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">AGENT VIEW</span>
+      <div class="ios-bar"><span class="t">9:43</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l"></div>
+        <div class="nav-c">Payment Confirmed</div>
+        <div class="nav-r"></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div style="text-align:center;padding:16px 0 4px;">
+            <div class="ok-icon">&#10003;</div>
+            <div style="font-size:20px;font-weight:800;">Payment Processed</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Receipt sent to member's email.</div>
+          </div>
+          <div class="card">
+            <div class="sum-r"><span class="sum-l">Amount</span><span class="sum-v">$142.50</span></div>
+            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 6, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Card</span><span class="sum-v">Debit ending in 8821</span></div>
+            <div class="sum-r"><span class="sum-l">Confirmation #</span><span class="sum-v">EWS-2026-04893</span></div>
+            <div class="sum-r"><span class="sum-l">Receipt sent to</span><span class="sum-v">j***n@email.com</span></div>
+          </div>
+          <div class="card">
+            <div class="card-t">Read to member</div>
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.6;background:var(--gray-100);padding:14px;border-radius:10px;">
+              "Your payment of <strong>$142.50</strong> has been received. Your confirmation number is <strong>EWS-2026-04893</strong>. A receipt has been emailed to you. Your EWS record will be updated within <strong>10 business days</strong>, and you'll receive an email when it's cleared. Is there anything else I can help with?"
+            </div>
+          </div>
+          <div class="info-box">
+            <strong>Next steps:</strong> EWS healing report will be submitted automatically within 10 business days. Member will be notified by email.
+          </div>
+          <button class="btn btn-outline">Log interaction in case management</button>
         </div>
       </div>
     </div></div>
@@ -572,6 +810,11 @@
             <div class="form-g"><label class="form-l">Email for receipt</label><input class="form-i" type="email" placeholder="you@email.com"></div>
             <div class="form-h" style="margin-bottom:12px;">&#128274; Processed securely by Stripe. Credit cards not accepted.</div>
             <button class="btn btn-primary">Pay $142.50</button>
+          </div>
+          <div style="text-align:center;padding:2px 0;">
+            <div style="font-size:12px;color:var(--gray-400);margin-bottom:6px;">or</div>
+            <button class="btn btn-outline" style="gap:8px;">&#128222; Pay by Phone: 1-855-456-7634</button>
+            <div style="font-size:11px;color:var(--gray-500);margin-top:6px;line-height:1.4;">Speak to an agent who can process your payment. Mon to Fri, 8am to 8pm ET.</div>
           </div>
           <div style="text-align:center;"><button class="link">Think this is wrong? Dispute this data</button></div>
         </div>

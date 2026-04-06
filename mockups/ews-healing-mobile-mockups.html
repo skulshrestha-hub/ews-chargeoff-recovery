@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EWS Healing &amp; Dispute - Mobile Mockups</title>
+<title>EWS Healing &amp; Dispute - Logged In &amp; Guest Mockups</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -27,6 +27,7 @@
     --green-border: #A5D6A7;
     --blue-link: #1A73E8;
     --red: #D32F2F;
+    --red-bg: #FFEBEE;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
@@ -42,16 +43,22 @@
     color: var(--black);
   }
 
-  .page-header { text-align:center; max-width:700px; }
+  .page-header { text-align:center; max-width:800px; }
   .page-header h1 { font-size:28px; font-weight:800; color:#fff; margin-bottom:8px; letter-spacing:-0.5px; }
   .page-header p { font-size:14px; color:#9B9BB0; line-height:1.6; }
 
-  .screen-group { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .toc { text-align:center; margin-top:-32px; margin-bottom:-32px; }
+  .toc a { font-size:14px; color:var(--sofi-blue); text-decoration:none; margin:0 12px; font-weight:600; }
+  .toc a:hover { text-decoration:underline; }
+
+  .screen-group { display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; }
   .screen-group-label {
     font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
     color:var(--sofi-blue); padding:6px 18px; border:1px solid rgba(0,162,199,0.35);
     border-radius:20px; background:rgba(0,162,199,0.08);
   }
+  .screen-group-title { font-size:22px; font-weight:800; color:#fff; margin-top:8px; }
+  .screen-group-desc { font-size:14px; color:#9B9BB0; text-align:center; max-width:600px; line-height:1.6; margin-bottom:8px; }
 
   .flow-row { display:flex; gap:44px; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
 
@@ -59,17 +66,13 @@
   .screen-title { font-size:16px; font-weight:700; color:#fff; }
   .screen-desc { font-size:13px; color:#9B9BB0; text-align:center; max-width:340px; line-height:1.5; }
 
-  /* Phone frame */
+  .arrow-connector { display:flex; align-items:center; justify-content:center; color:#9B9BB0; font-size:32px; margin-top:350px; }
+
   .phone {
-    width: 375px;
-    height: 812px;
-    background: var(--bg);
-    border-radius: 44px;
-    overflow: hidden;
+    width: 375px; height: 812px; background: var(--bg);
+    border-radius: 44px; overflow: hidden;
     box-shadow: 0 0 0 2px rgba(255,255,255,0.08), 0 30px 80px rgba(0,0,0,0.5);
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    position: relative; display: flex; flex-direction: column;
   }
   .phone-inner { flex:1; display:flex; flex-direction:column; overflow:hidden; }
 
@@ -78,7 +81,6 @@
     color:#fff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:10px; z-index:20;
   }
 
-  /* iOS status bar */
   .ios-status {
     display:flex; justify-content:space-between; align-items:center;
     padding:14px 24px 0; background:var(--white); height:44px; flex-shrink:0;
@@ -86,7 +88,6 @@
   .ios-status .time { font-size:15px; font-weight:600; color:var(--black); }
   .ios-status .icons { display:flex; gap:5px; align-items:center; font-size:13px; color:var(--black); }
 
-  /* Nav bar - matches SoFi */
   .nav-bar {
     display:flex; align-items:center; padding:6px 20px 14px;
     background:var(--white); position:relative;
@@ -101,7 +102,6 @@
   .nav-icon.profile { border:1.5px solid var(--gray-200); }
   .back-arrow { font-size:22px; font-weight:300; color:var(--black); cursor:pointer; }
 
-  /* Balance hero */
   .balance-hero { background:var(--white); padding:4px 24px 20px; }
   .balance-amount {
     font-size:42px; font-weight:800; color:var(--black); letter-spacing:-2px; line-height:1;
@@ -117,23 +117,19 @@
     font-size:10px; font-weight:700; color:var(--gray-400);
   }
 
-  /* Account rows card */
   .accounts-card {
     background:var(--white); border-radius:16px; margin:12px 16px 0; overflow:hidden;
     box-shadow:0 1px 3px rgba(0,0,0,0.04);
   }
   .acct-row {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 20px;
+    display:flex; align-items:center; justify-content:space-between; padding:18px 20px;
   }
   .acct-row + .acct-row { border-top:1px solid var(--gray-100); }
   .acct-name { font-size:16px; font-weight:600; color:var(--black); }
   .acct-sub { font-size:13px; color:var(--gray-500); margin-top:2px; }
   .acct-amount { font-size:17px; font-weight:700; color:var(--black); text-align:right; }
   .acct-amount.negative { color:var(--red); }
-  .acct-amount-sub { font-size:12px; color:var(--gray-500); text-align:right; margin-top:1px; }
 
-  /* Quick actions */
   .quick-actions {
     display:flex; background:var(--white); border-radius:16px; margin:12px 16px 0;
     box-shadow:0 1px 3px rgba(0,0,0,0.04); overflow:hidden;
@@ -145,28 +141,27 @@
   .qa-item + .qa-item { border-left:1px solid var(--gray-100); }
   .qa-icon { font-size:22px; color:var(--black); }
 
-  /* Alert card (charge-off warning) */
   .alert-card {
     background:var(--white); border-radius:16px; margin:12px 16px 0;
     box-shadow:0 1px 3px rgba(0,0,0,0.04); overflow:hidden;
     border-left:4px solid var(--sofi-blue);
   }
+  .alert-card.urgent { border-left-color: var(--red); }
   .alert-inner { padding:20px 18px; }
   .alert-badge {
     display:inline-flex; align-items:center; gap:6px;
     background:var(--sofi-blue-light); color:var(--sofi-blue); font-size:12px; font-weight:700;
     padding:4px 10px; border-radius:6px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;
   }
+  .alert-badge.urgent { background:var(--red-bg); color:var(--red); }
   .alert-title { font-size:17px; font-weight:700; color:var(--black); margin-bottom:8px; line-height:1.3; }
   .alert-body { font-size:14px; color:var(--gray-700); line-height:1.6; margin-bottom:18px; }
   .alert-body strong { color:var(--black); font-weight:700; }
 
-  /* Buttons */
   .btn-coral {
     display:flex; align-items:center; justify-content:center; width:100%;
     padding:15px; background:var(--sofi-blue); color:#fff; font-size:16px;
-    font-weight:700; border:none; border-radius:28px; cursor:pointer;
-    letter-spacing:-0.2px;
+    font-weight:700; border:none; border-radius:28px; cursor:pointer; letter-spacing:-0.2px;
   }
   .btn-coral:hover { background:var(--sofi-blue-dark); }
   .btn-outline {
@@ -183,1001 +178,770 @@
   }
   .text-link:hover { text-decoration:underline; }
 
-  /* Content area (scrollable) */
   .scroll-content { flex:1; overflow-y:auto; padding:0 0 8px; }
   .content-pad { padding:0 16px; }
   .content-inner { padding:16px; display:flex; flex-direction:column; gap:12px; }
 
-  /* Card (generic white) */
   .card {
     background:var(--white); border-radius:16px; padding:20px;
     box-shadow:0 1px 3px rgba(0,0,0,0.04);
   }
   .card-title { font-size:16px; font-weight:700; color:var(--black); margin-bottom:14px; }
 
-  /* Summary rows */
   .sum-row { display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--gray-100); }
-  .sum-row:last-child { border-bottom:none; }
-  .sum-row .lbl { font-size:14px; color:var(--gray-500); }
-  .sum-row .val { font-size:14px; font-weight:600; color:var(--black); }
-  .sum-row.total { padding-top:14px; }
-  .sum-row.total .lbl { font-size:16px; font-weight:700; color:var(--black); }
-  .sum-row.total .val { font-size:20px; font-weight:800; color:var(--black); }
+  .sum-row:last-child { border-bottom:none; font-weight:700; }
+  .sum-label { font-size:14px; color:var(--gray-700); }
+  .sum-value { font-size:14px; font-weight:600; color:var(--black); }
 
-  /* Form fields */
-  .form-group { margin-bottom:14px; }
-  .form-label { font-size:13px; font-weight:600; color:var(--gray-700); margin-bottom:6px; display:block; }
-  .form-input {
-    width:100%; padding:14px 16px; border:1.5px solid var(--gray-200);
-    border-radius:12px; font-size:16px; font-family:inherit; color:var(--black); background:var(--white);
-  }
-  .form-input:focus { outline:none; border-color:var(--black); }
-  .form-input::placeholder { color:var(--gray-400); }
-  .form-row { display:flex; gap:10px; }
-  .form-row .form-group { flex:1; }
-
-  /* Info box */
-  .info-box {
-    background:var(--gray-100); border-radius:12px; padding:14px 16px;
-    display:flex; gap:10px; align-items:flex-start;
-  }
-  .info-box .ii { font-size:16px; flex-shrink:0; }
-  .info-box .it { font-size:13px; color:var(--gray-700); line-height:1.55; }
-  .info-box .it strong { color:var(--black); }
-
-  /* Success card */
-  .success-card {
-    background:var(--sofi-blue-light); border-radius:16px; padding:28px 20px; text-align:center;
-  }
   .success-icon {
-    width:56px; height:56px; background:var(--sofi-blue); border-radius:50%;
-    display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
-    font-size:26px; color:#fff;
+    width:64px; height:64px; border-radius:50%; background:var(--green-bg);
+    display:flex; align-items:center; justify-content:center;
+    font-size:32px; color:var(--green); margin:0 auto 16px;
   }
-  .success-title { font-size:20px; font-weight:800; color:var(--black); margin-bottom:6px; }
-  .success-body { font-size:14px; color:var(--gray-700); line-height:1.6; }
-  .success-body strong { color:var(--black); }
 
-  /* Timeline */
-  .tl-item { display:flex; gap:12px; padding:10px 0; }
-  .tl-dot {
-    width:24px; height:24px; border-radius:50%; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;
-  }
-  .tl-dot.done { background:var(--sofi-blue); color:#fff; }
-  .tl-dot.active { background:var(--black); color:#fff; }
-  .tl-dot.pending { background:var(--gray-200); color:var(--gray-500); }
-  .tl-title { font-size:14px; font-weight:600; color:var(--black); }
-  .tl-sub { font-size:12px; color:var(--gray-500); margin-top:2px; }
-
-  /* Dispute options */
-  .dopt {
-    display:flex; align-items:center; padding:16px; background:var(--white);
-    border:1.5px solid var(--gray-200); border-radius:14px; margin-bottom:10px;
-    cursor:pointer; gap:12px; transition:all 0.12s;
-  }
-  .dopt:hover { border-color:var(--gray-400); }
-  .dopt.sel { border-color:var(--sofi-blue); background:var(--sofi-blue-light); }
-  .dopt .radio {
-    width:20px; height:20px; border:2px solid var(--gray-200); border-radius:50%;
-    flex-shrink:0; display:flex; align-items:center; justify-content:center;
-  }
-  .dopt.sel .radio { border-color:var(--sofi-blue); }
-  .dopt.sel .radio::after { content:''; width:10px; height:10px; background:var(--sofi-blue); border-radius:50%; }
-  .dopt .otxt { font-size:14px; font-weight:500; color:var(--black); }
-
-  /* Section header */
-  .sec-header { display:flex; justify-content:space-between; align-items:center; padding:20px 20px 10px; }
-  .sec-title { font-size:18px; font-weight:700; color:var(--black); }
-  .sec-link { font-size:14px; font-weight:600; color:var(--gray-500); }
-
-  /* Link rows */
-  .lnk-row {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:15px 0; border-bottom:1px solid var(--gray-100); cursor:pointer;
-  }
-  .lnk-row:last-child { border-bottom:none; }
-  .lnk-text { font-size:15px; font-weight:500; color:var(--black); }
-  .lnk-arrow { font-size:18px; color:var(--gray-400); }
-
-  /* Tab bar - matches SoFi app exactly */
   .tab-bar {
     display:flex; background:var(--white); border-top:1px solid var(--gray-200);
-    padding:8px 0 6px; flex-shrink:0;
+    padding:8px 0 4px; flex-shrink:0;
   }
   .tab {
-    flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;
-    font-size:10px; font-weight:500; color:var(--gray-400); padding:2px 0;
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    font-size:10px; font-weight:600; color:var(--gray-400); padding:4px 0;
   }
-  .tab.active { color:var(--black); font-weight:600; }
-  .tab .tab-ico {
-    width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+  .tab.active { color:var(--sofi-blue); }
+  .tab-icon { font-size:22px; }
+  .tab-badge {
+    position:relative;
   }
-  .tab .tab-ico svg { display:block; }
-  .tab.active .banking-circle {
-    background:var(--black); color:#fff; border-radius:50%; width:28px; height:28px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:14px; font-weight:800; font-family:'Inter',sans-serif;
-  }
-
-  /* Divider */
-  .div-line { height:1px; background:var(--gray-100); margin:4px 0; }
-
-  /* Badge */
-  .badge-action {
-    display:inline-block; background:var(--sofi-blue-light); color:var(--sofi-blue);
-    font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px;
+  .tab-badge::after {
+    content:''; position:absolute; top:-2px; right:-6px;
+    width:8px; height:8px; border-radius:50%; background:var(--red);
   }
 
-  @media (max-width:420px) {
-    .phone { width:100%; height:auto; min-height:780px; border-radius:0; }
-    body { padding:20px 0 60px; gap:40px; }
-    .flow-row { gap:28px; }
+  .form-group { margin-bottom:16px; }
+  .form-label { font-size:13px; font-weight:600; color:var(--gray-700); margin-bottom:6px; display:block; }
+  .form-input {
+    width:100%; padding:14px 16px; border:1.5px solid var(--gray-200); border-radius:12px;
+    font-size:16px; font-family:inherit; color:var(--black); background:var(--white);
+    outline:none; transition:border-color 0.2s;
+  }
+  .form-input:focus { border-color:var(--sofi-blue); }
+  .form-input::placeholder { color:var(--gray-400); }
+  .form-hint { font-size:12px; color:var(--gray-500); margin-top:4px; }
+  .form-input.error { border-color:var(--red); }
+  .form-error { font-size:12px; color:var(--red); margin-top:4px; }
+
+  .card-input-row { display:flex; gap:10px; }
+  .card-input-row > * { flex:1; }
+
+  .divider { height:1px; background:var(--gray-200); margin:8px 0; }
+
+  .info-box {
+    background:var(--sofi-blue-light); border-radius:12px; padding:14px 16px;
+    font-size:13px; color:var(--sofi-blue-dark); line-height:1.5;
+  }
+  .info-box strong { font-weight:700; }
+
+  .step-indicator {
+    display:flex; align-items:center; justify-content:center; gap:8px; padding:12px 0;
+  }
+  .step-dot {
+    width:8px; height:8px; border-radius:50%; background:var(--gray-200);
+  }
+  .step-dot.active { background:var(--sofi-blue); width:24px; border-radius:4px; }
+  .step-dot.done { background:var(--green); }
+
+  .web-header {
+    background:var(--white); padding:16px 24px; display:flex; align-items:center;
+    justify-content:space-between; border-bottom:1px solid var(--gray-200);
+  }
+  .web-logo { font-size:20px; font-weight:800; color:var(--sofi-blue); letter-spacing:-0.5px; }
+  .web-header-links { display:flex; gap:16px; }
+  .web-header-links a { font-size:13px; color:var(--gray-700); text-decoration:none; font-weight:500; }
+
+  .lock-icon { font-size:14px; color:var(--green); margin-right:4px; }
+
+  .timeline-item { display:flex; gap:12px; padding:8px 0; }
+  .timeline-dot { width:24px; height:24px; border-radius:50%; background:var(--green-bg); color:var(--green); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; margin-top:2px; }
+  .timeline-dot.pending { background:var(--gray-100); color:var(--gray-500); }
+  .timeline-text { font-size:14px; color:var(--gray-700); line-height:1.5; }
+  .timeline-text strong { color:var(--black); }
+
+  .section-divider {
+    width:100%; max-width:1200px; border-top:2px solid rgba(255,255,255,0.06);
+    margin:16px 0;
   }
 </style>
 </head>
 <body>
 
 <div class="page-header">
-  <h1>EWS Charged-Off Account Recovery</h1>
-  <p>Mobile mockups matching SoFi app layout. Healing payment flow and dispute experience.</p>
+  <h1>EWS Charge-Off Recovery</h1>
+  <p>Logged-in (SoFi app) and logged-out (guest web) experiences for healing payments and disputes.</p>
 </div>
 
-<!-- ══════════ JOURNEY 1: HEALING ══════════ -->
+<div class="toc">
+  <a href="#logged-in">Logged-In Experience</a>
+  <a href="#logged-out">Logged-Out (Guest) Experience</a>
+  <a href="#dispute">Dispute Flow</a>
+  <a href="#notifications">Pre-Charge-Off Notifications</a>
+</div>
 
-<div class="screen-group">
-  <span class="screen-group-label">Journey 1 &middot; Healing Payment</span>
+<!-- ============================== -->
+<!-- LOGGED-IN EXPERIENCE           -->
+<!-- ============================== -->
+
+<div class="screen-group" id="logged-in">
+  <span class="screen-group-label">Logged-In Experience</span>
+  <div class="screen-group-title">In-App Healing Flow</div>
+  <div class="screen-group-desc">Member logs into SoFi app and sees the charged-off balance in their Banking tab. Full payment via debit card (Stripe).</div>
 </div>
 
 <div class="flow-row">
-
-<!-- ====== Screen 1: Banking Home ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">1. Banking Home</div>
-  <div class="screen-desc">Member logs in and sees the charge-off alert card in their Banking tab.</div>
-  <div class="phone">
-    <span class="screen-tag">1 / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:41</span>
-        <div class="icons">
-          <svg width="17" height="12" fill="none"><rect x="0" y="3" width="3" height="9" rx="1" fill="#1A1A1A"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#1A1A1A"/><rect x="9" y="0.5" width="3" height="11.5" rx="1" fill="#1A1A1A"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#1A1A1A"/></svg>
-          <svg width="16" height="12" fill="none"><path d="M1 4.5C3.5 1.5 6.5 0 8 0s4.5 1.5 7 4.5" stroke="#1A1A1A" stroke-width="1.5" fill="none"/><path d="M3 7C4.8 5 6.3 4 8 4s3.2 1 5 3" stroke="#1A1A1A" stroke-width="1.5" fill="none"/><circle cx="8" cy="10" r="1.5" fill="#1A1A1A"/></svg>
-          <span style="font-size:13px;font-weight:600;">86</span>
-          <svg width="25" height="12" fill="none"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#1A1A1A" stroke-width="1.2"/><rect x="22.5" y="4" width="2" height="4" rx="1" fill="#1A1A1A" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="2" fill="#1A1A1A"/></svg>
-        </div>
-      </div>
-
+  <div class="screen-wrap">
+    <div class="screen-title">1. Banking Tab</div>
+    <div class="screen-desc">Charged-off balance card appears prominently in the Banking tab.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">LOGGED IN</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
       <div class="nav-bar">
-        <div class="nav-left"><div class="nav-icon profile">&#128100;</div></div>
+        <div class="nav-left"></div>
         <div class="nav-center">Banking</div>
-        <div class="nav-right">
-          <div class="nav-icon">&#9881;&#65039;</div>
-          <div class="nav-icon" style="position:relative;">&#128172;<span style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid #fff;"></span></div>
-        </div>
+        <div class="nav-right"><div class="nav-icon">&#128269;</div><div class="nav-icon profile">S</div></div>
       </div>
-
       <div class="balance-hero">
-        <div class="balance-amount">$0<span class="cents">.00</span></div>
-        <div class="balance-label">Total available balance <span class="info-i">i</span></div>
+        <div class="balance-amount">$4,218<span class="cents">.43</span></div>
+        <div class="balance-label">Total Balance <span class="info-i">i</span></div>
       </div>
-
       <div class="scroll-content">
-        <div class="accounts-card">
-          <div class="acct-row">
-            <div>
-              <div class="acct-name">Checking</div>
-              <div class="acct-sub" style="color:var(--red);">Closed &middot; Charge-off</div>
-            </div>
-            <div>
-              <div class="acct-amount negative">-$147.32</div>
-              <div class="acct-amount-sub">Owed</div>
-            </div>
-          </div>
-          <div class="acct-row">
-            <div>
-              <div class="acct-name">Savings</div>
-              <div class="acct-sub">3.30% - 4.50% APY</div>
-            </div>
-            <div>
-              <div class="acct-amount">$0.00</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Charge-off alert card -->
-        <div class="alert-card">
+        <div class="alert-card urgent">
           <div class="alert-inner">
-            <div class="alert-badge">&#9888; Action needed</div>
-            <div class="alert-title">You have an outstanding balance</div>
+            <div class="alert-badge urgent">&#9888; Action Required</div>
+            <div class="alert-title">You have an outstanding charged-off balance</div>
             <div class="alert-body">
-              Your Checking account was closed on <strong>Jan 15, 2026</strong> with an outstanding balance of <strong>$147.32</strong>.
-              <br><br>
-              This has been reported to Early Warning Services (EWS), which may affect your ability to open accounts at other banks.
+              Your Checking account was closed on <strong>Jan 15, 2026</strong> with an outstanding balance of <strong>$142.50</strong>.<br><br>
+              This has been reported to <strong>Early Warning Services (EWS)</strong> and may prevent you from opening bank accounts at other institutions for up to 5 years.<br><br>
+              Pay this balance to clear your record.
             </div>
             <div class="btn-row">
-              <button class="btn-coral">Pay Now</button>
-              <button class="btn-outline">Learn More</button>
+              <button class="btn-coral">Pay $142.50</button>
             </div>
-            <div style="text-align:center; margin-top:14px;">
-              <button class="text-link">Something is wrong? File a dispute</button>
+            <div style="text-align:center; margin-top:12px;">
+              <button class="text-link">Think this is wrong? Dispute this data</button>
             </div>
           </div>
         </div>
-
-        <div class="sec-header">
-          <span class="sec-title">Activity</span>
-          <span class="sec-link">Statements &rsaquo;</span>
+        <div class="accounts-card">
+          <div class="acct-row">
+            <div><div class="acct-name">Checking (...4521)</div><div class="acct-sub">SoFi Bank</div></div>
+            <div><div class="acct-amount">$3,847.12</div></div>
+          </div>
+          <div class="acct-row">
+            <div><div class="acct-name">Savings (...8832)</div><div class="acct-sub">SoFi Bank</div></div>
+            <div><div class="acct-amount">$371.31</div></div>
+          </div>
+        </div>
+        <div class="quick-actions">
+          <div class="qa-item"><span class="qa-icon">&#8593;</span>Send</div>
+          <div class="qa-item"><span class="qa-icon">&#8595;</span>Receive</div>
+          <div class="qa-item"><span class="qa-icon">&#8596;</span>Transfer</div>
+          <div class="qa-item"><span class="qa-icon">&#9733;</span>Rewards</div>
         </div>
       </div>
-
       <div class="tab-bar">
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z"/><path d="M9 21V12h6v9"/></svg></div>
-          Home
-        </div>
-        <div class="tab active">
-          <div class="tab-ico"><div class="banking-circle">$</div></div>
-          Banking
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          Credit card
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V10"/><path d="M10 20V4"/><path d="M14 20V12"/><path d="M18 20V8"/></svg></div>
-          Invest
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
-          Loans
-        </div>
+        <div class="tab active"><span class="tab-icon">&#127968;</span>Home</div>
+        <div class="tab"><span class="tab-icon tab-badge">&#128176;</span>Banking</div>
+        <div class="tab"><span class="tab-icon">&#128200;</span>Invest</div>
+        <div class="tab"><span class="tab-icon">&#128179;</span>Borrow</div>
+        <div class="tab"><span class="tab-icon">&#8226;&#8226;&#8226;</span>More</div>
       </div>
-    </div>
+    </div></div>
   </div>
-</div>
 
-<!-- ====== Screen 2: Choose Payment Method ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">2. Choose How to Pay</div>
-  <div class="screen-desc">Member selects their payment method: debit card in-app or pay over the phone with an agent.</div>
-  <div class="phone">
-    <span class="screen-tag">2 / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:41</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
+  <div class="screen-wrap">
+    <div class="screen-title">2. Payment Details</div>
+    <div class="screen-desc">Member enters debit card. Pre-populated balance, full payment only for MVP.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">LOGGED IN</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
       <div class="nav-bar">
-        <div class="nav-left"><span class="back-arrow">&lsaquo;</span></div>
-        <div class="nav-center">Pay Balance</div>
-        <div class="nav-right" style="width:40px;"></div>
+        <div class="nav-left"><span class="back-arrow">&#8249;</span></div>
+        <div class="nav-center">Pay Charged-Off Balance</div>
+        <div class="nav-right"></div>
       </div>
-
       <div class="scroll-content">
         <div class="content-inner">
-          <div class="card" style="text-align:center; padding:28px 20px;">
-            <div style="font-size:13px; color:var(--gray-500); margin-bottom:4px;">Amount due</div>
-            <div style="font-size:40px; font-weight:800; color:var(--black); letter-spacing:-2px;">$147<span style="font-size:22px;vertical-align:super;letter-spacing:0;">.32</span></div>
-            <div style="font-size:13px; color:var(--gray-500); margin-top:6px;">Checking (...4821) &middot; Closed Jan 15, 2026</div>
-          </div>
-
-          <div style="font-size:16px; font-weight:700; color:var(--black); padding:4px 0 8px;">Choose how to pay</div>
-
-          <!-- Option 1: Debit card -->
-          <div class="dopt sel" style="padding:18px; margin-bottom:12px;">
-            <div class="radio"></div>
-            <div style="flex:1;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <svg width="24" height="24" fill="none" stroke="var(--black)" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-                <span style="font-size:15px; font-weight:700; color:var(--black);">Pay with debit card</span>
-              </div>
-              <div style="font-size:13px; color:var(--gray-500); line-height:1.5; padding-left:32px;">
-                Enter your debit card details and pay instantly. Secure payment via Stripe.
-              </div>
-            </div>
-          </div>
-
-          <!-- Option 2: Call agent -->
-          <div class="dopt" style="padding:18px; margin-bottom:12px;">
-            <div class="radio"></div>
-            <div style="flex:1;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <svg width="24" height="24" fill="none" stroke="var(--black)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-                <span style="font-size:15px; font-weight:700; color:var(--black);">Pay over the phone</span>
-              </div>
-              <div style="font-size:13px; color:var(--gray-500); line-height:1.5; padding-left:32px;">
-                Call a SoFi agent who can process your payment. Available Mon to Fri, 8 AM to 8 PM ET.
-              </div>
-            </div>
-          </div>
-
-          <button class="btn-coral" style="margin-top:8px;">Continue with Debit Card</button>
-
-          <div class="info-box" style="margin-top:8px;">
-            <span class="ii">&#9432;</span>
-            <span class="it">Only <strong>debit cards</strong> are accepted for in-app payments. Credit cards cannot be used. Full balance payment is required.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== Screen 3: Enter Debit Card ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">3. Enter Card Details</div>
-  <div class="screen-desc">Member enters debit card information. Amount is pre-filled at the full balance (MVP).</div>
-  <div class="phone">
-    <span class="screen-tag">3 / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:41</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
-      <div class="nav-bar">
-        <div class="nav-left"><span class="back-arrow">&lsaquo;</span></div>
-        <div class="nav-center">Enter Card Details</div>
-        <div class="nav-right" style="width:40px;"></div>
-      </div>
-
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div class="card" style="text-align:center; padding:20px;">
-            <div style="font-size:13px; color:var(--gray-500);">Paying</div>
-            <div style="font-size:28px; font-weight:800; color:var(--black); letter-spacing:-1px; margin:4px 0;">$147.32</div>
+          <div class="step-indicator">
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
           </div>
 
           <div class="card">
-            <div class="card-title">Debit card details</div>
+            <div class="card-title">Payment Summary</div>
+            <div class="sum-row"><span class="sum-label">Account</span><span class="sum-value">Checking (...7823)</span></div>
+            <div class="sum-row"><span class="sum-label">Closed on</span><span class="sum-value">Jan 15, 2026</span></div>
+            <div class="sum-row"><span class="sum-label">Amount due</span><span class="sum-value" style="color:var(--red)">$142.50</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Debit Card</div>
             <div class="form-group">
               <label class="form-label">Card number</label>
-              <input type="text" class="form-input" value="4242 4242 4242 1234" readonly>
+              <input class="form-input" type="text" placeholder="1234 5678 9012 3456" value="4532 •••• •••• 8821">
             </div>
-            <div class="form-row">
+            <div class="card-input-row">
               <div class="form-group">
-                <label class="form-label">Expiration</label>
-                <input type="text" class="form-input" value="08/27" readonly>
+                <label class="form-label">Expiry</label>
+                <input class="form-input" type="text" placeholder="MM/YY" value="09/27">
               </div>
               <div class="form-group">
                 <label class="form-label">CVV</label>
-                <input type="text" class="form-input" value="&bull;&bull;&bull;" readonly>
+                <input class="form-input" type="text" placeholder="123" value="•••">
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Name on card</label>
-              <input type="text" class="form-input" value="Shweta Kulshrestha" readonly>
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label class="form-label">ZIP code</label>
-              <input type="text" class="form-input" value="84121" readonly>
-            </div>
+            <div class="form-hint"><span class="lock-icon">&#128274;</span> Processed securely by Stripe. Credit cards not accepted.</div>
           </div>
 
           <div class="info-box">
-            <span class="ii">&#128274;</span>
-            <span class="it">Your payment is processed securely via Stripe. Only <strong>debit cards</strong> are accepted.</span>
+            <strong>What happens after you pay:</strong> Your EWS record will be updated within 10 business days. Once cleared, the charge-off will no longer block you from opening accounts at other financial institutions.
           </div>
 
-          <button class="btn-coral" style="margin-top:4px;">Review Payment</button>
+          <button class="btn-coral" style="margin-top:8px;">Pay $142.50</button>
         </div>
       </div>
-    </div>
+    </div></div>
   </div>
-</div>
 
-</div><!-- /flow-row -->
-
-<div class="flow-row">
-
-<!-- ====== Screen 2b: Call Agent (alternate path) ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">2b. Pay Over the Phone</div>
-  <div class="screen-desc">Alternate path: member chooses to call an agent to make the payment.</div>
-  <div class="phone">
-    <span class="screen-tag">2b / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:41</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
-      <div class="nav-bar">
-        <div class="nav-left"><span class="back-arrow">&lsaquo;</span></div>
-        <div class="nav-center">Pay Over the Phone</div>
-        <div class="nav-right" style="width:40px;"></div>
-      </div>
-
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div class="card" style="text-align:center; padding:28px 20px;">
-            <div style="font-size:13px; color:var(--gray-500); margin-bottom:4px;">Amount due</div>
-            <div style="font-size:40px; font-weight:800; color:var(--black); letter-spacing:-2px;">$147<span style="font-size:22px;vertical-align:super;letter-spacing:0;">.32</span></div>
-            <div style="font-size:13px; color:var(--gray-500); margin-top:6px;">Checking (...4821) &middot; Closed Jan 15, 2026</div>
-          </div>
-
-          <div class="card" style="text-align:center; padding:24px 20px;">
-            <svg width="48" height="48" fill="none" stroke="var(--sofi-blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z" transform="translate(12,12)"/></svg>
-            <div style="font-size:18px; font-weight:800; margin-bottom:8px;">Call a SoFi agent</div>
-            <div style="font-size:14px; color:var(--gray-700); line-height:1.6; margin-bottom:20px;">
-              An agent will verify your identity, look up your charged-off account, and process your debit card payment over the phone.
-            </div>
-            <button class="btn-coral">Call (855) 456-7634</button>
-            <div style="font-size:13px; color:var(--gray-500); margin-top:10px;">Mon to Fri, 8 AM to 8 PM ET</div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">What to expect</div>
-            <div style="font-size:14px; color:var(--black); line-height:2.2; padding-left:4px;">
-              <strong>1.</strong>&nbsp; Agent verifies your identity<br>
-              <strong>2.</strong>&nbsp; Agent confirms your balance ($147.32)<br>
-              <strong>3.</strong>&nbsp; You provide debit card info by phone<br>
-              <strong>4.</strong>&nbsp; Payment is processed immediately<br>
-              <strong>5.</strong>&nbsp; You receive email confirmation
-            </div>
-          </div>
-
-          <div class="info-box">
-            <span class="ii">&#128274;</span>
-            <span class="it">Your card information is collected securely and not stored after the transaction. The same EWS update process applies (within 10 business days).</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== Screen 4: Review Payment ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">4. Review Payment</div>
-  <div class="screen-desc">Confirmation screen before the charge. Member reviews details and taps to confirm.</div>
-  <div class="phone">
-    <span class="screen-tag">4 / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:42</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
-      <div class="nav-bar">
-        <div class="nav-left"><span class="back-arrow">&lsaquo;</span></div>
-        <div class="nav-center">Review Payment</div>
-        <div class="nav-right" style="width:40px;"></div>
-      </div>
-
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div class="card">
-            <div class="card-title">Payment summary</div>
-            <div class="sum-row"><span class="lbl">Account</span><span class="val">Checking (...4821)</span></div>
-            <div class="sum-row"><span class="lbl">Charge-off date</span><span class="val">Jan 15, 2026</span></div>
-            <div class="sum-row"><span class="lbl">Payment method</span><span class="val">Debit ...1234</span></div>
-            <div class="sum-row"><span class="lbl">Payment date</span><span class="val">Apr 2, 2026</span></div>
-            <div class="sum-row total"><span class="lbl">Total</span><span class="val">$147.32</span></div>
-          </div>
-
-          <div class="card" style="background:#F8F8FA;">
-            <div style="font-size:14px; font-weight:700; color:var(--black); margin-bottom:14px;">What happens after you pay</div>
-            <div class="tl-item">
-              <div class="tl-dot active">1</div>
-              <div><div class="tl-title">Payment processed</div><div class="tl-sub">Immediately upon confirmation</div></div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot pending">2</div>
-              <div><div class="tl-title">EWS record updated</div><div class="tl-sub">Within 10 business days</div></div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot pending">3</div>
-              <div><div class="tl-title">Confirmation email sent</div><div class="tl-sub">Once EWS update is complete</div></div>
-            </div>
-          </div>
-
-          <div style="font-size:12px; color:var(--gray-500); line-height:1.6; text-align:center; padding:0 4px;">
-            By tapping "Confirm Payment" you authorize SoFi to charge your debit card $147.32 to settle the outstanding balance on your closed Checking account.
-          </div>
-
-          <button class="btn-coral">Confirm Payment</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /flow-row -->
-
-<div class="flow-row">
-
-<!-- ====== Screen 5: Payment Success ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">5. Payment Confirmed</div>
-  <div class="screen-desc">Payment successful. Shows what happens next and EWS update timeline.</div>
-  <div class="phone">
-    <span class="screen-tag">5 / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:42</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
+  <div class="screen-wrap">
+    <div class="screen-title">3. Confirmation</div>
+    <div class="screen-desc">Payment received. Clear next-steps and EWS update timeline.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">LOGGED IN</span>
+      <div class="ios-status"><span class="time">9:42</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
       <div class="nav-bar">
         <div class="nav-left"></div>
-        <div class="nav-center">Payment Confirmed</div>
-        <div class="nav-right" style="width:40px;"></div>
+        <div class="nav-center">Payment Confirmation</div>
+        <div class="nav-right"></div>
       </div>
-
       <div class="scroll-content">
-        <div class="content-inner" style="padding-top:20px;">
-          <div class="success-card">
+        <div class="content-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+          </div>
+
+          <div style="text-align:center; padding:24px 0 8px;">
             <div class="success-icon">&#10003;</div>
-            <div class="success-title">Payment received</div>
-            <div class="success-body">Your payment of <strong>$147.32</strong> has been processed successfully.</div>
+            <div style="font-size:22px; font-weight:800; color:var(--black); margin-bottom:4px;">Payment Received</div>
+            <div style="font-size:14px; color:var(--gray-500);">Your payment is being processed.</div>
           </div>
 
           <div class="card">
-            <div class="sum-row"><span class="lbl">Confirmation #</span><span class="val">EWS-20260402-7K3M</span></div>
-            <div class="sum-row"><span class="lbl">Amount paid</span><span class="val">$147.32</span></div>
-            <div class="sum-row"><span class="lbl">Date</span><span class="val">Apr 2, 2026</span></div>
-            <div class="sum-row"><span class="lbl">Card used</span><span class="val">Debit ...1234</span></div>
+            <div class="sum-row"><span class="sum-label">Amount paid</span><span class="sum-value">$142.50</span></div>
+            <div class="sum-row"><span class="sum-label">Date</span><span class="sum-value">Apr 6, 2026</span></div>
+            <div class="sum-row"><span class="sum-label">Card</span><span class="sum-value">Debit ending in 8821</span></div>
+            <div class="sum-row"><span class="sum-label">Confirmation #</span><span class="sum-value">EWS-2026-04893</span></div>
           </div>
 
           <div class="card">
             <div class="card-title">What happens next</div>
-            <div class="tl-item">
-              <div class="tl-dot done">&#10003;</div>
-              <div><div class="tl-title">Payment processed</div><div class="tl-sub">Complete</div></div>
+            <div class="timeline-item">
+              <div class="timeline-dot">&#10003;</div>
+              <div class="timeline-text"><strong>Payment received</strong><br>A confirmation email has been sent.</div>
             </div>
-            <div class="tl-item">
-              <div class="tl-dot active">&#8226;</div>
-              <div><div class="tl-title">EWS record being updated</div><div class="tl-sub">Expected by Apr 16, 2026</div></div>
+            <div class="timeline-item">
+              <div class="timeline-dot pending">2</div>
+              <div class="timeline-text"><strong>EWS record updated</strong><br>Within 10 business days, your charge-off flag will be removed from the EWS database.</div>
             </div>
-            <div class="tl-item">
-              <div class="tl-dot pending">&#8226;</div>
-              <div><div class="tl-title">Confirmation email</div><div class="tl-sub">Sent once EWS is updated</div></div>
+            <div class="timeline-item">
+              <div class="timeline-dot pending">3</div>
+              <div class="timeline-text"><strong>Record cleared</strong><br>You will receive an email confirming your EWS record has been updated. This charge-off will no longer affect your ability to open bank accounts.</div>
             </div>
-          </div>
-
-          <div class="info-box">
-            <span class="ii">&#128231;</span>
-            <span class="it">A receipt has been sent to <strong>s***a@gmail.com</strong>. Once your EWS record is updated, the charge-off will no longer block you from opening accounts at other banks.</span>
           </div>
 
           <button class="btn-coral">Done</button>
+          <button class="btn-outline">Download Receipt</button>
         </div>
       </div>
-    </div>
+    </div></div>
   </div>
 </div>
 
-<!-- ====== Screen 6: Learn More ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">6. Learn More</div>
-  <div class="screen-desc">Educational screen explaining EWS, charge-offs, and the member's options.</div>
-  <div class="phone">
-    <span class="screen-tag">6 / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:41</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
-      <div class="nav-bar">
-        <div class="nav-left"><span class="back-arrow">&lsaquo;</span></div>
-        <div class="nav-center">About Your Balance</div>
-        <div class="nav-right" style="width:40px;"></div>
-      </div>
+<div class="section-divider"></div>
 
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div class="card">
-            <div style="font-size:18px; font-weight:800; margin-bottom:14px; line-height:1.3;">What is Early Warning Services (EWS)?</div>
-            <p style="font-size:14px; color:var(--gray-700); line-height:1.7; margin-bottom:14px;">
-              EWS operates the <strong>National Shared Database</strong>, used by most U.S. banks and credit unions to screen applicants when they open new deposit accounts.
-            </p>
-            <p style="font-size:14px; color:var(--gray-700); line-height:1.7; margin-bottom:14px;">
-              When an account is closed due to a negative balance (charge-off), this is reported to EWS. Other banks may see this when you try to open a new account.
-            </p>
-            <p style="font-size:14px; color:var(--gray-700); line-height:1.7;">
-              <strong>The good news:</strong> You can clear your record by paying off the balance. Once paid, SoFi will update your EWS record within 10 business days.
-            </p>
-          </div>
+<!-- ============================== -->
+<!-- LOGGED-OUT (GUEST) EXPERIENCE  -->
+<!-- ============================== -->
 
-          <div class="card">
-            <div class="card-title">Your options</div>
-            <div class="lnk-row"><span class="lnk-text">&#128179;&nbsp; Pay your balance now</span><span class="lnk-arrow">&rsaquo;</span></div>
-            <div class="lnk-row"><span class="lnk-text">&#128222;&nbsp; Call us for help</span><span class="lnk-arrow">&rsaquo;</span></div>
-            <div class="lnk-row"><span class="lnk-text">&#128221;&nbsp; Dispute reported data</span><span class="lnk-arrow">&rsaquo;</span></div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Common questions</div>
-            <div class="lnk-row"><span class="lnk-text">Will paying clear my EWS record?</span><span class="lnk-arrow">&rsaquo;</span></div>
-            <div class="lnk-row"><span class="lnk-text">How long does the update take?</span><span class="lnk-arrow">&rsaquo;</span></div>
-            <div class="lnk-row"><span class="lnk-text">Can I reopen my SoFi account?</span><span class="lnk-arrow">&rsaquo;</span></div>
-            <div class="lnk-row"><span class="lnk-text">What if I think this is wrong?</span><span class="lnk-arrow">&rsaquo;</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== Screen 7: EWS Updated ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">7. EWS Updated</div>
-  <div class="screen-desc">10 days later, the member sees their EWS record is cleared.</div>
-  <div class="phone">
-    <span class="screen-tag">7 / 7</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">10:15</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 72</span></div>
-      </div>
-      <div class="nav-bar">
-        <div class="nav-left"><div class="nav-icon profile">&#128100;</div></div>
-        <div class="nav-center">Banking</div>
-        <div class="nav-right">
-          <div class="nav-icon">&#9881;&#65039;</div>
-          <div class="nav-icon">&#128172;</div>
-        </div>
-      </div>
-
-      <div class="scroll-content">
-        <div class="content-inner" style="padding-top:8px;">
-          <div class="success-card">
-            <div class="success-icon">&#127881;</div>
-            <div class="success-title">Your EWS record is cleared</div>
-            <div class="success-body">Your charge-off has been resolved and your Early Warning Services record has been updated. This should no longer affect your ability to open accounts at other banks.</div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Resolution details</div>
-            <div class="sum-row"><span class="lbl">Account</span><span class="val">Checking (...4821)</span></div>
-            <div class="sum-row"><span class="lbl">Balance paid</span><span class="val">$147.32</span></div>
-            <div class="sum-row"><span class="lbl">Payment date</span><span class="val">Apr 2, 2026</span></div>
-            <div class="sum-row"><span class="lbl">EWS updated</span><span class="val" style="color:var(--sofi-blue);">Apr 14, 2026</span></div>
-            <div class="sum-row"><span class="lbl">Status</span><span class="val" style="color:var(--sofi-blue);">&#10003; Healed</span></div>
-          </div>
-
-          <div class="card" style="text-align:center;">
-            <p style="font-size:14px; color:var(--gray-700); line-height:1.6; margin-bottom:16px;">
-              Need to prove your account is in good standing? You can request a copy of your EWS report.
-            </p>
-            <button class="btn-outline" style="font-size:14px; padding:13px;">Request EWS Report</button>
-          </div>
-
-          <button class="btn-coral">Back to Banking</button>
-        </div>
-      </div>
-
-      <div class="tab-bar">
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z"/><path d="M9 21V12h6v9"/></svg></div>
-          Home
-        </div>
-        <div class="tab active">
-          <div class="tab-ico"><div class="banking-circle">$</div></div>
-          Banking
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          Credit card
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V10"/><path d="M10 20V4"/><path d="M14 20V12"/><path d="M18 20V8"/></svg></div>
-          Invest
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
-          Loans
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /flow-row -->
-
-
-<!-- ══════════ JOURNEY 2: DISPUTE ══════════ -->
-
-<div class="screen-group" style="margin-top:20px;">
-  <span class="screen-group-label">Journey 2 &middot; Dispute</span>
+<div class="screen-group" id="logged-out">
+  <span class="screen-group-label">Logged-Out Experience</span>
+  <div class="screen-group-title">Guest Payment Portal</div>
+  <div class="screen-group-desc">For members who cannot log in (forgot credentials, no app access, directed by adverse action letter). They visit sofi.com/pay and look up their balance using a reference number or identity verification.</div>
 </div>
 
 <div class="flow-row">
-
-<!-- ====== Screen D0: Banking Home (Dispute Entry Point) ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">D0. Banking Home</div>
-  <div class="screen-desc">Member sees the charge-off alert and taps "Something is wrong? File a dispute" to start the dispute flow.</div>
-  <div class="phone">
-    <span class="screen-tag">D0 / 4</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:41</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
+  <div class="screen-wrap">
+    <div class="screen-title">1. Landing Page</div>
+    <div class="screen-desc">Member arrives from a letter, email, or support call. Two lookup options.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">GUEST</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-header">
+        <div class="web-logo">SoFi</div>
+        <div class="web-header-links"><a href="#">Help</a><a href="#">Log In</a></div>
       </div>
-      <div class="nav-bar">
-        <div class="nav-left"><div class="nav-icon profile">&#128100;</div></div>
-        <div class="nav-center">Banking</div>
-        <div class="nav-right">
-          <div class="nav-icon">&#9881;&#65039;</div>
-          <div class="nav-icon" style="position:relative;">&#128172;<span style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid #fff;"></span></div>
-        </div>
-      </div>
-      <div class="balance-hero">
-        <div class="balance-amount">$0<span class="cents">.00</span></div>
-        <div class="balance-label">Total available balance <span class="info-i">i</span></div>
-      </div>
-
-      <div class="scroll-content">
-        <div class="accounts-card">
-          <div class="acct-row">
-            <div>
-              <div class="acct-name">Checking</div>
-              <div class="acct-sub" style="color:var(--red);">Closed &middot; Charge-off</div>
-            </div>
-            <div>
-              <div class="acct-amount negative">-$147.32</div>
-              <div class="acct-amount-sub">Owed</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="alert-card">
-          <div class="alert-inner">
-            <div class="alert-badge">&#9888; Action needed</div>
-            <div class="alert-title">You have an outstanding balance</div>
-            <div class="alert-body">
-              Your Checking account was closed on <strong>Jan 15, 2026</strong> with an outstanding balance of <strong>$147.32</strong>.
-            </div>
-            <div class="btn-row">
-              <button class="btn-coral">Pay Now</button>
-              <button class="btn-outline">Learn More</button>
-            </div>
-            <div style="text-align:center; margin-top:14px;">
-              <!-- This is the tap target for dispute -->
-              <button class="text-link" style="position:relative;">
-                Something is wrong? File a dispute
-                <span style="position:absolute; left:-8px; right:-8px; top:-4px; bottom:-4px; border:2.5px solid var(--sofi-blue); border-radius:8px; pointer-events:none;"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-bar">
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z"/><path d="M9 21V12h6v9"/></svg></div>
-          Home
-        </div>
-        <div class="tab active">
-          <div class="tab-ico"><div class="banking-circle">$</div></div>
-          Banking
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          Credit card
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V10"/><path d="M10 20V4"/><path d="M14 20V12"/><path d="M18 20V8"/></svg></div>
-          Invest
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
-          Loans
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== Screen D1: Dispute Reason ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">D1. Select Dispute Reason</div>
-  <div class="screen-desc">After tapping the dispute link, member selects what they're disputing.</div>
-  <div class="phone">
-    <span class="screen-tag">D1 / 4</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:41</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
-      <div class="nav-bar">
-        <div class="nav-left"><span class="back-arrow">&lsaquo;</span></div>
-        <div class="nav-center">Dispute Data</div>
-        <div class="nav-right" style="width:40px;"></div>
-      </div>
-
       <div class="scroll-content">
         <div class="content-inner">
-          <div style="margin-bottom:4px;">
-            <div style="font-size:20px; font-weight:800; margin-bottom:6px; letter-spacing:-0.3px;">What would you like to dispute?</div>
-            <div style="font-size:14px; color:var(--gray-500); line-height:1.5;">Select the reason that best describes your concern.</div>
+          <div style="text-align:center; padding:20px 0 8px;">
+            <div style="font-size:22px; font-weight:800; color:var(--black); line-height:1.3;">Pay Your Outstanding<br>Balance</div>
+            <div style="font-size:14px; color:var(--gray-500); margin-top:8px; line-height:1.5;">Resolve your charged-off balance and clear your Early Warning Services (EWS) record.</div>
           </div>
 
-          <div class="dopt sel"><div class="radio"></div><span class="otxt">The balance amount is wrong</span></div>
-          <div class="dopt"><div class="radio"></div><span class="otxt">This account is not mine (identity theft)</span></div>
-          <div class="dopt"><div class="radio"></div><span class="otxt">The account was not closed due to fraud</span></div>
-          <div class="dopt"><div class="radio"></div><span class="otxt">The charge-off date is incorrect</span></div>
-          <div class="dopt"><div class="radio"></div><span class="otxt">I already paid or settled this balance</span></div>
-          <div class="dopt"><div class="radio"></div><span class="otxt">My address or personal info is wrong</span></div>
-          <div class="dopt"><div class="radio"></div><span class="otxt">Other data inaccuracy</span></div>
-
-          <button class="btn-coral" style="margin-top:4px;">Continue</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== Screen D2: Contact Info ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">D2. File Your Dispute</div>
-  <div class="screen-desc">MVP routes to phone/mail. Clear instructions for the agent-assisted dispute process.</div>
-  <div class="phone">
-    <span class="screen-tag">D2 / 4</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">9:42</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 86</span></div>
-      </div>
-      <div class="nav-bar">
-        <div class="nav-left"><span class="back-arrow">&lsaquo;</span></div>
-        <div class="nav-center">File Your Dispute</div>
-        <div class="nav-right" style="width:40px;"></div>
-      </div>
-
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div class="card" style="text-align:center; padding:28px 20px;">
-            <div style="font-size:36px; margin-bottom:10px;">&#128222;</div>
-            <div style="font-size:18px; font-weight:800; margin-bottom:8px;">Call us to file your dispute</div>
-            <div style="font-size:14px; color:var(--gray-700); line-height:1.6; margin-bottom:20px;">
-              A SoFi agent will capture your dispute details and provide you with a case number.
+          <div class="card" style="border:2px solid var(--sofi-blue-light);">
+            <div class="card-title" style="display:flex; align-items:center; gap:8px;">&#128196; Look up with Reference Number</div>
+            <div style="font-size:13px; color:var(--gray-500); margin-bottom:14px;">Found on your letter or email from SoFi.</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Reference number</label>
+              <input class="form-input" type="text" placeholder="e.g., EWS-2026-04893">
             </div>
-            <button class="btn-coral">Call (855) 456-7634</button>
-            <div style="font-size:13px; color:var(--gray-500); margin-top:10px;">Mon to Fri, 8 AM to 8 PM ET</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Last 4 of SSN</label>
+              <input class="form-input" type="text" placeholder="••••" maxlength="4">
+            </div>
+            <button class="btn-coral">Look Up My Balance</button>
           </div>
 
-          <div style="text-align:center; font-size:14px; font-weight:600; color:var(--gray-400); padding:4px 0;">or</div>
+          <div style="text-align:center; color:var(--gray-400); font-size:13px; font-weight:600; padding:4px 0;">OR</div>
 
           <div class="card">
-            <div class="card-title">&#9993; Submit by mail</div>
-            <div style="font-size:14px; color:var(--gray-700); line-height:1.6; margin-bottom:12px;">
-              Send a written dispute with your name, account number, and a description of the inaccuracy to:
+            <div class="card-title" style="display:flex; align-items:center; gap:8px;">&#128100; Verify Your Identity</div>
+            <div style="font-size:13px; color:var(--gray-500); margin-bottom:14px;">Don't have a reference number? Look up using your personal info.</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Full name</label>
+              <input class="form-input" type="text" placeholder="First and last name">
             </div>
-            <div style="background:var(--gray-100); padding:14px 16px; border-radius:12px; font-size:14px; line-height:1.6;">
-              <strong>SoFi Bank, N.A.</strong><br>
-              Attn: EWS Disputes<br>
-              2750 East Cottonwood Parkway #300<br>
-              Cottonwood Heights, UT 84121
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Date of birth</label>
+              <input class="form-input" type="text" placeholder="MM/DD/YYYY">
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Last 4 of SSN</label>
+              <input class="form-input" type="text" placeholder="••••" maxlength="4">
+            </div>
+            <button class="btn-outline">Verify &amp; Look Up</button>
+          </div>
+
+          <div style="text-align:center; padding:8px 0;">
+            <button class="text-link">Have a SoFi account? Log in instead</button>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">2. Balance Found</div>
+    <div class="screen-desc">Identity verified. Member sees their charged-off balance and can pay.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">GUEST</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-header">
+        <div class="web-logo">SoFi</div>
+        <div class="web-header-links"><a href="#">Help</a><a href="#">Log In</a></div>
+      </div>
+      <div class="scroll-content">
+        <div class="content-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+          </div>
+
+          <div class="info-box" style="text-align:center;">
+            <span class="lock-icon">&#128274;</span> Identity verified. Session expires in 15 minutes.
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--red);">
+            <div style="font-size:13px; font-weight:600; color:var(--red); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Outstanding Balance</div>
+            <div style="font-size:36px; font-weight:800; color:var(--black); margin-bottom:4px;">$142.50</div>
+            <div class="divider"></div>
+            <div class="sum-row"><span class="sum-label">Account</span><span class="sum-value">Checking (...7823)</span></div>
+            <div class="sum-row"><span class="sum-label">Closed on</span><span class="sum-value">Jan 15, 2026</span></div>
+            <div class="sum-row"><span class="sum-label">Reported to</span><span class="sum-value">EWS</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Pay with Debit Card</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Card number</label>
+              <input class="form-input" type="text" placeholder="1234 5678 9012 3456">
+            </div>
+            <div class="card-input-row" style="margin-bottom:12px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label">Expiry</label>
+                <input class="form-input" type="text" placeholder="MM/YY">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label">CVV</label>
+                <input class="form-input" type="text" placeholder="123">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Email for receipt</label>
+              <input class="form-input" type="email" placeholder="you@email.com">
+            </div>
+            <div class="form-hint" style="margin-bottom:16px;"><span class="lock-icon">&#128274;</span> Processed securely by Stripe. Credit cards not accepted.</div>
+            <button class="btn-coral">Pay $142.50</button>
+          </div>
+
+          <div style="text-align:center; padding:4px 0;">
+            <button class="text-link">Think this is wrong? Dispute this data</button>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">3. Guest Confirmation</div>
+    <div class="screen-desc">Payment confirmed. Receipt emailed. No login needed.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">GUEST</span>
+      <div class="ios-status"><span class="time">9:42</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-header">
+        <div class="web-logo">SoFi</div>
+        <div class="web-header-links"><a href="#">Help</a></div>
+      </div>
+      <div class="scroll-content">
+        <div class="content-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+          </div>
+
+          <div style="text-align:center; padding:24px 0 8px;">
+            <div class="success-icon">&#10003;</div>
+            <div style="font-size:22px; font-weight:800; color:var(--black); margin-bottom:4px;">Payment Received</div>
+            <div style="font-size:14px; color:var(--gray-500);">A receipt has been sent to j***n@email.com</div>
+          </div>
+
+          <div class="card">
+            <div class="sum-row"><span class="sum-label">Amount paid</span><span class="sum-value">$142.50</span></div>
+            <div class="sum-row"><span class="sum-label">Date</span><span class="sum-value">Apr 6, 2026</span></div>
+            <div class="sum-row"><span class="sum-label">Card</span><span class="sum-value">Debit ending in 4412</span></div>
+            <div class="sum-row"><span class="sum-label">Confirmation #</span><span class="sum-value">EWS-2026-04893</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">What happens next</div>
+            <div class="timeline-item">
+              <div class="timeline-dot">&#10003;</div>
+              <div class="timeline-text"><strong>Payment received</strong><br>A confirmation email has been sent to your email address.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot pending">2</div>
+              <div class="timeline-text"><strong>EWS record updated</strong><br>Within 10 business days, your charge-off flag will be removed from the EWS database.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot pending">3</div>
+              <div class="timeline-text"><strong>Record cleared</strong><br>You will receive an email confirming your EWS record has been updated.</div>
+            </div>
+          </div>
+
+          <button class="btn-coral">Download Receipt</button>
+          <button class="btn-outline">Print This Page</button>
+
+          <div class="info-box" style="margin-top:4px;">
+            <strong>Keep your confirmation number.</strong> If you need to reference this payment, your confirmation number is <strong>EWS-2026-04893</strong>. You can also call SoFi at 1-855-456-7634.
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================== -->
+<!-- DISPUTE FLOW                   -->
+<!-- ============================== -->
+
+<div class="screen-group" id="dispute">
+  <span class="screen-group-label">Dispute Flow</span>
+  <div class="screen-group-title">Dispute Initiation</div>
+  <div class="screen-group-desc">Available from both logged-in and guest experiences. For MVP, the in-app link routes to phone/mail instructions. Phase 2 adds a self-service form.</div>
+</div>
+
+<div class="flow-row">
+  <div class="screen-wrap">
+    <div class="screen-title">Dispute (In-App, MVP)</div>
+    <div class="screen-desc">Logged-in member taps "Dispute this data" and sees instructions for phone or mail.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">LOGGED IN</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav-bar">
+        <div class="nav-left"><span class="back-arrow">&#8249;</span></div>
+        <div class="nav-center">Dispute Reported Data</div>
+        <div class="nav-right"></div>
+      </div>
+      <div class="scroll-content">
+        <div class="content-inner">
+          <div class="card">
+            <div class="card-title">What you can dispute</div>
+            <div style="font-size:14px; color:var(--gray-700); line-height:1.6;">
+              If you believe the data SoFi reported to Early Warning Services is inaccurate, you have the right to dispute it. Common reasons include:
+            </div>
+            <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Wrong balance amount</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Account is not mine (identity theft)</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Already paid or settled</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Incorrect closure reason</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Other data inaccuracy</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">How to file a dispute</div>
+
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--sofi-blue-light); color:var(--sofi-blue); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">&#128222;</div>
+              <div>
+                <div style="font-size:15px; font-weight:700; color:var(--black);">Call us</div>
+                <div style="font-size:14px; color:var(--gray-700); line-height:1.5;">1-855-456-7634<br>Mon to Fri, 8am to 8pm ET</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-top:16px;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--sofi-blue-light); color:var(--sofi-blue); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">&#9993;</div>
+              <div>
+                <div style="font-size:15px; font-weight:700; color:var(--black);">Write to us</div>
+                <div style="font-size:14px; color:var(--gray-700); line-height:1.5;">SoFi Bank, N.A.<br>2750 East Cottonwood Parkway #300<br>Cottonwood Heights, UT 84121</div>
+              </div>
             </div>
           </div>
 
           <div class="info-box">
-            <span class="ii">&#128337;</span>
-            <span class="it"><strong>Your reason:</strong> The balance amount is wrong.
-              <br><br>
-              Under the FCRA, SoFi must investigate your dispute within 30 days (45 if you provide additional information).
-            </span>
-          </div>
-
-          <div class="card">
-            <div style="font-size:14px; font-weight:600; color:var(--gray-500); margin-bottom:12px; text-align:center;">What to have ready when you call</div>
-            <div style="font-size:14px; color:var(--black); line-height:2; padding-left:8px;">
-              &#10003;&nbsp; Your SoFi account number<br>
-              &#10003;&nbsp; Description of the error<br>
-              &#10003;&nbsp; Any supporting documents<br>
-              &#10003;&nbsp; Government-issued ID
-            </div>
+            <strong>Your rights under FCRA:</strong> SoFi will investigate your dispute within 30 days and notify you of the outcome. You have the right to add a personal statement to your record.
           </div>
         </div>
       </div>
-    </div>
+    </div></div>
   </div>
-</div>
 
-<!-- ====== Screen D3: Dispute Filed ====== -->
-<div class="screen-wrap">
-  <div class="screen-title">D3. Dispute Status</div>
-  <div class="screen-desc">After filing, the member sees dispute tracking in their Banking tab.</div>
-  <div class="phone">
-    <span class="screen-tag">D3 / 4</span>
-    <div class="phone-inner">
-      <div class="ios-status">
-        <span class="time">2:30</span>
-        <div class="icons"><span style="font-size:13px;font-weight:600;">&#9679;&#9679;&#9679;&#9679; &#128267; 79</span></div>
+  <div class="screen-wrap">
+    <div class="screen-title">Dispute (Guest Portal)</div>
+    <div class="screen-desc">Guest clicks "Dispute this data" from the balance page and sees the same contact info.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">GUEST</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-header">
+        <div class="web-logo">SoFi</div>
+        <div class="web-header-links"><a href="#">Help</a></div>
       </div>
-      <div class="nav-bar">
-        <div class="nav-left"><div class="nav-icon profile">&#128100;</div></div>
-        <div class="nav-center">Banking</div>
-        <div class="nav-right">
-          <div class="nav-icon">&#9881;&#65039;</div>
-          <div class="nav-icon">&#128172;</div>
-        </div>
-      </div>
-
       <div class="scroll-content">
-        <div class="content-inner" style="padding-top:4px;">
-          <div class="card" style="border-left:4px solid var(--sofi-blue); padding:20px 18px;">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-              <span style="font-size:18px;">&#128203;</span>
-              <span style="font-size:16px; font-weight:800;">Dispute in progress</span>
-            </div>
-            <div style="font-size:14px; color:var(--gray-700); line-height:1.6; margin-bottom:16px;">
-              Your dispute about the <strong>balance amount</strong> on Checking (...4821) has been filed.
-            </div>
-            <div class="sum-row" style="padding:8px 0;"><span class="lbl">Case #</span><span class="val">DSP-20260402-9R2T</span></div>
-            <div class="sum-row" style="padding:8px 0;"><span class="lbl">Filed</span><span class="val">Apr 2, 2026</span></div>
-            <div class="sum-row" style="padding:8px 0;"><span class="lbl">Expected resolution</span><span class="val">By May 2, 2026</span></div>
-            <div class="sum-row" style="padding:8px 0; border-bottom:none;">
-              <span class="lbl">Status</span>
-              <span class="val" style="display:flex; align-items:center; gap:6px;">
-                <span style="width:8px; height:8px; background:var(--sofi-blue); border-radius:50%; display:inline-block;"></span>
-                Under investigation
-              </span>
+        <div class="content-inner">
+          <div style="text-align:center; padding:16px 0 8px;">
+            <div style="font-size:22px; font-weight:800; color:var(--black); line-height:1.3;">Dispute Reported Data</div>
+            <div style="font-size:14px; color:var(--gray-500); margin-top:8px;">If you believe the information SoFi reported to EWS is inaccurate, you have the right to dispute it.</div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Common dispute reasons</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Wrong balance amount</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Account is not mine (identity theft)</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Already paid or settled</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Incorrect closure reason</div>
+              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Other data inaccuracy</div>
             </div>
           </div>
 
           <div class="card">
-            <div class="card-title">Investigation timeline</div>
-            <div class="tl-item">
-              <div class="tl-dot done">&#10003;</div>
-              <div><div class="tl-title">Dispute received</div><div class="tl-sub">Apr 2, 2026</div></div>
+            <div class="card-title">Contact us to file a dispute</div>
+
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--sofi-blue-light); color:var(--sofi-blue); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">&#128222;</div>
+              <div>
+                <div style="font-size:15px; font-weight:700; color:var(--black);">Call us</div>
+                <div style="font-size:14px; color:var(--gray-700); line-height:1.5;">1-855-456-7634<br>Mon to Fri, 8am to 8pm ET</div>
+              </div>
             </div>
-            <div class="tl-item">
-              <div class="tl-dot done">&#10003;</div>
-              <div><div class="tl-title">EWS flagged as disputed</div><div class="tl-sub">Apr 3, 2026</div></div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot active">&#8226;</div>
-              <div><div class="tl-title">Investigation in progress</div><div class="tl-sub">Reviewing account records</div></div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot pending">&#8226;</div>
-              <div><div class="tl-title">Resolution &amp; notification</div><div class="tl-sub">By May 2, 2026</div></div>
+
+            <div class="divider"></div>
+
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-top:16px;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--sofi-blue-light); color:var(--sofi-blue); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">&#9993;</div>
+              <div>
+                <div style="font-size:15px; font-weight:700; color:var(--black);">Write to us</div>
+                <div style="font-size:14px; color:var(--gray-700); line-height:1.5;">SoFi Bank, N.A.<br>2750 East Cottonwood Parkway #300<br>Cottonwood Heights, UT 84121</div>
+              </div>
             </div>
           </div>
 
           <div class="info-box">
-            <span class="ii">&#128172;</span>
-            <span class="it">While your dispute is under investigation, your EWS record shows a "Consumer Disputes Debt" flag. You'll receive an email when the investigation is complete.</span>
+            <strong>Your rights:</strong> Under the Fair Credit Reporting Act (FCRA), SoFi must investigate your dispute within 30 days and notify you of the outcome. You also have the right to add a personal statement to your EWS record.
           </div>
 
-          <button class="btn-outline">Contact Support About This Dispute</button>
+          <div style="text-align:center; padding:8px 0;">
+            <button class="text-link">&#8249; Back to balance</button>
+          </div>
         </div>
       </div>
-
-      <div class="tab-bar">
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z"/><path d="M9 21V12h6v9"/></svg></div>
-          Home
-        </div>
-        <div class="tab active">
-          <div class="tab-ico"><div class="banking-circle">$</div></div>
-          Banking
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          Credit card
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V10"/><path d="M10 20V4"/><path d="M14 20V12"/><path d="M18 20V8"/></svg></div>
-          Invest
-        </div>
-        <div class="tab">
-          <div class="tab-ico"><svg width="24" height="24" fill="none" stroke="#AAAAAA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
-          Loans
-        </div>
-      </div>
-    </div>
+    </div></div>
   </div>
 </div>
 
-</div><!-- /flow-row -->
+<div class="section-divider"></div>
 
-<div class="page-header" style="margin-top:24px;">
-  <p style="font-size:12px; color:#6B6B80;">
-    Mockups are illustrative and subject to design review. All data shown is sample data.<br>
-    Layout matches SoFi iOS app (Banking tab). Created for PRD: EWS Charged-Off Account Recovery (Apr 2026).
-  </p>
+<!-- ============================== -->
+<!-- PRE-CHARGE-OFF NOTIFICATIONS   -->
+<!-- ============================== -->
+
+<div class="screen-group" id="notifications">
+  <span class="screen-group-label">Pre-Charge-Off</span>
+  <div class="screen-group-title">EWS Implication Notifications</div>
+  <div class="screen-group-desc">Proposed push notifications and emails during the 57-day grace period that warn members about EWS consequences.</div>
+</div>
+
+<div class="flow-row">
+  <div class="screen-wrap">
+    <div class="screen-title">Day 1 to 14: Initial Warning</div>
+    <div class="screen-desc">First notification includes EWS implications.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">NOTIFICATION</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav-bar">
+        <div class="nav-left"></div>
+        <div class="nav-center">Notifications</div>
+        <div class="nav-right"></div>
+      </div>
+      <div class="scroll-content">
+        <div class="content-inner">
+          <div class="alert-card">
+            <div class="alert-inner">
+              <div class="alert-badge">&#9888; Negative Balance</div>
+              <div class="alert-title">Your account has a negative balance of -$142.50</div>
+              <div class="alert-body">
+                Please deposit funds to bring your balance back to $0.<br><br>
+                <strong>If not resolved, your account will be closed and reported to Early Warning Services (EWS), which may prevent you from opening bank accounts at other institutions for up to 5 years.</strong>
+              </div>
+              <button class="btn-coral">Deposit Now</button>
+            </div>
+          </div>
+
+          <div class="card" style="background:var(--gray-100); padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:var(--gray-500); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Push Notification Preview</div>
+            <div style="background:var(--white); border-radius:16px; padding:14px 16px; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <div style="width:20px; height:20px; border-radius:6px; background:var(--sofi-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800;">S</div>
+                <span style="font-size:12px; font-weight:600; color:var(--gray-500);">SoFi</span>
+                <span style="font-size:11px; color:var(--gray-400); margin-left:auto;">now</span>
+              </div>
+              <div style="font-size:14px; font-weight:600; color:var(--black); margin-bottom:2px;">Your account has a negative balance</div>
+              <div style="font-size:13px; color:var(--gray-700);">-$142.50. Deposit now to avoid closure and EWS reporting, which could block future bank account applications.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">Day 15 to 45: Escalation</div>
+    <div class="screen-desc">Countdown begins. Stronger language about consequences.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">NOTIFICATION</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav-bar">
+        <div class="nav-left"></div>
+        <div class="nav-center">Notifications</div>
+        <div class="nav-right"></div>
+      </div>
+      <div class="scroll-content">
+        <div class="content-inner">
+          <div class="alert-card urgent">
+            <div class="alert-inner">
+              <div class="alert-badge urgent">&#9888; 20 Days Remaining</div>
+              <div class="alert-title">Your account will be closed if not resolved</div>
+              <div class="alert-body">
+                You have <strong>20 days</strong> to bring your balance back to $0.<br><br>
+                After that, your account will be <strong>permanently closed</strong>, the balance will be charged off, and it will be <strong>reported to Early Warning Services (EWS)</strong>.<br><br>
+                An EWS flag can prevent you from opening checking or savings accounts at other banks for <strong>up to 5 years</strong>.
+              </div>
+              <button class="btn-coral">Deposit $142.50 Now</button>
+              <div style="text-align:center; margin-top:10px;">
+                <button class="text-link">Need help? Contact us</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="background:var(--gray-100); padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:var(--gray-500); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Email Subject Line</div>
+            <div style="background:var(--white); border-radius:12px; padding:14px 16px;">
+              <div style="font-size:14px; font-weight:700; color:var(--black);">Action required: 20 days to resolve your -$142.50 balance</div>
+              <div style="font-size:13px; color:var(--gray-500); margin-top:4px;">Your account will be closed and reported to EWS if not resolved...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">Day 46 to 57: Final Warning</div>
+    <div class="screen-desc">Last chance. Urgent tone with specific deadline.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="screen-tag">NOTIFICATION</span>
+      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav-bar">
+        <div class="nav-left"></div>
+        <div class="nav-center">Notifications</div>
+        <div class="nav-right"></div>
+      </div>
+      <div class="scroll-content">
+        <div class="content-inner">
+          <div class="alert-card urgent" style="border-left-width:6px;">
+            <div class="alert-inner">
+              <div class="alert-badge urgent" style="font-size:13px;">&#128680; FINAL NOTICE</div>
+              <div class="alert-title">Your account will be closed in 5 days</div>
+              <div class="alert-body">
+                This is your final notice. If you do not deposit <strong>$142.50</strong> by <strong>April 11, 2026</strong>, your account will be:<br><br>
+                &#10060; <strong>Permanently closed</strong><br>
+                &#10060; <strong>Charged off</strong> for the outstanding balance<br>
+                &#10060; <strong>Reported to EWS</strong>, which may block you from opening bank accounts at other institutions for up to 5 years<br><br>
+                Once reported, the only way to clear your record is to pay the full balance after charge-off.
+              </div>
+              <button class="btn-coral" style="background:var(--red);">Deposit $142.50 Now</button>
+              <div style="text-align:center; margin-top:10px;">
+                <button class="text-link">Call us: 1-855-456-7634</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="background:var(--gray-100); padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:var(--gray-500); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Push Notification Preview</div>
+            <div style="background:var(--white); border-radius:16px; padding:14px 16px; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <div style="width:20px; height:20px; border-radius:6px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800;">!</div>
+                <span style="font-size:12px; font-weight:600; color:var(--gray-500);">SoFi</span>
+                <span style="font-size:11px; color:var(--gray-400); margin-left:auto;">now</span>
+              </div>
+              <div style="font-size:14px; font-weight:600; color:var(--black); margin-bottom:2px;">Final notice: Account closure in 5 days</div>
+              <div style="font-size:13px; color:var(--gray-700);">Deposit $142.50 by Apr 11 to avoid permanent closure and EWS reporting (blocks bank accounts for up to 5 years).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:40px 0 0; color:#9B9BB0; font-size:12px;">
+  EWS Charge-Off Recovery Mockups &mdash; SoFi Bank, N.A. &mdash; Internal Use Only
 </div>
 
 </body>

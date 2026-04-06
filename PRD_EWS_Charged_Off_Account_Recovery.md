@@ -53,7 +53,7 @@
 
 ## TL;DR
 
-SoFi must let members repay charged-off Checking & Savings balances and dispute reported data as a condition of our EWS data contribution contract. Today, no such capability exists: once an account is charged off, it is permanently closed with no way for the member to pay, even if they want to. We cannot report charge-offs to EWS without offering a healing and dispute path (UDAAP risk) and members have a statutory right to dispute furnished data (FCRA). We are targeting an **MVP in production by July 31, 2026**, using a hybrid model: members log into the SoFi app, see their charged-off balance, and pay via debit card (reusing the SoFi Plus / Stripe payment rail). Funds route to a recovery GL. Disputes are handled via phone and mail for MVP. Upon payment or dispute resolution, SoFi reports the updated status to EWS within 10 business days to remove the negative flag. This work is part of the broader EWS Data Contributions initiative, which must be fully compliant by December 31, 2026, or EWS can terminate our access to New Account Risk services. We are currently paying ~$100k/month in excess fees until we begin contributing.
+Currently, members with charged-off SoFi Money accounts have no way to repay, yet these charge-offs are reported to EWS, blocking them from opening bank accounts for up to 5 years. This creates regulatory risk (UDAAP/FCRA) since we lack required payment and dispute pathways. By **July 31, 2026**, we will launch an MVP enabling in-app balance visibility, debit card repayment (via Stripe), and EWS updates within 10 business days to clear flags, along with dispute support across app, phone, and mail. Full EWS data contribution compliance is required by **December 31, 2026** to avoid loss of New Account Risk access.
 
 ---
 
@@ -82,15 +82,33 @@ Per the National Shared Database Operating Rules, SoFi must contribute (daily, e
 - ACH Data
 - Shared Fraud Data
 
-The "Hot File" is optional and out of scope.
+The "Hot File" (a real-time alert feed that flags accounts involved in active fraud to other banks as it happens, rather than waiting for the next daily batch) is optional per the Operating Rules and out of scope.
 
 ### Why healing and dispute matter
 
 Once we begin reporting charge-offs to EWS, two obligations kick in:
 
-1. **Healing (UDAAP requirement).** We cannot report a member as having a charged-off account if we do not allow them to repay and clear that record. Doing so would cause consumer harm with no recourse, which is the definition of unfair under UDAAP. Per the EWS Operating Rules, if a consumer pays off or settles Account Abuse, we must update the data within **10 business days**.
+1. **Healing (UDAAP requirement).** We cannot report a member as having a charged-off account if we do not allow them to repay and clear that record. Doing so would cause consumer harm with no recourse, which is the definition of unfair under UDAAP. The member has **up to 5 years** from when the charge-off is reported to EWS to pay and clear the flag (after 5 years the flag expires automatically). Once the member pays, SoFi must update EWS within **10 business days** per the Operating Rules.
 
-2. **Dispute (FCRA requirement).** As a data furnisher to a consumer reporting agency (EWS), SoFi is subject to FCRA furnisher obligations. Members have the right to dispute any data we report (wrong balance, wrong address, not closed due to fraud, account not theirs, etc.). We must investigate within **30 days** (45 if additional info is provided), correct inaccuracies, and propagate corrections to all CRAs that received the data. Frivolous disputes must be identified and the member notified within **5 business days**.
+2. **Dispute (FCRA requirement).** As a data furnisher to a consumer reporting agency (EWS), SoFi is subject to FCRA furnisher obligations. Members have the right to dispute any data we report (wrong balance, wrong address, not closed due to fraud, account not theirs, etc.) at any point while the record exists, up to **5 years**. Once a dispute is filed, SoFi must investigate within **30 days** (45 if additional info is provided), correct inaccuracies, and propagate corrections to all CRAs that received the data. Frivolous disputes must be identified and the member notified within **5 business days**.
+
+### How charge-offs work today
+
+When a member's C&S account goes negative, SoFi provides a **57-day grace period** with reminders to repay. If the member does not bring the balance to zero within that window, the account is closed and the balance is charged off. After charge-off:
+- The account is **permanently closed**. There is no mechanism to reopen it or deposit into it.
+- There is **no way for the member to repay**. Even if they want to, no payment channel exists.
+- If the member reapplies for a SoFi Money account in the future, they are **declined**.
+- Once we begin reporting to EWS, the charge-off will appear in the National Shared Database, potentially blocking the member from opening accounts at other financial institutions for up to 5 years.
+
+### Why this matters
+
+**Compliance exposure.** Reporting charge-offs to EWS without offering a healing or dispute path creates UDAAP risk (unfair/deceptive to report negative data with no member recourse) and FCRA non-compliance (members have a statutory right to dispute furnished data). The BRD explicitly flags this: "To address UDAAP risk if we report charge-offs but don't allow members to resolve those charge-offs."
+
+**Member harm.** An EWS flag can prevent a member from opening checking or savings accounts at other financial institutions for up to **5 years**. Members who want to make things right currently have no way to do so.
+
+**Financial impact.** SoFi is paying approximately **$100k/month** in excess fees to EWS until we begin contributing data. Full contribution compliance (including healing and dispute capabilities) is required by **December 31, 2026**, or EWS can terminate our access to New Account Risk and other services. The pricing difference is significant: $2.9M (non-contributing) vs. $1.5M (contributing) over 3 years.
+
+**Contract obligation.** Per the EWS Operating Rules, if a consumer pays off or otherwise settles Account Abuse, the bank must report the update within **10 business days**. We cannot fulfill this obligation without a payment collection mechanism.
 
 ### The broader initiative
 
@@ -105,6 +123,88 @@ This PRD covers the **payment collection and dispute** workstreams of the larger
 | **Enable member dispute and investigation** | **Srikant Movva (TBD)** | **This PRD** |
 | Update account status and report to EWS | Shared (depends on payment/dispute outcome) | This PRD |
 | Compliance, disclosures, policies and governance | Compliance team | Parallel |
+
+---
+
+## MVP: What Must Ship by July 31, 2026
+
+SoFi is paying **~$100K/month in excess EWS fees** because we are not contributing data. We cannot begin contributing until healing and dispute capabilities exist. Every month we delay costs $100K. Full compliance is required by **December 31, 2026**, or EWS can terminate our access to New Account Risk entirely.
+
+The MVP is the minimum set of capabilities that allows us to start contributing charge-off data to EWS without creating regulatory exposure.
+
+### What the MVP must include
+
+| # | Capability | Why it's required | What "done" looks like |
+|---|---|---|---|
+| 1 | **Balance lookup** | Members must be able to see what they owe. | Logged-in: charged-off balance card in Banking tab. Logged-out: guest portal balance lookup at sofi.com/pay. |
+| 2 | **Payment collection (debit card via Stripe)** | UDAAP: cannot report charge-offs without a repayment path. | Member pays full balance via debit card. Payment routed to recovery GL. Works for logged-in (in-app) and logged-out (guest portal). |
+| 3 | **Pay by phone (agent-assisted)** | Members who cannot use the app or guest portal must still be able to pay. | Agent looks up account, collects debit card info over phone, processes payment via agent-facing tool. Same Stripe backend. |
+| 4 | **EWS healing report** | Contractual: must update EWS within 10 business days of payment. | Healed account status submitted to EWS via batch file or API within 10 business days. |
+| 5 | **Dispute intake (phone + mail)** | FCRA: members have a statutory right to dispute furnished data. | Member can file dispute by phone (1-855-456-7634) or mail. Agent logs in case management. Investigation completed within 30 days. |
+| 6 | **Dispute flags in EWS data** | EWS Operating Rules: disputed records must be flagged while under investigation. | "Consumer Disputes Debt" indicator set in contribution file during investigation. Removed on resolution. |
+| 7 | **Updated member communications** | FCRA/UDAAP: members must know about EWS reporting and how to resolve it. | Charge-off notices, adverse action letters, and pre-charge-off reminders include EWS language, sofi.com/pay URL, and dispute contact info. |
+
+### MVP user stories and requirements
+
+MVP is split into two milestones. **Milestone 1 (Healing):** members can see and pay what they owe. **Milestone 2 (Dispute):** members can challenge inaccurate data (required by FCRA before we furnish to EWS). Both can be developed in parallel; both must ship by July 31, 2026.
+
+#### Milestone 1: Account Healing / Repayment
+
+| # | Category | Requirement | User Story |
+|---|---|---|---|
+| 1 | Balance Visibility | Member can view charged-off balance (in-app) | As a member, I want to see how much I owe so I can decide whether to repay. Balance card in Banking tab shows amount, closure date, and EWS status. |
+| 2 | Balance Visibility | Member can view charged-off balance (guest portal) | As a member without app access, I want to look up what I owe online. sofi.com/pay lookup by reference number + last 4 SSN, or name + DOB + SSN. |
+| 3 | Payment | Member can pay full balance via debit card (in-app) | As a member, I want to pay my charged-off balance so my EWS record is cleared. Stripe debit card payment, full balance only, routed to recovery GL. |
+| 4 | Payment | Member can pay full balance via debit card (guest portal) | As a member without app access, I want to pay online without logging in. Same Stripe payment on sofi.com/pay, email receipt, no login required. |
+| 5 | Payment | Member can pay via phone (agent-assisted) | As a member, I want to pay over the phone if I can't use the app or website. Agent collects debit card, processes via agent tool, same Stripe backend. |
+| 6 | Payment | Member can pay via ACH push (guest portal / in-app) | As a member, I want to pay via ACH from my external bank. ACH push from external bank accepted, routed to recovery GL. |
+| 7 | Confirmation | Payment confirmation and receipt (all channels) | As a member, I want a receipt confirming my payment and what happens next. On-screen confirmation + email with amount, date, confirmation number, next steps. |
+| 8 | EWS Reporting | EWS record updated after payment (backend) | As SoFi, when a member repays, we must update EWS within 10 business days. Healed status submitted via batch file or API. |
+| 9 | Notification | Member notified when EWS record is cleared (email) | As a member, I want to know when my EWS record has been cleared. Email sent after EWS confirms update. |
+| 10 | Ops Tooling | Agent can look up balance and process payment (internal) | As an ops agent, I want to look up a member's charged-off account and process payment on their behalf. Agent searches by member identifier, views balance, initiates payment. |
+| 11 | Communications | Pre-charge-off emails include EWS language (email) | As SoFi, pre-charge-off emails must warn members about EWS consequences. All 57-day reminders mention EWS consequences and sofi.com/pay. |
+| 12 | Communications | Charge-off notification includes sofi.com/pay (email) | As SoFi, the charge-off notification must tell members how to pay. Day 57 email includes payment URL, dispute phone/mail info. |
+| 13 | Communications | Adverse action notices include EWS contact (letter) | As SoFi, adverse action notices must include EWS contact info per FCRA Section 615(a). |
+| 14 | Ops Readiness | Agent training and SOPs (internal) | As SoFi, agents must be trained on healing flows before launch. Agents trained on payment processing and identity verification. |
+| 15 | Audit | Audit trail for all healing actions (internal) | As SoFi, all healing actions must be logged for compliance. All actions logged and auditable. |
+
+#### Milestone 2: Data Dispute
+
+| # | Category | Requirement | User Story |
+|---|---|---|---|
+| 1 | Dispute Intake | Member can file dispute by phone (phone) | As a member, I want to dispute data SoFi reported to EWS that I believe is wrong. Agent captures disputed data element, reason, supporting docs. Case number provided. |
+| 2 | Dispute Intake | Member can file dispute by mail (mail) | As a member, I want to submit a written dispute. Written dispute accepted at SoFi Bank, N.A., 2750 East Cottonwood Parkway #300, Cottonwood Heights, UT 84121. |
+| 3 | Dispute Intake | Dispute information discoverable (all channels) | As a member, I want to learn about my right to dispute from the app or portal. Dispute phone number and mailing address accessible from in-app, guest portal, help center, and agent scripts. |
+| 4 | Investigation | Investigation completed within 30 days (ops) | As SoFi, we must investigate and resolve disputes within FCRA timelines. Member notified of outcome. Corrected records propagated if dispute upheld. 45 days if additional info provided. |
+| 5 | Investigation | Frivolous dispute determination (ops) | As SoFi, if a dispute is frivolous, we must notify the member within 5 business days with reasons and missing info. |
+| 6 | Investigation | Indirect dispute handling (ops) | As SoFi, when we receive an indirect dispute via EWS/CRA, we must investigate, respond with results, and propagate corrections to all nationwide CRAs. |
+| 7 | EWS Reporting | Dispute flag set in EWS contribution data (backend) | As SoFi, disputed records must be flagged in EWS data during investigation. "Consumer Disputes Debt" indicator set during investigation, removed on resolution. |
+| 8 | EWS Reporting | Corrected data submitted to EWS and all CRAs (backend) | As SoFi, upheld disputes must be corrected with EWS and all CRAs within required timeframe. |
+| 9 | Member Rights | Consumer statement right communicated (ops) | As a member, if my dispute is denied, I want to know why and my right to add a personal statement to the record. |
+| 10 | Ops Readiness | Agent training and SOPs for disputes (internal) | As SoFi, agents must be trained on dispute intake, categories, and FCRA timelines before launch. |
+| 11 | Audit | Audit trail for all dispute actions (internal) | As SoFi, all dispute activity (intake, investigation, outcome, notifications) must be logged and auditable. |
+
+### What the MVP does NOT include
+
+Partial payments, payment plans, credit card payments, self-service dispute forms, proactive outreach, PayNearMe, account revival, collections, or analytics dashboards. These are Phase 2.
+
+---
+
+## Phase Summary
+
+| Area | Phase 1, Milestone 1: Account Healing / Repayment | Phase 1, Milestone 2: Data Dispute | Phase 2: Full Flow (Dec 31, 2026) |
+|---|---|---|---|
+| **Goal** | Enable members to pay charged-off balances and clear EWS record | Enable members to dispute inaccurate data reported to EWS | Scale, automate, and expand all capabilities |
+| **Payment channels** | In-app debit card (Stripe), logged-out portal (sofi.com/pay), ACH from external bank, pay by phone (agent) | N/A | + PayNearMe (CC, Venmo, cash, Apple Pay) |
+| **Payment types** | Full balance only | N/A | + Partial payments, payment plans, settlements |
+| **Dispute channels** | N/A | Phone + mail (agent-assisted) | + Self-service in-app/web form with document upload |
+| **Dispute handling** | N/A | Manual investigation via case management | + Automated SLA tracking, escalation alerts, analytics dashboard |
+| **How members learn they owe** | Charge-off email, in-app card, agent, help center, adverse action letter | Same channels include dispute rights info | + Proactive push notifications, email campaigns |
+| **EWS integration** | Batch file or API for healing reports | + Dispute flags and consumer statements in contribution data | + Full data contribution (all file types, governance, attestation) |
+| **Logged-out portal (sofi.com/pay)** | Balance lookup + pay (reference number or identity verification) | + "Think this is wrong?" dispute instructions page | + Payment history, dispute status tracking |
+| **Analytics** | Basic event tracking (payment volume, healing rate) | + Dispute volume, resolution time tracking | + Full dashboard: healing rate, dispute volume, resolution time, recovery $, ops handle time |
+| **Ops readiness** | Agent training on payment processing, identity verification | + Agent training on dispute intake, FCRA timelines, categories | + Automated workflows, reduced manual effort |
+| **Account re-engagement / revival** | Not included | Not included | Evaluate path back to SoFi for healed members; reopen accounts if new core supports it |
 
 ---
 
@@ -130,160 +230,6 @@ From query history, Risk Management already runs comprehensive charge-off monito
 - **Charge-off metrics** are computed daily, MTD, QTD, and YTD
 - **Data is split by account owner**: SoFi Money, SoFi Bank, and Samsung
 - **Product types** filtered: 'SoFi Money Cash Account', 'SoFi Bank DDA', 'SOFI BANK SAVINGS'
-
-### Metrics from Amplitude (queried 2026-04-02)
-
-**Source:** MrClean Prod v2 (appId 250200), `MONEY_ACCOUNT_CLOSED` event, last 12 months.
-
-**Monthly Money account closures (all reasons, unique users):**
-
-| Month | Closures |
-|-------|----------|
-| Apr 2025 | 33,872 |
-| May 2025 | 22,595 |
-| Jun 2025 | 30,137 |
-| Jul 2025 | 31,035 |
-| Aug 2025 | 29,928 |
-| Sep 2025 | 24,433 |
-| Oct 2025 | 50,835 |
-| Nov 2025 | 24,281 |
-| Dec 2025 | 15,250 |
-| Jan 2026 | 17,142 |
-| Feb 2026 | 15,439 |
-| Mar 2026 | 16,654 |
-
-Recent months (Jan to Mar 2026) average approximately **16,400 closures/month**, down from ~30,000/month in mid-2025. October 2025 was an outlier at 50,835.
-
-**Closures by `close_reason_code` (unique users, 12-month total):**
-
-| Code | Unique Users (12mo) | Monthly Trend (recent) | Likely Mapping |
-|------|--------------------|-----------------------|----------------|
-| 1 | 115,379 | ~4,500/mo (down from ~12,000) | Voluntary / Customer-initiated |
-| 14 | 85,610 | ~7,000/mo (stable) | Risk / Fraud-related |
-| 13 | 54,433 | ~3,000 to 3,500/mo | **Charge-off / Write-off** (most likely) |
-| 16 | 35,280 | Sporadic (spikes in Jun, Oct) | Batch / Administrative |
-| 17 | 20,427 | ~1,400/mo (stable) | Inactivity |
-| 11 | 797 | Low | Other |
-| 15 | 302 | Low | Other |
-| 12 | 160 | Low | Other |
-
-**Close reason code mapping (confirmed via Snowflake):** Amplitude `close_reason_code` **13** = Snowflake `ACCOUNT_CLOSED_REASON` = "Closed by SoFi - Charge-Off / Write-Off". The Amplitude volume for code 13 (~3,000 to 3,500 accounts/month in `MONEY_ACCOUNT_CLOSED`) undercounts the true charge-off volume. The authoritative source is `ACCOUNT_TO_CLOSE_EVENTS` in Snowflake, which shows **~12,800 unique accounts/month** (see Snowflake metrics below). The discrepancy is because Amplitude's `MONEY_ACCOUNT_CLOSED` event fires only once at final closure, while the Snowflake events table captures the full delinquency lifecycle including accounts that were flagged for charge-off but may resolve through different closure paths.
-
-**ACCOUNT_CLOSED by account_type (all products, 12-month unique users):**
-
-| Account Type | Unique Users |
-|-------------|-------------|
-| new | 457,634 |
-| individual | 94,160 |
-| ira_roth | 18,307 |
-| ira_trad_contrib | 13,581 |
-
-The "new" and "individual" types represent checking/savings accounts and dominate closures.
-
-**BANKING_ACCOUNT_ENDED_DAY_WITH_NEGATIVE_BALANCE:** This event returned zero data for the past 12 months in MrClean Prod v2. It likely fires in a different Amplitude project or is a backend event not ingested into this project. The event exists in the taxonomy but appears inactive. Negative balance data is better sourced from Snowflake directly.
-
-### Snowflake metrics (queried 2026-04-02)
-
-All queries executed via `snow sql -c sofi` against production Snowflake.
-
-#### Close reason code mapping (all-time, MONEY_ACCOUNT_CLOSURES)
-
-| Close Reason | Total Accounts |
-|---|---:|
-| Customer Request | 2,122,542 |
-| Closed by SoFi - Risk Request | 216,159 |
-| **Closed by SoFi - Charge-Off / Write-Off** | **180,777** |
-| Closed by SoFi - Fraud - No Payout | 56,254 |
-| None | 29,593 |
-| Auto Close Experian KYC Check Status | 20,884 |
-| Closed by Sofi - Escheatment | 15,254 |
-| Member Withdrew During KYC | 14,581 |
-| Closed by SoFi - Failed KYC | 12,346 |
-| Closed by SoFi - Dispute Abuse | 6,290 |
-
-This confirms **Amplitude close reason code 13 = "Closed by SoFi - Charge-Off / Write-Off"**. Data range: April 2019 to October 2025 (table last refreshed Oct 6, 2025).
-
-#### Monthly charge-off volume (unique accounts)
-
-Three Snowflake tables track charge-off volume. Cross-referencing them for the same months (Apr to Sep 2025) shows that `ACCOUNT_TO_CLOSE_EVENTS` overcounts by ~1.57x vs. the curated `MONEY_ACCOUNT_CLOSURES` table. The modeled closures table (with `RANK = 1` deduplication) is the most accurate source for unique account counts, but it was last refreshed Oct 6, 2025.
-
-| Month | MONEY_ACCOUNT_CLOSURES (authoritative) | ACCOUNT_TO_CLOSE_EVENTS (CLOSED, distinct SURROGATE_ID) | Ratio |
-|---|---:|---:|---:|
-| Sep 2025 | 7,891 | 12,888 | 1.63x |
-| Aug 2025 | 9,710 | 14,776 | 1.52x |
-| Jul 2025 | 7,875 | 12,436 | 1.58x |
-| Jun 2025 | 6,965 | 10,772 | 1.55x |
-| May 2025 | 7,424 | 11,305 | 1.52x |
-| Apr 2025 | 6,123 | 9,881 | 1.61x |
-| **Average** | **~7,665** | **~12,010** | **1.57x** |
-
-For months after Oct 2025 (where only `ACCOUNT_TO_CLOSE_EVENTS` has data), applying the 1.57x correction factor:
-
-| Month | ACCOUNT_TO_CLOSE_EVENTS (raw) | Corrected estimate (/ 1.57) |
-|---|---:|---:|
-| Mar 2026 | 12,812 | ~8,160 |
-| Feb 2026 | 12,204 | ~7,770 |
-| Jan 2026 | 13,523 | ~8,610 |
-| Dec 2025 | 12,041 | ~7,670 |
-| Nov 2025 | 11,696 | ~7,450 |
-| Oct 2025 | 12,595 | ~8,020 |
-
-**Best estimate: ~8,000 unique accounts charged off per month.** Write-offs (DELINQUENCY_TYPE = 'WRITEOFF') add ~600 to 700/month. Combined: ~8,600 to 8,700/month.
-
-Note: Amplitude `MONEY_ACCOUNT_CLOSED` (code 13) shows ~3,000 to 3,500/month, which undercounts by roughly half. It should not be used as the authoritative volume.
-
-#### Charge-off balance: actual transaction amounts
-
-Source: `TDM_RISK_MGMT_HUB.SUMMARIZED.RR_BANKING_TRANSACTIONS_FACTS` joined with `RR_BANKING_TRANSACTIONS_DETAILS` on charge-off transaction codes (DDCHGOFF, DDWRTOFF). This is the **definitive source** for charge-off dollar amounts, representing the actual transaction posted to each account at the time of charge-off.
-
-| Month | Charge-off Transactions | Avg Charge-off Amount | Total Charged Off |
-|---|---:|---:|---:|
-| Mar 2026 | 7,722 | **$140** | $1.08M |
-| Feb 2026 | 7,164 | **$156** | $1.12M |
-| Jan 2026 | 7,724 | **$227** | $1.75M |
-| Dec 2025 | 7,085 | **$203** | $1.44M |
-| Nov 2025 | 6,678 | **$184** | $1.23M |
-| Oct 2025 | 7,567 | **$284** | $2.15M |
-| Sep 2025 | 7,258 | **$286** | $2.08M |
-| Aug 2025 | 8,596 | **$210** | $1.81M |
-| Jul 2025 | 7,263 | **$348** | $2.53M |
-| Jun 2025 | 6,553 | **$277** | $1.82M |
-| May 2025 | 7,261 | **$221** | $1.60M |
-| Apr 2025 | 5,807 | **$194** | $1.12M |
-
-**Key metrics:**
-- **Trailing 12-month average charge-off amount: ~$228**
-- **Recent 3-month average (Jan to Mar 2026): ~$170** (trending downward)
-- Nearly 100% of charge-off transactions have non-zero amounts
-- **Annual charge-off loss (Apr 2025 to Mar 2026): ~$19.7M**
-- Monthly charge-off loss: $1.1M to $2.5M
-
-By transaction code (since Apr 2025):
-
-| Code | Description | Transactions | Avg Amount | Total |
-|---|---|---:|---:|---:|
-| DDCHGOFF | DDA charge-off | 77,724 | $244 | $18.97M |
-| DDWRTOFF | DDA write-off | 8,954 | $85 | $760K |
-| SDCHGOFF | Savings charge-off | 506 | $1,192 | $603K |
-| SDWRTOFF | Savings write-off | 32 | $503 | $16K |
-
-**Note on earlier proxy data:** The `AVG_TOTAL_BALANCE_T30D` field in `MONEY_ACCOUNT_CLOSURES` (which showed $75 average) is a trailing 30-day average balance, not the actual charge-off amount. It significantly underestimates the true charge-off balance. The transaction-level data above is authoritative.
-
-#### Recovery opportunity sizing
-
-| Metric | Value |
-|---|---|
-| All-time charged-off accounts (through Oct 2025, MONEY_ACCOUNT_CLOSURES) | 180,777 |
-| Estimated through Mar 2026 (adding ~40K from Nov to Mar at ~8K/month) | ~221,000 |
-| Monthly new charge-offs (unique accounts, corrected) | **~8,000** |
-| Average charge-off balance (trailing 12-month, from transactions) | **~$228** |
-| Recent average charge-off balance (Jan to Mar 2026) | **~$170** |
-| Annual charge-off loss (Apr 2025 to Mar 2026) | **$19.7M** |
-| **Estimated all-time total recovery opportunity** | **~$50M** (221K accounts x $228 avg) |
-| Monthly recovery opportunity (new accounts only) | **~$1.4M to $1.8M** |
-| Realistic recovery rate assumption (industry: 5 to 15%) | 5 to 15% |
-| **Estimated annual recoveries at 10% rate** | **~$2.0M** |
-| **Estimated annual recoveries at 15% rate** | **~$3.0M** |
 
 ### Amplitude: Relevant events
 
@@ -325,24 +271,6 @@ SoFi is contractually required by Early Warning Services (EWS) to contribute Che
 
 Today, **neither capability exists at SoFi**. There is no member-facing experience, no operational workflow, and no system integration to process healing payments or manage EWS data disputes for charged-off deposit accounts.
 
-### How charge-offs work today
-
-When a member's C&S account goes negative, SoFi provides a **57-day grace period** with reminders to repay. If the member does not bring the balance to zero within that window, the account is closed and the balance is charged off. After charge-off:
-- The account is **permanently closed**. There is no mechanism to reopen it or deposit into it.
-- There is **no way for the member to repay**. Even if they want to, no payment channel exists.
-- If the member reapplies for a SoFi Money account in the future, they are **declined**.
-- Once we begin reporting to EWS, the charge-off will appear in the National Shared Database, potentially blocking the member from opening accounts at other financial institutions for up to 5 years.
-
-### Why this matters
-
-**Compliance exposure.** Reporting charge-offs to EWS without offering a healing or dispute path creates UDAAP risk (unfair/deceptive to report negative data with no member recourse) and FCRA non-compliance (members have a statutory right to dispute furnished data). The BRD explicitly flags this: "To address UDAAP risk if we report charge-offs but don't allow members to resolve those charge-offs."
-
-**Member harm.** An EWS flag can prevent a member from opening checking or savings accounts at other financial institutions for up to **5 years**. Members who want to make things right currently have no way to do so.
-
-**Financial impact.** SoFi is paying approximately **$100k/month** in excess fees to EWS until we begin contributing data. Full contribution compliance (including healing and dispute capabilities) is required by **December 31, 2026**, or EWS can terminate our access to New Account Risk and other services. The pricing difference is significant: $2.9M (non-contributing) vs. $1.5M (contributing) over 3 years.
-
-**Contract obligation.** Per the EWS Operating Rules, if a consumer pays off or otherwise settles Account Abuse, the bank must report the update within **10 business days**. We cannot fulfill this obligation without a payment collection mechanism.
-
 ### Who is affected
 
 - **Charged-off C&S members:** Members whose SoFi Checking & Savings accounts were closed with a negative balance. Estimated in the thousands to tens of thousands. Typical balances are small (likely under $100), often resulting from ACH returns or timing issues rather than intentional fraud.
@@ -351,42 +279,90 @@ When a member's C&S account goes negative, SoFi provides a **57-day grace period
 
 ---
 
-## Member Experience: Current State vs. Proposed
+## Data Findings
 
-### Current member experience (today)
+_All data queried April 2, 2026, from production Snowflake via `snow sql -c sofi`._
 
-There is no healing or dispute path. The member journey hits a dead end at charge-off.
+### A note on data sources
 
-**Pre-charge-off (57-day grace period):**
+Two Snowflake tables track charge-off closures, and they report different numbers:
 
-| Day | What happens | What the member sees |
-|-----|-------------|---------------------|
-| Day 0 | ACH return, failed transaction, or other event causes account to go negative. | Balance goes negative in the app. Member may or may not notice. |
-| Day 1 to 14 | SoFi sends reminders that the account is negative. | Push notification / email: "Your account has a negative balance of -$XX. Please deposit funds to bring it back to $0." |
-| Day 15 to 45 | Additional reminders. Account may be restricted from certain transactions. | Continued reminders. Member can still deposit, transfer, or receive funds to cure the balance. |
-| Day 46 to 57 | Final warning period. | Stronger language: "Your account will be closed if the balance is not brought to $0." |
-| Day 57 | Account is closed and balance is charged off. Account closure processed via `ACCOUNT_TO_CLOSE_EVENTS` with `DELINQUENCY_TYPE` = CHARGEOFF. | **Dead end.** The Banking tab no longer shows the account. Member may see a generic "Account closed" message. No indication of what they owe or how to pay. |
+- **`MONEY_ACCOUNT_CLOSURES`** is a curated, deduplicated table: one row per account, representing the final closure state. This is the authoritative source for unique account counts but was last refreshed October 6, 2025.
+- **`ACCOUNT_TO_CLOSE_EVENTS`** is an event stream that captures the full lifecycle of a closure (started, pending, closed, canceled). A single account can generate multiple events across statuses, so raw counts overstate unique accounts by approximately 1.57x.
 
-**Post-charge-off (current state, no healing path):**
+The numbers below come from **transaction-level data** (`RR_BANKING_TRANSACTIONS_FACTS`), which counts the actual charge-off transaction posted to each account and is the most reliable per-month source.
 
-| Trigger | What happens | What the member experiences |
-|---------|-------------|----------------------------|
-| Member logs into SoFi app | Banking tab shows no active account. No mention of charged-off balance. | Confusion. "Where did my account go?" No information about the owed balance or how to resolve it. |
-| Member tries to open a new SoFi Money account | Application declined due to prior charge-off. | Declined with no clear explanation of why or how to fix it. |
-| Member applies for account at another bank | EWS returns charge-off data to that bank. Application declined. | Adverse action letter from the other bank naming SoFi as the data source: "Based on information provided by SoFi Bank / Early Warning Services, your application has been denied." |
-| Member calls SoFi support | Agent has no tooling, SOP, or payment mechanism. | Agent: "I'm sorry, I don't have a way to help you pay this balance." Member is stuck. |
-| Member wants to dispute data | No dispute intake process exists. | Agent: "I'm sorry, I'm not sure how to handle that." Member may be directed to write a letter, but no defined address, process, or timeline. |
-| Member wants to pay | No payment channel exists. Account is permanently closed. Cannot deposit. | **Complete dead end.** Member is willing to pay but literally cannot. |
+### Monthly charge-off volume (last 6 months)
 
-**The result:** The member is stuck with an EWS flag for up to 5 years, unable to open accounts at most financial institutions, with no recourse. This is the UDAAP risk the BRD identifies.
+| Month | Accounts | Avg Balance | Monthly Loss |
+|---|---:|---:|---:|
+| Mar 2026 | 7,722 | $140 | $1.08M |
+| Feb 2026 | 7,164 | $156 | $1.12M |
+| Jan 2026 | 7,724 | $227 | $1.75M |
+| Dec 2025 | 7,085 | $203 | $1.44M |
+| Nov 2025 | 6,678 | $184 | $1.23M |
+| Oct 2025 | 7,567 | $284 | $2.15M |
+| **6-month avg** | **~7,300** | **~$199** | **~$1.5M** |
+
+Source: `TDM_RISK_MGMT_HUB.SUMMARIZED.RR_BANKING_TRANSACTIONS_FACTS` joined with `RR_BANKING_TRANSACTIONS_DETAILS`, filtered on charge-off transaction codes (`DDCHGOFF`, `DDWRTOFF`, `SDCHGOFF`, `SDWRTOFF`).
+
+DDA (checking) charge-offs account for 95%+ of volume. Savings charge-offs are rare (~40/month) but carry higher average balances (~$1,200).
+
+### Recovery opportunity
+
+| Recovery Rate (industry benchmark: 5 to 15%) | Estimated Monthly Recovery |
+|---|---:|
+| 5% | ~$73K |
+| 10% | ~$146K |
+| 15% | ~$219K |
 
 ---
 
-### Proposed member experience (MVP)
+## Member Experience: Current State vs. Proposed
 
-#### Journey 1: Healing (payment)
+### Pre-charge-off (57-day grace period)
 
-**Entry points:** A member learns about their charge-off through one of these paths:
+| Day | Current Experience | Proposed Experience (MVP) |
+|-----|---|---|
+| Day 0 | ACH return, failed transaction, or other event causes account to go negative. Balance goes negative in the app. Member may or may not notice. | **Same**, plus in-app banner: "Your account has a negative balance. Resolve it to avoid account closure and reporting to Early Warning Services." |
+| Day 1 to 14 | Push notification / email: "Your account has a negative balance of -$XX. Please deposit funds to bring it back to $0." | **Push notification + email** with EWS implication: "Your account has a negative balance of -$XX. If not resolved, your account will be closed and reported to Early Warning Services (EWS), which may prevent you from opening bank accounts at other institutions for up to 5 years." |
+| Day 15 to 45 | Continued generic reminders. Account may be restricted from certain transactions. | **Escalated push notification + email** reinforcing consequences: "You have X days left to bring your balance to $0. After that, your account will be closed, the balance charged off, and reported to EWS." |
+| Day 46 to 57 | Stronger language: "Your account will be closed if the balance is not brought to $0." | **Final warning push notification + email**: "Your account will be closed in X days. The charged-off balance will be reported to EWS and may block you from opening accounts at other banks for up to 5 years. Deposit $XX now to avoid this." |
+| Day 57 | Account is closed and balance is charged off. The Banking tab no longer shows the account. No indication of what they owe or how to pay. | Account is closed and balance is charged off. **Post-closure email**: "Your account has been closed with an outstanding balance of $XX. This will be reported to EWS. Log in to your SoFi app to pay and clear your record, or call us at [number]." |
+
+The 57-day grace period and closure process remain the same. The proposed change is to the **messaging**: every notification now explains the EWS consequence so members understand what is at stake and are motivated to act before charge-off.
+
+### Post-charge-off (current vs. proposed)
+
+**Logged-in experience (SoFi app):**
+
+| Trigger | Current Experience | Proposed Experience (MVP) |
+|---|---|---|
+| Member logs into SoFi app | Banking tab shows no active account. No mention of charged-off balance. Confusion. | Banking tab displays a "Charged-Off Balance" card showing amount owed, EWS impact, and options to pay or dispute. |
+| Member tries to open a new SoFi Money account | Declined with no clear explanation of why or how to fix it. | Declined, but directed to resolve the charged-off balance first. |
+| Member wants to pay | No payment channel exists. **Complete dead end.** | In-app debit card payment (Stripe). Full balance only for MVP. Instant confirmation, EWS updated within 10 business days. |
+| Member wants to dispute data | No dispute intake process. Agent cannot help. | "Think this is wrong? Dispute this data" link routes to phone/mail instructions (MVP). Self-service form in Phase 2. |
+
+**Logged-out experience (guest portal, sofi.com/pay):**
+
+| Trigger | Current Experience | Proposed Experience (MVP) |
+|---|---|---|
+| Member receives adverse action letter from another bank | Letter names SoFi/EWS as data source. No recourse, no way to pay. | Letter includes sofi.com/pay URL. Member visits, looks up balance with reference number or identity verification, and pays. |
+| Member cannot log in (forgot credentials, no app) | No payment channel. Agent cannot help beyond "try resetting your password." | Guest portal: verify identity with reference number + last 4 SSN (or name + DOB + SSN), see balance, pay via debit card, receive email receipt. No login required. |
+| Member calls SoFi support | Agent has no tooling, SOP, or payment mechanism. Dead end. | Agent looks up account, directs member to sofi.com/pay or processes payment via agent tool. |
+| Member wants to dispute (no login) | No dispute intake process. No defined address or timeline. | Guest portal includes "Think this is wrong?" link with phone number and mailing address for disputes. |
+
+---
+
+### Proposed experience detail
+
+The healing flow has two variants depending on whether the member can log in. Both use the same Stripe payment backend and produce the same EWS update.
+
+#### Logged-in experience (SoFi app)
+
+For members who can log into their SoFi account. This is the primary flow.
+
+**Entry points:**
 
 | Entry point | Frequency (estimated) | Flow |
 |------------|----------------------|------|
@@ -478,9 +454,79 @@ Step 4: Agent directs member to pay
 Step 5: Same confirmation, email, and EWS reporting as in-app flow
 ```
 
+#### Logged-out experience (guest payment portal)
+
+For members who cannot log in: forgot credentials, no app access, or directed by an adverse action letter from another bank. They visit a web payment portal (sofi.com/pay) and look up their balance without needing a SoFi login.
+
+**How the member gets to sofi.com/pay:**
+
+| Entry path | What the member sees |
+|---|---|
+| **Adverse action letter from another bank** | Member is denied at another FI. Letter names SoFi/EWS. Member calls SoFi or searches online. Agent directs them to **sofi.com/pay**. |
+| **Charge-off notification email (Day 57)** | "Your account has been closed with a balance of $XX. This will be reported to EWS. **Pay at sofi.com/pay** or log in to the SoFi app." |
+| **Pre-charge-off reminder emails (Day 1 to 57)** | "Deposit funds to avoid closure. If your account is closed, you can pay at sofi.com/pay." |
+| **SoFi support agent** | Agent: "You can pay online at sofi.com/pay. You'll need your reference number from your email, or I can verify your identity over the phone." |
+| **SoFi help center / FAQ** | Help article: "How to pay a charged-off balance and clear your EWS record." Links to sofi.com/pay. |
+| **In-app "Pay on web instead" link** | Logged-in member who prefers web can tap this link on the charged-off balance card. Opens sofi.com/pay in mobile browser. |
+
+The URL **sofi.com/pay** must appear in: (1) charge-off notification email, (2) pre-charge-off reminder emails, (3) adverse action notice language, (4) SoFi help center, and (5) agent scripts/SOPs.
+
+**Guest flow:**
+
+```
+Step 1: Member visits sofi.com/pay
+        (URL included in adverse action letter, charge-off email,
+        or provided by SoFi support agent.)
+
+Step 2: Look up balance (two options)
+        Option A: Reference number (from letter/email) + last 4 of SSN
+        Option B: Full name + date of birth + last 4 of SSN
+
+Step 3: Identity verified, balance displayed
+        - Shows: account number (masked), closure date, balance owed, EWS status
+        - Session expires in 15 minutes for security
+
+Step 4: Enter debit card information
+        - Same Stripe integration as in-app flow
+        - Email address collected for receipt delivery
+        - No credit card accepted
+
+Step 5: Payment confirmation
+        - On-screen confirmation with reference number
+        - Receipt emailed to provided address
+        - Option to download/print receipt
+        - "Keep your confirmation number" callout
+
+Step 6: Backend processing (same as in-app)
+        - Payment deposited into recovery GL
+        - Account status updated in system of record
+        - EWS reporting triggered (within 10 business days)
+```
+
+**Key design considerations for guest portal:**
+
+- **No account creation required.** The member should be able to pay without signing up or remembering credentials.
+- **Time-boxed session.** Identity verification grants a 15-minute window for security.
+- **Receipt delivery.** Since there's no app to return to, the email receipt and confirmation number are critical.
+- **Dispute link included.** "Think this is wrong?" link routes to phone/mail dispute instructions, same as in-app.
+- **Redirect to login.** "Have a SoFi account? Log in instead" link for members who can use the app.
+
 #### Journey 2: Dispute
 
-**Entry points:** A member believes the data SoFi reported to EWS is wrong.
+**How does a member learn they can dispute?**
+
+| Discovery path | What the member sees |
+|---|---|
+| **In-app charged-off balance card** | "Think this is wrong? Dispute this data" link below the Pay button. Taps through to dispute instructions screen with phone number and mailing address. |
+| **Guest portal (sofi.com/pay)** | "Think this is wrong? Dispute this data" link on the balance page. Same dispute instructions. |
+| **Charge-off notification email (Day 57)** | Email includes: "If you believe this information is inaccurate, you have the right to dispute it. Call 1-855-456-7634 or write to SoFi Bank, N.A., 2750 East Cottonwood Parkway #300, Cottonwood Heights, UT 84121." |
+| **Adverse action letter from another bank** | Letter names EWS. EWS consumer services provides SoFi contact info. Member calls SoFi, agent explains dispute process. |
+| **SoFi help center / FAQ** | Help article: "How to dispute data SoFi reported to EWS." Includes phone number, mailing address, and what to include in a dispute. |
+| **Agent (phone)** | Any member who calls SoFi about a charge-off is informed of their right to dispute. Agent explains the process and can intake the dispute on the spot. |
+
+**Dispute contact info must appear in:** (1) in-app dispute screen, (2) guest portal dispute page, (3) charge-off notification email, (4) help center, and (5) agent scripts.
+
+**Entry points:**
 
 | Entry point | Flow |
 |------------|------|
@@ -488,6 +534,7 @@ Step 5: Same confirmation, email, and EWS reporting as in-app flow
 | **Member sends mail** | Written dispute received at: SoFi Bank, N.A., 2750 East Cottonwood Parkway #300, Cottonwood Heights, Utah 84121 |
 | **Indirect (CRA-routed)** | EWS forwards a dispute initiated by the member through another channel. SoFi investigates per FCRA. |
 | **In-app link (MVP)** | "Think this is wrong? Dispute this data" link on the charged-off balance card routes to phone number/instructions for MVP. Self-service form in Phase 2. |
+| **Guest portal link** | "Think this is wrong?" link on sofi.com/pay balance page routes to dispute instructions. |
 
 **Dispute flow (MVP, agent-assisted):**
 
@@ -618,23 +665,35 @@ Step 7: Member notification
 
 ## 2. Goals & Success Metrics
 
-| Metric | Baseline (current) | Target | Measurement window |
-|--------|-------------------|--------|-------------------|
-| **Compliance coverage** - % of required EWS healing/dispute workflows implemented | 0% (no capability exists) | 100% of MVP requirements live | By July 31, 2026 |
-| **Healing turnaround** - days from payment received to EWS record updated | N/A | Within 10 business days (contractual requirement) | Ongoing from launch |
-| **Dispute resolution time** - median days from dispute submission to resolution | N/A | ≤ 30 days (FCRA mandate; 45 days if member provides additional info) | Ongoing from launch |
-| **Recovery amount** - total $ collected through healing payments | $0 | Track from launch; no specific target for MVP | Monthly |
-| **Healing rate** - % of eligible members who repay and heal their record | 0% | Establish baseline in Phase 1 | Quarterly |
-| **Dispute accuracy** - % of disputes resolved correctly on first pass | N/A | > 95% | Quarterly |
-| **Ops handle time** - average time to process a healing payment (agent-assisted) | N/A | < 20 min per case | Monthly |
+### North Star Metric
 
-**Guardrail metrics (should not degrade):**
+**Healing Rate: % of eligible charged-off members who repay and clear their EWS record.**
+
+This single metric captures whether the product is working: member awareness, payment UX, and backend processing rolled into one number. Today there are ~221,000 all-time charged-off accounts and ~8,000 new ones every month. Even a modest healing rate translates into meaningful recovery and, more importantly, regulatory compliance.
+
+| | Baseline | 6-Month Target | 12-Month Stretch |
+|---|---|---|---|
+| Healing rate | 0% (no capability exists) | 5 to 10% | 10 to 15% |
+| Monthly recovery dollars | $0 | $140K to $270K | $350K+ |
+
+Industry benchmark for deposit charge-off recovery: 5 to 15%.
+
+### Supporting Metrics
+
+| Metric | Baseline | Target | Why it matters |
+|--------|----------|--------|----------------|
+| **EWS reporting SLA** - % of healed accounts reported to EWS within 10 business days | N/A | 100% | Contractual obligation. Missing this is a compliance violation. |
+| **Dispute resolution SLA** - % of disputes resolved within 30 days (45 if additional info) | N/A | 100% | FCRA mandate. Non-compliance risks regulatory action. |
+| **Payment completion rate** - % of members who start payment and finish | N/A | > 80% | Signals whether the payment UX works or has friction. |
+| **Monthly recovery amount ($)** | $0 | Track from launch | Financial recovery against ~$1.4M/month in new charge-off losses. |
+
+### Guardrails (should not degrade)
 
 | Metric | Constraint |
 |--------|-----------|
-| Member satisfaction (CSAT) for members going through healing/dispute | ≥ 4.0 / 5.0 |
+| Member satisfaction (CSAT) for healing/dispute flow | >= 4.0 / 5.0 |
+| Payment failure rate | < 10% |
 | False dispute rejection rate | < 5% |
-| Data accuracy of records reported to EWS | Per EWS accuracy thresholds (TBD with EWS) |
 
 ---
 
@@ -682,11 +741,12 @@ The investigation requirement is to "fix if wrong or provide an update." Differe
 ### In scope (MVP, targeting July 31, 2026)
 
 - **Payment collection for charged-off C&S account balances** (full balance payment; no partial payments or payment plans for MVP)
-- **Payment method:** Debit card via Stripe (leveraging SoFi Plus pattern) as primary method. Evaluate ACH from external bank as secondary. **No credit card payments.**
+- **Payment method:** Debit card via Stripe (leveraging SoFi Plus pattern) as primary method. ACH push from external bank as secondary. **No credit card payments.**
 - **Recovery GL:** Funds deposited into a SoFi recovery/collections general ledger (original account is closed and cannot receive deposits)
 - **EWS healing report:** Update Account Abuse data within 10 business days of confirmed payment, submitted via established EWS reporting mechanism (API or batch file)
-- **Member-facing experience:** In-app view of charged-off balance and payment flow for members who can log in to SoFi app
-- **Agent-assisted fallback:** Ops agent can look up balance and process payment for members who call in
+- **Logged-in experience:** In-app view of charged-off balance and payment flow for members who can log in to SoFi app
+- **Logged-out experience:** Guest payment portal (sofi.com/pay) for members who cannot log in. Balance lookup via reference number or identity verification, debit card payment, email receipt.
+- **Pay by phone (agent-assisted):** Ops agent can look up balance, collect debit card info, and process payment for members who call in
 - **Dispute intake:** Phone-based and mail-based dispute submission (FCRA requires mail; phone for member convenience)
 - **Dispute investigation:** Ops team investigates within FCRA timelines using existing or adapted case management tooling
 - **Dispute reporting:** EWS contribution records updated with dispute flags and consumer statements
@@ -706,7 +766,7 @@ The investigation requirement is to "fix if wrong or provide an update." Differe
 | New core banking account revival | David Finske confirmed this is technically possible in the new core, but prerequisites unavailable before late August 2026. Do not take a dependency. |
 | Changes to initial charge-off reporting pipeline | Being handled separately by Michelle Barnwell + Data Engineering (Daniel Evanko). |
 | Hot File contribution | Explicitly out of scope per the BRD. |
-| Logged-out payment experience | MVP requires member to log in to SoFi app or call in. A logged-out payment flow (e.g., email link to payment page) introduces fraud/identity risk and is deferred. |
+| ~~Logged-out payment experience~~ | **Moved to MVP.** Guest portal (sofi.com/pay) is now in scope. Identity verification via reference number + last 4 SSN or name + DOB + SSN. |
 
 ### Future phases
 
@@ -716,7 +776,7 @@ The investigation requirement is to "fix if wrong or provide an update." Differe
 - Partial payments and payment plans (settlement at less than full balance, similar to lending's ~60% settlement model)
 - Proactive outreach to eligible members (email, push)
 - ACH payment support from external banks
-- Payment website with case number for members who cannot log in
+- ~~Payment website with case number for members who cannot log in~~ (moved to MVP as guest portal)
 - Analytics dashboard: healing rate, dispute volume, resolution time
 - Evaluate re-engagement: offer healed members a path back to SoFi
 
@@ -735,7 +795,7 @@ The investigation requirement is to "fix if wrong or provide an update." Differe
 | **Member has multiple charged-off accounts** | Display all charged-off balances. Allow member to pay each separately. Each triggers its own EWS healing update. |
 | **Member overpays** | System should prevent overpayment by pre-populating the exact balance. If overpayment occurs, initiate refund process. |
 | **Payment fails or times out** | Display clear error message. Do not update EWS. Allow retry. Log the attempt for ops visibility. |
-| **Member no longer has SoFi app access** (forgot credentials, deleted account, etc.) | Agent-assisted path via phone. Standard identity verification before processing. |
+| **Member no longer has SoFi app access** (forgot credentials, deleted account, etc.) | Direct to guest portal (sofi.com/pay). Agent-assisted fallback via phone. Standard identity verification before processing. |
 | **Very old charge-off (1+ years)** | Still eligible for healing. Balance sourced from system of record. No expiration on healing eligibility. Note: EWS flags can persist for 5 years. |
 | **Very small balance (< $5)** | Still allow payment. Open question: is there a dollar threshold below which SoFi should write off rather than collect? Finance to advise. |
 | **Member disputes during active healing payment** | Pause healing flow until dispute is resolved. Do not double-process. |
@@ -840,10 +900,10 @@ An **in-app experience** naturally solves all three: the member is authenticated
 
 ### Security and authentication
 
-- Payment flow must be behind SoFi authentication (logged-in experience only for MVP)
-- Agent-assisted path requires standard identity verification before processing
-- PCI DSS compliance required for debit card handling via Stripe
-- Logged-out payment flow (e.g., emailed payment link) deferred due to fraud risk: a bad actor could intercept and use it to associate themselves with a member's identity
+- **Logged-in:** Payment flow is behind SoFi app authentication
+- **Guest portal (sofi.com/pay):** Identity verification required before showing balance or accepting payment. MVP options: (a) reference number (from email/letter) + last 4 SSN, or (b) name + DOB + last 4 SSN. No PII exposed until verified.
+- **Pay by phone:** Agent-assisted path requires standard identity verification before processing
+- PCI DSS compliance required for debit card handling via Stripe across all channels
 
 ---
 
@@ -901,6 +961,8 @@ An **in-app experience** naturally solves all three: the member is authenticated
 | 27 | Can we accept wire/ACH push to a SoFi routing + account number? Are there compliance concerns with providing an account number for push payments? | Compliance / Payments Eng | Open | Working doc |
 | 28 | What deposit methods should work for the healing payment? Need explicit Compliance sign-off on acceptable methods. | Compliance | Open | Working doc |
 | 29 | Confirm Srikant Movva as dispute workstream owner. | Shahar Ronen | Open | Working doc |
+| 30 | **Is sofi.com/pay a live URL?** Currently returns a 404. Needs to be provisioned and routed to the guest payment portal before MVP launch. Who owns the DNS/routing? | Web Eng / Infra | **Open - Blocker** | PRD review |
+| 31 | What is the fallback URL if sofi.com/pay cannot be provisioned in time? Options: sofi.com/chargeoff-pay, a subdomain, or a direct link in communications only. | Product / Web Eng | Open | PRD review |
 
 ---
 

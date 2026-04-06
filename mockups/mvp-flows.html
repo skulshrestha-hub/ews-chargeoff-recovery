@@ -305,7 +305,6 @@
 
 <div class="toc">
   <a href="#logged-in">Logged-In (App)</a>
-  <a href="#phone">Pay by Phone</a>
   <a href="#entry-paths">Guest Portal Entry Paths</a>
   <a href="#guest">Logged-Out (Guest)</a>
   <a href="#dispute">Dispute</a>
@@ -463,130 +462,6 @@
           </div>
           <button class="btn btn-primary">Done</button>
           <button class="btn btn-outline">Download Receipt</button>
-        </div>
-      </div>
-    </div></div>
-  </div>
-</div>
-
-<div class="sep"></div>
-
-<!-- ============================================ -->
-<!-- PAY BY PHONE                                  -->
-<!-- ============================================ -->
-
-<div class="section-label" id="phone">
-  <span class="section-badge notif">Agent-Assisted</span>
-  <div class="section-title">Pay by Phone</div>
-  <div class="section-desc">Member calls 1-855-456-7634. Agent verifies identity, looks up charged-off balance, collects debit card info, and processes payment via the same Stripe backend.</div>
-</div>
-
-<div class="flow-row">
-  <div class="screen-wrap">
-    <div class="screen-title">1. Agent Lookup</div>
-    <div class="screen-desc">Agent verifies member identity and pulls up charged-off account.</div>
-    <div class="phone"><div class="phone-inner">
-      <span class="tag notif">AGENT VIEW</span>
-      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
-      <div class="nav">
-        <div class="nav-l"></div>
-        <div class="nav-c">Charge-Off Recovery Tool</div>
-        <div class="nav-r"></div>
-      </div>
-      <div class="scroll">
-        <div class="pad">
-          <div class="card">
-            <div class="card-t">Member Lookup</div>
-            <div class="form-g">
-              <label class="form-l">Search by</label>
-              <input class="form-i" type="text" value="SSN last 4 + DOB">
-            </div>
-            <div class="form-row">
-              <div class="form-g"><label class="form-l">Last 4 SSN</label><input class="form-i" type="text" value="7823"></div>
-              <div class="form-g"><label class="form-l">DOB</label><input class="form-i" type="text" value="03/15/1990"></div>
-            </div>
-            <button class="btn btn-primary" style="margin-top:4px;">Search</button>
-          </div>
-          <div class="info-box">
-            <strong>Identity verification required.</strong> Confirm member's full name, DOB, and last 4 SSN before proceeding.
-          </div>
-        </div>
-      </div>
-    </div></div>
-  </div>
-
-  <div class="screen-wrap">
-    <div class="screen-title">2. Balance & Payment</div>
-    <div class="screen-desc">Agent reads balance to member, collects debit card over the phone.</div>
-    <div class="phone"><div class="phone-inner">
-      <span class="tag notif">AGENT VIEW</span>
-      <div class="ios-bar"><span class="t">9:42</span><span class="i">&#9679;&#9679;&#9679;</span></div>
-      <div class="nav">
-        <div class="nav-l">&#8249;</div>
-        <div class="nav-c">Process Payment</div>
-        <div class="nav-r"></div>
-      </div>
-      <div class="scroll">
-        <div class="pad">
-          <div class="card" style="border-left:4px solid var(--red);">
-            <div style="font-size:12px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Charged-Off Account</div>
-            <div class="sum-r"><span class="sum-l">Member</span><span class="sum-v">J*** D*** (...7823)</span></div>
-            <div class="sum-r"><span class="sum-l">Account</span><span class="sum-v">Checking (...7823)</span></div>
-            <div class="sum-r"><span class="sum-l">Closed on</span><span class="sum-v">Jan 15, 2026</span></div>
-            <div class="sum-r"><span class="sum-l">Balance owed</span><span class="sum-v" style="color:var(--red);font-size:16px;">$142.50</span></div>
-          </div>
-          <div class="card">
-            <div class="card-t">Collect Debit Card</div>
-            <div class="form-g"><label class="form-l">Card number</label><input class="form-i" type="text" value="4532 **** **** 8821"></div>
-            <div class="form-row">
-              <div class="form-g"><label class="form-l">Expiry</label><input class="form-i" type="text" value="09/27"></div>
-              <div class="form-g"><label class="form-l">CVV</label><input class="form-i" type="text" value="***"></div>
-            </div>
-            <div class="form-g"><label class="form-l">Member email (for receipt)</label><input class="form-i" type="email" value="j***n@email.com"></div>
-            <div class="form-h" style="margin-bottom:12px;">&#128274; PCI-compliant. Processed via Stripe. Credit cards not accepted.</div>
-            <button class="btn btn-primary">Process Payment $142.50</button>
-          </div>
-          <div style="text-align:center;"><button class="link">Member wants to dispute instead</button></div>
-        </div>
-      </div>
-    </div></div>
-  </div>
-
-  <div class="screen-wrap">
-    <div class="screen-title">3. Confirmation</div>
-    <div class="screen-desc">Agent confirms payment to member. Receipt emailed. EWS update queued.</div>
-    <div class="phone"><div class="phone-inner">
-      <span class="tag notif">AGENT VIEW</span>
-      <div class="ios-bar"><span class="t">9:43</span><span class="i">&#9679;&#9679;&#9679;</span></div>
-      <div class="nav">
-        <div class="nav-l"></div>
-        <div class="nav-c">Payment Confirmed</div>
-        <div class="nav-r"></div>
-      </div>
-      <div class="scroll">
-        <div class="pad">
-          <div style="text-align:center;padding:16px 0 4px;">
-            <div class="ok-icon">&#10003;</div>
-            <div style="font-size:20px;font-weight:800;">Payment Processed</div>
-            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Receipt sent to member's email.</div>
-          </div>
-          <div class="card">
-            <div class="sum-r"><span class="sum-l">Amount</span><span class="sum-v">$142.50</span></div>
-            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 6, 2026</span></div>
-            <div class="sum-r"><span class="sum-l">Card</span><span class="sum-v">Debit ending in 8821</span></div>
-            <div class="sum-r"><span class="sum-l">Confirmation #</span><span class="sum-v">EWS-2026-04893</span></div>
-            <div class="sum-r"><span class="sum-l">Receipt sent to</span><span class="sum-v">j***n@email.com</span></div>
-          </div>
-          <div class="card">
-            <div class="card-t">Read to member</div>
-            <div style="font-size:13px;color:var(--gray-700);line-height:1.6;background:var(--gray-100);padding:14px;border-radius:10px;">
-              "Your payment of <strong>$142.50</strong> has been received. Your confirmation number is <strong>EWS-2026-04893</strong>. A receipt has been emailed to you. Your EWS record will be updated within <strong>10 business days</strong>, and you'll receive an email when it's cleared. Is there anything else I can help with?"
-            </div>
-          </div>
-          <div class="info-box">
-            <strong>Next steps:</strong> EWS healing report will be submitted automatically within 10 business days. Member will be notified by email.
-          </div>
-          <button class="btn btn-outline">Log interaction in case management</button>
         </div>
       </div>
     </div></div>

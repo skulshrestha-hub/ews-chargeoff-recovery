@@ -184,6 +184,30 @@ MVP is split into two milestones. **Milestone 1 (Healing):** members can see and
 | 10 | Ops Readiness | Agent training and SOPs for disputes (internal) | As SoFi, agents must be trained on dispute intake, categories, and FCRA timelines before launch. |
 | 11 | Audit | Audit trail for all dispute actions (internal) | As SoFi, all dispute activity (intake, investigation, outcome, notifications) must be logged and auditable. |
 
+### MVP implementation details
+
+**Phone number for payments and disputes:**
+- **1-855-456-7634** (existing SoFi support line). Agents route charge-off callers to the recovery queue. This number appears on all charge-off communications, the guest portal, the in-app dispute screen, and adverse action letters.
+
+**Payment confirmation number format:**
+- Pattern: `EWS-YYYY-NNNNN` (e.g., `EWS-2026-04893`)
+- Generated on successful payment. Appears on-screen, in the email receipt, and is used as the member's proof of payment. Agent can look up a case by this number.
+
+**Reference number for guest portal (logged-out balance lookup):**
+- Pattern: `REF-XXXXXXXXXX` (e.g., `REF-7823A04291`)
+- Generated at charge-off and included in the Day 57 closure email and any subsequent letters. The member enters this + last 4 SSN on sofi.com/pay to pull up their balance without logging in. If the member does not have a reference number, they can verify identity with full name + DOB + last 4 SSN instead.
+
+**What is needed to receive a payment (all channels):**
+
+| Field | In-App | Guest Portal | Phone (Agent) |
+|---|---|---|---|
+| Identity verification | Already authenticated | Reference # + last 4 SSN, or name + DOB + last 4 SSN | Name + DOB + last 4 SSN (agent verifies) |
+| Payment method | Debit card number, expiry, CVV | Debit card number, expiry, CVV, email for receipt | Debit card number, expiry, CVV (agent enters), email for receipt |
+| ACH (secondary) | External bank routing + account number | External bank routing + account number | Not available via phone for MVP |
+
+**Where does the agent process payments?**
+- Agents use an internal admin tool (to be built or extended from existing tooling, e.g., Salesforce or internal ops portal). The tool allows the agent to: (1) search by member name, SSN, or reference number, (2) view charged-off balance and account details, (3) enter debit card info and process payment via the same Stripe backend, (4) generate confirmation number and trigger receipt email. The agent does not handle funds directly; Stripe routes to the recovery GL.
+
 ### What the MVP does NOT include
 
 Partial payments, payment plans, credit card payments, self-service dispute forms, proactive outreach, PayNearMe, account revival, collections, or analytics dashboards. These are Phase 2.

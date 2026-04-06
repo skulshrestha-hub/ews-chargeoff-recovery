@@ -304,7 +304,6 @@
 </div>
 
 <div class="toc">
-  <a href="#requirements">MVP Requirements</a>
   <a href="#logged-in">Logged-In (App)</a>
   <a href="#phone">Pay by Phone</a>
   <a href="#entry-paths">Guest Portal Entry Paths</a>
@@ -312,68 +311,6 @@
   <a href="#dispute">Dispute</a>
   <a href="#notifications">Pre-Charge-Off Notifications</a>
 </div>
-
-<!-- ============================================ -->
-<!-- MVP REQUIREMENTS                              -->
-<!-- ============================================ -->
-
-<div class="section-label" id="requirements">
-  <span class="section-badge logged-in">Requirements</span>
-  <div class="section-title">MVP User Stories & Requirements</div>
-  <div class="section-desc">MVP is split into two milestones. <strong style="color:#fff;">Milestone 1 (Healing):</strong> members can see and pay what they owe. <strong style="color:#fff;">Milestone 2 (Dispute):</strong> members can challenge inaccurate data (required by FCRA before we furnish to EWS). Both must ship by July 31, 2026.</div>
-</div>
-
-<div class="req-container">
-  <h3 class="req-heading">Milestone 1: Account Healing / Repayment</h3>
-  <div class="req-table-wrap">
-    <table class="req-table">
-      <thead>
-        <tr><th>#</th><th>Category</th><th>Requirement</th><th>User Story</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td><span class="cat-pill cat-vis">Balance Visibility</span></td><td>Member can view charged-off balance (in-app)</td><td>As a member, I want to see how much I owe so I can decide whether to repay. Balance card in Banking tab shows amount, closure date, and EWS status.</td></tr>
-        <tr><td>2</td><td><span class="cat-pill cat-vis">Balance Visibility</span></td><td>Member can view charged-off balance (guest portal)</td><td>As a member without app access, I want to look up what I owe online. sofi.com/pay lookup by reference number + last 4 SSN, or name + DOB + SSN.</td></tr>
-        <tr><td>3</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay full balance via debit card (in-app)</td><td>As a member, I want to pay my charged-off balance so my EWS record is cleared. Stripe debit card payment, full balance only, routed to recovery GL.</td></tr>
-        <tr><td>4</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay full balance via debit card (guest portal)</td><td>As a member without app access, I want to pay online without logging in. Same Stripe payment on sofi.com/pay, email receipt, no login required.</td></tr>
-        <tr><td>5</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay via phone (agent-assisted)</td><td>As a member, I want to pay over the phone if I can't use the app or website. Agent collects debit card, processes via agent tool, same Stripe backend.</td></tr>
-        <tr><td>6</td><td><span class="cat-pill cat-pay">Payment</span></td><td>Member can pay via ACH push (guest portal / in-app)</td><td>As a member, I want to pay via ACH from my external bank. ACH push from external bank accepted, routed to recovery GL.</td></tr>
-        <tr><td>7</td><td><span class="cat-pill cat-conf">Confirmation</span></td><td>Payment confirmation and receipt (all channels)</td><td>As a member, I want a receipt confirming my payment and what happens next. On-screen confirmation + email with amount, date, confirmation number, next steps.</td></tr>
-        <tr><td>8</td><td><span class="cat-pill cat-ews">EWS Reporting</span></td><td>EWS record updated after payment (backend)</td><td>As SoFi, when a member repays, we must update EWS within 10 business days. Healed status submitted via batch file or API.</td></tr>
-        <tr><td>9</td><td><span class="cat-pill cat-notif">Notification</span></td><td>Member notified when EWS record is cleared (email)</td><td>As a member, I want to know when my EWS record has been cleared. Email sent after EWS confirms update.</td></tr>
-        <tr><td>10</td><td><span class="cat-pill cat-ops">Ops Tooling</span></td><td>Agent can look up balance and process payment (internal)</td><td>As an ops agent, I want to look up a member's charged-off account and process payment on their behalf. Agent searches by member identifier, views balance, initiates payment.</td></tr>
-        <tr><td>11</td><td><span class="cat-pill cat-comm">Communications</span></td><td>Pre-charge-off emails include EWS language (email)</td><td>As SoFi, pre-charge-off emails must warn members about EWS consequences. All 57-day reminders mention EWS consequences and sofi.com/pay.</td></tr>
-        <tr><td>12</td><td><span class="cat-pill cat-comm">Communications</span></td><td>Charge-off notification includes sofi.com/pay (email)</td><td>As SoFi, the charge-off notification must tell members how to pay. Day 57 email includes payment URL, dispute phone/mail info.</td></tr>
-        <tr><td>13</td><td><span class="cat-pill cat-comm">Communications</span></td><td>Adverse action notices include EWS contact (letter)</td><td>As SoFi, adverse action notices must include EWS contact info per FCRA Section 615(a).</td></tr>
-        <tr><td>14</td><td><span class="cat-pill cat-ops">Ops Readiness</span></td><td>Agent training and SOPs (internal)</td><td>As SoFi, agents must be trained on healing flows before launch. Agents trained on payment processing and identity verification.</td></tr>
-        <tr><td>15</td><td><span class="cat-pill cat-audit">Audit</span></td><td>Audit trail for all healing actions (internal)</td><td>As SoFi, all healing actions must be logged for compliance. All actions logged and auditable.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3 class="req-heading" style="margin-top:32px;">Milestone 2: Data Dispute</h3>
-  <div class="req-table-wrap">
-    <table class="req-table">
-      <thead>
-        <tr><th>#</th><th>Category</th><th>Requirement</th><th>User Story</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td><span class="cat-pill cat-intake">Dispute Intake</span></td><td>Member can file dispute by phone (phone)</td><td>As a member, I want to dispute data SoFi reported to EWS that I believe is wrong. Agent captures disputed data element, reason, supporting docs. Case number provided.</td></tr>
-        <tr><td>2</td><td><span class="cat-pill cat-intake">Dispute Intake</span></td><td>Member can file dispute by mail (mail)</td><td>As a member, I want to submit a written dispute. Written dispute accepted at SoFi Bank, N.A., 2750 East Cottonwood Parkway #300, Cottonwood Heights, UT 84121.</td></tr>
-        <tr><td>3</td><td><span class="cat-pill cat-intake">Dispute Intake</span></td><td>Dispute information discoverable (all channels)</td><td>As a member, I want to learn about my right to dispute from the app or portal. Dispute phone number and mailing address accessible from in-app, guest portal, help center, and agent scripts.</td></tr>
-        <tr><td>4</td><td><span class="cat-pill cat-invest">Investigation</span></td><td>Investigation completed within 30 days (ops)</td><td>As SoFi, we must investigate and resolve disputes within FCRA timelines. Member notified of outcome. Corrected records propagated if dispute upheld. 45 days if additional info provided.</td></tr>
-        <tr><td>5</td><td><span class="cat-pill cat-invest">Investigation</span></td><td>Frivolous dispute determination (ops)</td><td>As SoFi, if a dispute is frivolous, we must notify the member within 5 business days with reasons and missing info.</td></tr>
-        <tr><td>6</td><td><span class="cat-pill cat-invest">Investigation</span></td><td>Indirect dispute handling (ops)</td><td>As SoFi, when we receive an indirect dispute via EWS/CRA, we must investigate, respond with results, and propagate corrections to all nationwide CRAs.</td></tr>
-        <tr><td>7</td><td><span class="cat-pill cat-ews">EWS Reporting</span></td><td>Dispute flag set in EWS contribution data (backend)</td><td>As SoFi, disputed records must be flagged in EWS data during investigation. "Consumer Disputes Debt" indicator set during investigation, removed on resolution.</td></tr>
-        <tr><td>8</td><td><span class="cat-pill cat-ews">EWS Reporting</span></td><td>Corrected data submitted to EWS and all CRAs (backend)</td><td>As SoFi, upheld disputes must be corrected with EWS and all CRAs within required timeframe.</td></tr>
-        <tr><td>9</td><td><span class="cat-pill cat-rights">Member Rights</span></td><td>Consumer statement right communicated (ops)</td><td>As a member, if my dispute is denied, I want to know why and my right to add a personal statement to the record.</td></tr>
-        <tr><td>10</td><td><span class="cat-pill cat-ops">Ops Readiness</span></td><td>Agent training and SOPs for disputes (internal)</td><td>As SoFi, agents must be trained on dispute intake, categories, and FCRA timelines before launch.</td></tr>
-        <tr><td>11</td><td><span class="cat-pill cat-audit">Audit</span></td><td>Audit trail for all dispute actions (internal)</td><td>As SoFi, all dispute activity (intake, investigation, outcome, notifications) must be logged and auditable.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="sep"></div>
 
 <!-- ============================================ -->
 <!-- LOGGED-IN                                     -->

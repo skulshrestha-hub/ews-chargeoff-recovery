@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EWS Healing MVP Flows</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --black: #1A1A1A;
+    --gray-900: #333333;
+    --gray-700: #555555;
+    --gray-500: #888888;
+    --gray-400: #AAAAAA;
+    --gray-200: #E0E0E0;
+    --gray-100: #F0F0F0;
+    --bg: #F7F7F7;
+    --white: #FFFFFF;
+    --sofi-blue: #00A2C7;
+    --sofi-blue-dark: #008DAD;
+    --sofi-blue-light: #E5F6FA;
+    --green: #2E7D32;
+    --green-bg: #E8F5E9;
+    --red: #D32F2F;
+    --red-bg: #FFEBEE;
+    --amber: #F57C00;
+    --amber-bg: #FFF3E0;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #1A1A2E;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 48px 20px 80px; gap: 56px; color: var(--black);
+  }
+
+  .page-header { text-align:center; max-width:800px; }
+  .page-header h1 { font-size:28px; font-weight:800; color:#fff; margin-bottom:8px; letter-spacing:-0.5px; }
+  .page-header .subtitle { font-size:16px; color:var(--sofi-blue); font-weight:700; margin-bottom:8px; }
+  .page-header p { font-size:14px; color:#9B9BB0; line-height:1.6; }
+
+  .toc { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:-24px; }
+  .toc a {
+    font-size:13px; color:#fff; text-decoration:none; font-weight:600;
+    padding:8px 16px; border-radius:20px; background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1); transition:all 0.2s;
+  }
+  .toc a:hover { background:rgba(0,162,199,0.15); border-color:var(--sofi-blue); color:var(--sofi-blue); }
+  .toc a.active { background:var(--sofi-blue); color:#fff; border-color:var(--sofi-blue); }
+
+  .section-label {
+    display:flex; flex-direction:column; align-items:center; gap:8px; width:100%;
+  }
+  .section-badge {
+    font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    padding:5px 14px; border-radius:20px;
+  }
+  .section-badge.logged-in { color:var(--sofi-blue); background:rgba(0,162,199,0.1); border:1px solid rgba(0,162,199,0.3); }
+  .section-badge.guest { color:var(--amber); background:rgba(245,124,0,0.1); border:1px solid rgba(245,124,0,0.3); }
+  .section-badge.dispute { color:#7C4DFF; background:rgba(124,77,255,0.1); border:1px solid rgba(124,77,255,0.3); }
+  .section-badge.notif { color:var(--green); background:rgba(46,125,50,0.1); border:1px solid rgba(46,125,50,0.3); }
+  .section-title { font-size:22px; font-weight:800; color:#fff; }
+  .section-desc { font-size:14px; color:#9B9BB0; text-align:center; max-width:700px; line-height:1.6; }
+
+  .flow-row { display:flex; gap:40px; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
+
+  .screen-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .screen-title { font-size:15px; font-weight:700; color:#fff; }
+  .screen-desc { font-size:12px; color:#9B9BB0; text-align:center; max-width:320px; line-height:1.5; }
+
+  .phone {
+    width: 360px; height: 780px; background: var(--bg);
+    border-radius: 40px; overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.06), 0 24px 60px rgba(0,0,0,0.5);
+    position: relative; display: flex; flex-direction: column;
+  }
+  .phone-inner { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+  .tag {
+    position:absolute; top:12px; right:12px; font-size:10px; font-weight:700;
+    padding:3px 10px; border-radius:10px; z-index:20; color:#fff;
+  }
+  .tag.in { background:rgba(0,162,199,0.8); }
+  .tag.guest { background:rgba(245,124,0,0.8); }
+  .tag.notif { background:rgba(46,125,50,0.8); }
+
+  .ios-bar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 22px 0; background:var(--white); height:40px; flex-shrink:0;
+  }
+  .ios-bar .t { font-size:14px; font-weight:600; }
+  .ios-bar .i { font-size:12px; }
+
+  .nav {
+    display:flex; align-items:center; padding:4px 18px 12px; background:var(--white);
+  }
+  .nav-l { width:36px; font-size:20px; font-weight:300; cursor:pointer; }
+  .nav-c { flex:1; text-align:center; font-size:16px; font-weight:600; }
+  .nav-r { width:36px; }
+
+  .web-hdr {
+    background:var(--white); padding:14px 20px; display:flex; align-items:center;
+    justify-content:space-between; border-bottom:1px solid var(--gray-200);
+  }
+  .web-logo { font-size:18px; font-weight:800; color:var(--sofi-blue); }
+  .web-links { display:flex; gap:14px; }
+  .web-links a { font-size:12px; color:var(--gray-700); text-decoration:none; font-weight:500; }
+
+  .scroll { flex:1; overflow-y:auto; padding:0 0 8px; }
+  .pad { padding:14px; display:flex; flex-direction:column; gap:10px; }
+
+  .card {
+    background:var(--white); border-radius:14px; padding:18px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card-t { font-size:15px; font-weight:700; margin-bottom:12px; }
+
+  .alert {
+    background:var(--white); border-radius:14px; overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04); border-left:4px solid var(--red);
+  }
+  .alert-in { padding:18px 16px; }
+  .alert-badge {
+    display:inline-flex; font-size:11px; font-weight:700; padding:3px 8px;
+    border-radius:5px; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .alert-badge.red { background:var(--red-bg); color:var(--red); }
+  .alert-badge.blue { background:var(--sofi-blue-light); color:var(--sofi-blue); }
+  .alert-badge.amber { background:var(--amber-bg); color:var(--amber); }
+  .alert-t { font-size:16px; font-weight:700; margin-bottom:6px; line-height:1.3; }
+  .alert-b { font-size:13px; color:var(--gray-700); line-height:1.55; margin-bottom:14px; }
+  .alert-b strong { color:var(--black); }
+
+  .btn {
+    display:flex; align-items:center; justify-content:center; width:100%;
+    padding:14px; font-size:15px; font-weight:700; border:none; border-radius:26px;
+    cursor:pointer; letter-spacing:-0.2px;
+  }
+  .btn-primary { background:var(--sofi-blue); color:#fff; }
+  .btn-primary:hover { background:var(--sofi-blue-dark); }
+  .btn-outline { background:transparent; color:var(--black); border:2px solid var(--gray-200); }
+  .btn-danger { background:var(--red); color:#fff; }
+  .btn-row { display:flex; gap:8px; }
+  .btn-row > * { flex:1; }
+  .link { font-size:13px; font-weight:600; color:var(--sofi-blue); background:none; border:none; cursor:pointer; padding:6px 0; }
+
+  .form-g { margin-bottom:12px; }
+  .form-l { font-size:12px; font-weight:600; color:var(--gray-700); margin-bottom:4px; display:block; }
+  .form-i {
+    width:100%; padding:12px 14px; border:1.5px solid var(--gray-200); border-radius:10px;
+    font-size:15px; font-family:inherit; color:var(--black); background:var(--white); outline:none;
+  }
+  .form-i:focus { border-color:var(--sofi-blue); }
+  .form-i::placeholder { color:var(--gray-400); }
+  .form-h { font-size:11px; color:var(--gray-500); margin-top:3px; }
+  .form-row { display:flex; gap:8px; }
+  .form-row > * { flex:1; }
+
+  .sum-r { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--gray-100); }
+  .sum-r:last-child { border-bottom:none; font-weight:700; }
+  .sum-l { font-size:13px; color:var(--gray-700); }
+  .sum-v { font-size:13px; font-weight:600; }
+
+  .ok-icon {
+    width:56px; height:56px; border-radius:50%; background:var(--green-bg);
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px; color:var(--green); margin:0 auto 12px;
+  }
+
+  .tl-item { display:flex; gap:10px; padding:6px 0; }
+  .tl-dot {
+    width:22px; height:22px; border-radius:50%; display:flex; align-items:center;
+    justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px;
+  }
+  .tl-dot.done { background:var(--green-bg); color:var(--green); }
+  .tl-dot.wait { background:var(--gray-100); color:var(--gray-500); }
+  .tl-text { font-size:13px; color:var(--gray-700); line-height:1.45; }
+  .tl-text strong { color:var(--black); }
+
+  .info-box {
+    background:var(--sofi-blue-light); border-radius:10px; padding:12px 14px;
+    font-size:12px; color:var(--sofi-blue-dark); line-height:1.5;
+  }
+  .info-box strong { font-weight:700; }
+
+  .divider { height:1px; background:var(--gray-200); margin:6px 0; }
+
+  .step-dots { display:flex; align-items:center; justify-content:center; gap:6px; padding:8px 0; }
+  .dot { width:7px; height:7px; border-radius:50%; background:var(--gray-200); }
+  .dot.on { background:var(--sofi-blue); width:20px; border-radius:4px; }
+  .dot.ok { background:var(--green); }
+
+  .reason-pill {
+    font-size:13px; padding:9px 12px; background:var(--gray-100); border-radius:8px;
+  }
+
+  .contact-row { display:flex; gap:10px; align-items:flex-start; }
+  .contact-icon {
+    width:32px; height:32px; border-radius:50%; background:var(--sofi-blue-light);
+    color:var(--sofi-blue); display:flex; align-items:center; justify-content:center;
+    font-size:16px; flex-shrink:0;
+  }
+  .contact-name { font-size:14px; font-weight:700; }
+  .contact-detail { font-size:13px; color:var(--gray-700); line-height:1.5; }
+
+  .entry-paths {
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px; padding:24px; max-width:900px; width:100%;
+  }
+  .entry-paths h3 { font-size:16px; font-weight:700; color:#fff; margin-bottom:16px; text-align:center; }
+  .path-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:12px; }
+  .path-card {
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08);
+    border-radius:12px; padding:16px; display:flex; gap:12px; align-items:flex-start;
+  }
+  .path-num {
+    width:28px; height:28px; border-radius:50%; background:var(--sofi-blue);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:800; flex-shrink:0;
+  }
+  .path-title { font-size:13px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .path-desc { font-size:12px; color:#9B9BB0; line-height:1.5; }
+
+  .sep { width:100%; max-width:1200px; border-top:2px solid rgba(255,255,255,0.05); }
+
+  .push-preview { background:var(--gray-100); border-radius:14px; padding:14px; }
+  .push-label { font-size:11px; font-weight:700; color:var(--gray-500); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .push-card {
+    background:var(--white); border-radius:14px; padding:12px 14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .push-top { display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+  .push-icon { width:18px; height:18px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:#fff; }
+  .push-app { font-size:11px; font-weight:600; color:var(--gray-500); }
+  .push-time { font-size:10px; color:var(--gray-400); margin-left:auto; }
+  .push-title { font-size:13px; font-weight:600; margin-bottom:2px; }
+  .push-body { font-size:12px; color:var(--gray-700); line-height:1.4; }
+
+  .tab-bar {
+    display:flex; background:var(--white); border-top:1px solid var(--gray-200);
+    padding:6px 0 2px; flex-shrink:0;
+  }
+  .tab {
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+    font-size:9px; font-weight:600; color:var(--gray-400); padding:3px 0;
+  }
+  .tab.on { color:var(--sofi-blue); }
+  .tab-i { font-size:20px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="subtitle">MVP - Ship by July 31, 2026</div>
+  <h1>EWS Charge-Off Recovery Flows</h1>
+  <p>The minimum viable experience to start contributing charge-off data to EWS and stop paying ~$100K/month in excess fees. Covers logged-in (app), logged-out (guest portal), dispute, and pre-charge-off notifications.</p>
+</div>
+
+<div class="toc">
+  <a href="#logged-in">Logged-In (App)</a>
+  <a href="#entry-paths">Guest Portal Entry Paths</a>
+  <a href="#guest">Logged-Out (Guest)</a>
+  <a href="#dispute">Dispute</a>
+  <a href="#notifications">Pre-Charge-Off Notifications</a>
+</div>
+
+<!-- ============================================ -->
+<!-- LOGGED-IN                                     -->
+<!-- ============================================ -->
+
+<div class="section-label" id="logged-in">
+  <span class="section-badge logged-in">Logged-In Experience</span>
+  <div class="section-title">In-App Healing Flow</div>
+  <div class="section-desc">Member logs into SoFi app, sees charged-off balance in Banking tab, pays via debit card (Stripe).</div>
+</div>
+
+<div class="flow-row">
+  <!-- Screen 1: Banking Tab -->
+  <div class="screen-wrap">
+    <div class="screen-title">1. Banking Tab</div>
+    <div class="screen-desc">Charged-off balance card appears prominently.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag in">IN-APP</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l"></div>
+        <div class="nav-c">Banking</div>
+        <div class="nav-r" style="display:flex;gap:8px;justify-content:flex-end;">
+          <span style="font-size:16px;">&#128269;</span>
+          <span style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">S</span>
+        </div>
+      </div>
+      <div style="background:var(--white);padding:2px 20px 16px;">
+        <div style="font-size:38px;font-weight:800;letter-spacing:-2px;">$4,218<span style="font-size:20px;font-weight:700;vertical-align:super;">.43</span></div>
+        <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Total Balance</div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="alert">
+            <div class="alert-in">
+              <div class="alert-badge red">&#9888; Action Required</div>
+              <div class="alert-t">You have an outstanding charged-off balance</div>
+              <div class="alert-b">
+                Your Checking account was closed on <strong>Jan 15, 2026</strong> with an outstanding balance of <strong>$142.50</strong>.<br><br>
+                This has been reported to <strong>Early Warning Services (EWS)</strong> and may prevent you from opening bank accounts at other institutions for up to 5 years.
+              </div>
+              <button class="btn btn-primary">Pay $142.50</button>
+              <div style="text-align:center;margin-top:8px;">
+                <button class="link">Think this is wrong? Dispute this data</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;">
+              <div><div style="font-size:15px;font-weight:600;">Checking (...4521)</div><div style="font-size:12px;color:var(--gray-500);">SoFi Bank</div></div>
+              <div style="font-size:16px;font-weight:700;">$3,847.12</div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;">
+              <div><div style="font-size:15px;font-weight:600;">Savings (...8832)</div><div style="font-size:12px;color:var(--gray-500);">SoFi Bank</div></div>
+              <div style="font-size:16px;font-weight:700;">$371.31</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab on"><span class="tab-i">&#127968;</span>Home</div>
+        <div class="tab"><span class="tab-i">&#128176;</span>Banking</div>
+        <div class="tab"><span class="tab-i">&#128200;</span>Invest</div>
+        <div class="tab"><span class="tab-i">&#128179;</span>Borrow</div>
+        <div class="tab"><span class="tab-i">&#8226;&#8226;&#8226;</span>More</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Screen 2: Payment -->
+  <div class="screen-wrap">
+    <div class="screen-title">2. Payment</div>
+    <div class="screen-desc">Debit card entry. Pre-populated balance. Full payment only.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag in">IN-APP</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l">&#8249;</div>
+        <div class="nav-c">Pay Charged-Off Balance</div>
+        <div class="nav-r"></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="step-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+          <div class="card">
+            <div class="card-t">Payment Summary</div>
+            <div class="sum-r"><span class="sum-l">Account</span><span class="sum-v">Checking (...7823)</span></div>
+            <div class="sum-r"><span class="sum-l">Closed on</span><span class="sum-v">Jan 15, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Amount due</span><span class="sum-v" style="color:var(--red)">$142.50</span></div>
+          </div>
+          <div class="card">
+            <div class="card-t">Debit Card</div>
+            <div class="form-g">
+              <label class="form-l">Card number</label>
+              <input class="form-i" type="text" value="4532 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 8821">
+            </div>
+            <div class="form-row">
+              <div class="form-g"><label class="form-l">Expiry</label><input class="form-i" type="text" value="09/27"></div>
+              <div class="form-g"><label class="form-l">CVV</label><input class="form-i" type="text" value="&bull;&bull;&bull;"></div>
+            </div>
+            <div class="form-h">&#128274; Processed securely by Stripe. Credit cards not accepted.</div>
+          </div>
+          <div class="info-box">
+            <strong>After you pay:</strong> Your EWS record will be updated within 10 business days. The charge-off will no longer block you from opening accounts at other banks.
+          </div>
+          <button class="btn btn-primary" style="margin-top:4px;">Pay $142.50</button>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Screen 3: Confirmation -->
+  <div class="screen-wrap">
+    <div class="screen-title">3. Confirmation</div>
+    <div class="screen-desc">Payment received with clear next-steps timeline.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag in">IN-APP</span>
+      <div class="ios-bar"><span class="t">9:42</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l"></div>
+        <div class="nav-c">Confirmation</div>
+        <div class="nav-r"></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="step-dots"><div class="dot ok"></div><div class="dot ok"></div><div class="dot on"></div></div>
+          <div style="text-align:center;padding:16px 0 4px;">
+            <div class="ok-icon">&#10003;</div>
+            <div style="font-size:20px;font-weight:800;">Payment Received</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Your payment is being processed.</div>
+          </div>
+          <div class="card">
+            <div class="sum-r"><span class="sum-l">Amount paid</span><span class="sum-v">$142.50</span></div>
+            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 6, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Card</span><span class="sum-v">Debit ending in 8821</span></div>
+            <div class="sum-r"><span class="sum-l">Confirmation #</span><span class="sum-v">EWS-2026-04893</span></div>
+          </div>
+          <div class="card">
+            <div class="card-t">What happens next</div>
+            <div class="tl-item"><div class="tl-dot done">&#10003;</div><div class="tl-text"><strong>Payment received</strong><br>Confirmation email sent.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>EWS record updated</strong><br>Within 10 business days, your charge-off flag will be removed.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>Record cleared</strong><br>You'll get an email when your EWS record is updated.</div></div>
+          </div>
+          <button class="btn btn-primary">Done</button>
+          <button class="btn btn-outline">Download Receipt</button>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ============================================ -->
+<!-- ENTRY PATHS TO GUEST PORTAL                   -->
+<!-- ============================================ -->
+
+<div class="section-label" id="entry-paths">
+  <span class="section-badge guest">Guest Portal</span>
+  <div class="section-title">How Members Reach sofi.com/pay</div>
+  <div class="section-desc">The most common path: member is denied at another bank, receives an adverse action letter naming SoFi/EWS, and needs to pay but can't log in.</div>
+</div>
+
+<div class="entry-paths">
+  <div class="path-grid">
+    <div class="path-card">
+      <div class="path-num">1</div>
+      <div>
+        <div class="path-title">Adverse Action Letter</div>
+        <div class="path-desc">Member denied at another bank. Letter names SoFi/EWS. Member calls SoFi, agent directs to sofi.com/pay.</div>
+      </div>
+    </div>
+    <div class="path-card">
+      <div class="path-num">2</div>
+      <div>
+        <div class="path-title">Charge-Off Email (Day 57)</div>
+        <div class="path-desc">"Your account has been closed with a balance of $XX. Pay at <strong style="color:var(--sofi-blue)">sofi.com/pay</strong> or log in to the app."</div>
+      </div>
+    </div>
+    <div class="path-card">
+      <div class="path-num">3</div>
+      <div>
+        <div class="path-title">Pre-Charge-Off Reminders</div>
+        <div class="path-desc">Updated emails during 57-day grace period include sofi.com/pay as fallback if account is closed.</div>
+      </div>
+    </div>
+    <div class="path-card">
+      <div class="path-num">4</div>
+      <div>
+        <div class="path-title">SoFi Support Agent</div>
+        <div class="path-desc">Member calls for any charge-off issue. Agent provides URL verbally or via text/email.</div>
+      </div>
+    </div>
+    <div class="path-card">
+      <div class="path-num">5</div>
+      <div>
+        <div class="path-title">Help Center / FAQ</div>
+        <div class="path-desc">"How to pay a charged-off balance and clear your EWS record" article links to portal.</div>
+      </div>
+    </div>
+    <div class="path-card">
+      <div class="path-num">6</div>
+      <div>
+        <div class="path-title">In-App "Pay on Web"</div>
+        <div class="path-desc">Logged-in member can tap "Pay on web instead" to open sofi.com/pay in mobile browser.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- GUEST FLOW                                    -->
+<!-- ============================================ -->
+
+<div class="section-label" id="guest">
+  <span class="section-badge guest">Logged-Out Experience</span>
+  <div class="section-title">Guest Payment Portal (sofi.com/pay)</div>
+  <div class="section-desc">No login required. Member looks up balance with reference number or identity verification, pays via debit card, gets email receipt.</div>
+</div>
+
+<div class="flow-row">
+  <!-- Guest 1: Landing -->
+  <div class="screen-wrap">
+    <div class="screen-title">1. Landing Page</div>
+    <div class="screen-desc">Two lookup options: reference number or identity verification.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag guest">GUEST</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-hdr">
+        <div class="web-logo">SoFi</div>
+        <div class="web-links"><a href="#">Help</a><a href="#">Log In</a></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div style="text-align:center;padding:14px 0 4px;">
+            <div style="font-size:20px;font-weight:800;line-height:1.3;">Pay Your Outstanding<br>Balance</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:6px;line-height:1.5;">Resolve your charged-off balance and clear your EWS record.</div>
+          </div>
+
+          <div class="card" style="border:2px solid var(--sofi-blue-light);">
+            <div class="card-t">&#128196; Reference Number Lookup</div>
+            <div style="font-size:12px;color:var(--gray-500);margin-bottom:12px;">Found on your letter or email from SoFi.</div>
+            <div class="form-g">
+              <label class="form-l">Reference number</label>
+              <input class="form-i" type="text" placeholder="e.g., EWS-2026-04893">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Last 4 of SSN</label>
+              <input class="form-i" type="text" placeholder="&bull;&bull;&bull;&bull;" maxlength="4">
+            </div>
+            <button class="btn btn-primary">Look Up My Balance</button>
+          </div>
+
+          <div style="text-align:center;color:var(--gray-400);font-size:12px;font-weight:600;">OR</div>
+
+          <div class="card">
+            <div class="card-t">&#128100; Verify Your Identity</div>
+            <div style="font-size:12px;color:var(--gray-500);margin-bottom:12px;">Don't have a reference number?</div>
+            <div class="form-g"><label class="form-l">Full name</label><input class="form-i" type="text" placeholder="First and last name"></div>
+            <div class="form-g"><label class="form-l">Date of birth</label><input class="form-i" type="text" placeholder="MM/DD/YYYY"></div>
+            <div class="form-g"><label class="form-l">Last 4 of SSN</label><input class="form-i" type="text" placeholder="&bull;&bull;&bull;&bull;" maxlength="4"></div>
+            <button class="btn btn-outline">Verify &amp; Look Up</button>
+          </div>
+
+          <div style="text-align:center;"><button class="link">Have a SoFi account? Log in instead</button></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Guest 2: Balance + Pay -->
+  <div class="screen-wrap">
+    <div class="screen-title">2. Balance &amp; Payment</div>
+    <div class="screen-desc">Identity verified. Balance displayed. Debit card payment.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag guest">GUEST</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-hdr">
+        <div class="web-logo">SoFi</div>
+        <div class="web-links"><a href="#">Help</a></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="step-dots"><div class="dot ok"></div><div class="dot on"></div><div class="dot"></div></div>
+          <div class="info-box" style="text-align:center;">&#128274; Identity verified. Session expires in 15 minutes.</div>
+
+          <div class="card" style="border-left:4px solid var(--red);">
+            <div style="font-size:12px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Outstanding Balance</div>
+            <div style="font-size:32px;font-weight:800;margin-bottom:2px;">$142.50</div>
+            <div class="divider"></div>
+            <div class="sum-r"><span class="sum-l">Account</span><span class="sum-v">Checking (...7823)</span></div>
+            <div class="sum-r"><span class="sum-l">Closed on</span><span class="sum-v">Jan 15, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Reported to</span><span class="sum-v">EWS</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-t">Pay with Debit Card</div>
+            <div class="form-g"><label class="form-l">Card number</label><input class="form-i" type="text" placeholder="1234 5678 9012 3456"></div>
+            <div class="form-row">
+              <div class="form-g"><label class="form-l">Expiry</label><input class="form-i" type="text" placeholder="MM/YY"></div>
+              <div class="form-g"><label class="form-l">CVV</label><input class="form-i" type="text" placeholder="123"></div>
+            </div>
+            <div class="form-g"><label class="form-l">Email for receipt</label><input class="form-i" type="email" placeholder="you@email.com"></div>
+            <div class="form-h" style="margin-bottom:12px;">&#128274; Processed securely by Stripe. Credit cards not accepted.</div>
+            <button class="btn btn-primary">Pay $142.50</button>
+          </div>
+          <div style="text-align:center;"><button class="link">Think this is wrong? Dispute this data</button></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Guest 3: Confirmation -->
+  <div class="screen-wrap">
+    <div class="screen-title">3. Confirmation</div>
+    <div class="screen-desc">Receipt emailed. Confirmation number prominently displayed.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag guest">GUEST</span>
+      <div class="ios-bar"><span class="t">9:42</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-hdr">
+        <div class="web-logo">SoFi</div>
+        <div class="web-links"><a href="#">Help</a></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="step-dots"><div class="dot ok"></div><div class="dot ok"></div><div class="dot on"></div></div>
+          <div style="text-align:center;padding:16px 0 4px;">
+            <div class="ok-icon">&#10003;</div>
+            <div style="font-size:20px;font-weight:800;">Payment Received</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Receipt sent to j***n@email.com</div>
+          </div>
+          <div class="card">
+            <div class="sum-r"><span class="sum-l">Amount paid</span><span class="sum-v">$142.50</span></div>
+            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 6, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Card</span><span class="sum-v">Debit ending in 4412</span></div>
+            <div class="sum-r"><span class="sum-l">Confirmation #</span><span class="sum-v">EWS-2026-04893</span></div>
+          </div>
+          <div class="card">
+            <div class="card-t">What happens next</div>
+            <div class="tl-item"><div class="tl-dot done">&#10003;</div><div class="tl-text"><strong>Payment received</strong><br>Confirmation emailed.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>EWS record updated</strong><br>Within 10 business days.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>Record cleared</strong><br>You'll get an email when done.</div></div>
+          </div>
+          <button class="btn btn-primary">Download Receipt</button>
+          <button class="btn btn-outline">Print This Page</button>
+          <div class="info-box">
+            <strong>Keep your confirmation number:</strong> EWS-2026-04893. Call SoFi at 1-855-456-7634 if you have questions.
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ============================================ -->
+<!-- DISPUTE                                       -->
+<!-- ============================================ -->
+
+<div class="section-label" id="dispute">
+  <span class="section-badge dispute">Dispute Flow</span>
+  <div class="section-title">Dispute Initiation (MVP: Phone + Mail)</div>
+  <div class="section-desc">Available from both logged-in and guest experiences. Routes to phone/mail for MVP. Self-service form in Phase 2.</div>
+</div>
+
+<div class="flow-row">
+  <div class="screen-wrap">
+    <div class="screen-title">In-App Dispute</div>
+    <div class="screen-desc">Logged-in member taps "Dispute this data."</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag in">IN-APP</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l">&#8249;</div>
+        <div class="nav-c">Dispute Reported Data</div>
+        <div class="nav-r"></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="card">
+            <div class="card-t">What you can dispute</div>
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.5;margin-bottom:10px;">If you believe the data SoFi reported to EWS is inaccurate, you have the right to dispute it.</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="reason-pill">&#8226; Wrong balance amount</div>
+              <div class="reason-pill">&#8226; Account is not mine (identity theft)</div>
+              <div class="reason-pill">&#8226; Already paid or settled</div>
+              <div class="reason-pill">&#8226; Incorrect closure reason</div>
+              <div class="reason-pill">&#8226; Other data inaccuracy</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-t">How to file a dispute</div>
+            <div class="contact-row" style="margin-bottom:14px;">
+              <div class="contact-icon">&#128222;</div>
+              <div><div class="contact-name">Call us</div><div class="contact-detail">1-855-456-7634<br>Mon to Fri, 8am to 8pm ET</div></div>
+            </div>
+            <div class="divider"></div>
+            <div class="contact-row" style="margin-top:14px;">
+              <div class="contact-icon">&#9993;</div>
+              <div><div class="contact-name">Write to us</div><div class="contact-detail">SoFi Bank, N.A.<br>2750 E Cottonwood Pkwy #300<br>Cottonwood Heights, UT 84121</div></div>
+            </div>
+          </div>
+          <div class="info-box">
+            <strong>Your rights under FCRA:</strong> SoFi will investigate within 30 days and notify you of the outcome. You can add a personal statement to your record.
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">Guest Dispute</div>
+    <div class="screen-desc">Guest clicks "Dispute" from the balance page.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag guest">GUEST</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="web-hdr">
+        <div class="web-logo">SoFi</div>
+        <div class="web-links"><a href="#">Help</a></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div style="text-align:center;padding:12px 0 4px;">
+            <div style="font-size:20px;font-weight:800;">Dispute Reported Data</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:6px;">If you believe the information SoFi reported to EWS is inaccurate, you have the right to dispute it.</div>
+          </div>
+          <div class="card">
+            <div class="card-t">Common dispute reasons</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="reason-pill">&#8226; Wrong balance amount</div>
+              <div class="reason-pill">&#8226; Account is not mine (identity theft)</div>
+              <div class="reason-pill">&#8226; Already paid or settled</div>
+              <div class="reason-pill">&#8226; Incorrect closure reason</div>
+              <div class="reason-pill">&#8226; Other data inaccuracy</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-t">Contact us to file a dispute</div>
+            <div class="contact-row" style="margin-bottom:14px;">
+              <div class="contact-icon">&#128222;</div>
+              <div><div class="contact-name">Call us</div><div class="contact-detail">1-855-456-7634<br>Mon to Fri, 8am to 8pm ET</div></div>
+            </div>
+            <div class="divider"></div>
+            <div class="contact-row" style="margin-top:14px;">
+              <div class="contact-icon">&#9993;</div>
+              <div><div class="contact-name">Write to us</div><div class="contact-detail">SoFi Bank, N.A.<br>2750 E Cottonwood Pkwy #300<br>Cottonwood Heights, UT 84121</div></div>
+            </div>
+          </div>
+          <div class="info-box">
+            <strong>Your rights:</strong> Under FCRA, SoFi must investigate within 30 days and notify you of the outcome. You can add a personal statement to your record.
+          </div>
+          <div style="text-align:center;"><button class="link">&#8249; Back to balance</button></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ============================================ -->
+<!-- PRE-CHARGE-OFF NOTIFICATIONS                  -->
+<!-- ============================================ -->
+
+<div class="section-label" id="notifications">
+  <span class="section-badge notif">Pre-Charge-Off</span>
+  <div class="section-title">EWS Implication Notifications</div>
+  <div class="section-desc">Updated push notifications and emails during the 57-day grace period that warn members about EWS consequences.</div>
+</div>
+
+<div class="flow-row">
+  <div class="screen-wrap">
+    <div class="screen-title">Day 1 to 14: Initial</div>
+    <div class="screen-desc">First warning with EWS implications.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">NOTIFICATION</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav"><div class="nav-l"></div><div class="nav-c">Notifications</div><div class="nav-r"></div></div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="alert" style="border-left-color:var(--sofi-blue);">
+            <div class="alert-in">
+              <div class="alert-badge blue">&#9888; Negative Balance</div>
+              <div class="alert-t">Your account has a negative balance of -$142.50</div>
+              <div class="alert-b">
+                Please deposit funds to bring your balance back to $0.<br><br>
+                <strong>If not resolved, your account will be closed and reported to Early Warning Services (EWS), which may prevent you from opening bank accounts at other institutions for up to 5 years.</strong>
+              </div>
+              <button class="btn btn-primary">Deposit Now</button>
+            </div>
+          </div>
+          <div class="push-preview">
+            <div class="push-label">Push Notification</div>
+            <div class="push-card">
+              <div class="push-top">
+                <div class="push-icon" style="background:var(--sofi-blue);">S</div>
+                <span class="push-app">SoFi</span>
+                <span class="push-time">now</span>
+              </div>
+              <div class="push-title">Your account has a negative balance</div>
+              <div class="push-body">-$142.50. Deposit now to avoid closure and EWS reporting, which could block future bank account applications.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">Day 15 to 45: Escalation</div>
+    <div class="screen-desc">Countdown with stronger consequences language.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">NOTIFICATION</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav"><div class="nav-l"></div><div class="nav-c">Notifications</div><div class="nav-r"></div></div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="alert">
+            <div class="alert-in">
+              <div class="alert-badge red">&#9888; 20 Days Remaining</div>
+              <div class="alert-t">Your account will be closed if not resolved</div>
+              <div class="alert-b">
+                You have <strong>20 days</strong> to bring your balance to $0.<br><br>
+                After that, your account will be <strong>permanently closed</strong>, the balance charged off, and <strong>reported to EWS</strong>.<br><br>
+                An EWS flag can prevent you from opening accounts at other banks for <strong>up to 5 years</strong>.
+              </div>
+              <button class="btn btn-primary">Deposit $142.50 Now</button>
+              <div style="text-align:center;margin-top:8px;"><button class="link">Need help? Contact us</button></div>
+            </div>
+          </div>
+          <div class="push-preview">
+            <div class="push-label">Email Subject</div>
+            <div class="push-card">
+              <div class="push-title">Action required: 20 days to resolve your -$142.50 balance</div>
+              <div class="push-body">Your account will be closed and reported to EWS if not resolved...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">Day 46 to 57: Final Warning</div>
+    <div class="screen-desc">Last chance. Urgent tone with specific deadline.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">NOTIFICATION</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav"><div class="nav-l"></div><div class="nav-c">Notifications</div><div class="nav-r"></div></div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="alert" style="border-left-width:6px;">
+            <div class="alert-in">
+              <div class="alert-badge red" style="font-size:12px;">&#128680; FINAL NOTICE</div>
+              <div class="alert-t">Your account will be closed in 5 days</div>
+              <div class="alert-b">
+                If you do not deposit <strong>$142.50</strong> by <strong>April 11, 2026</strong>:<br><br>
+                &#10060; <strong>Permanently closed</strong><br>
+                &#10060; <strong>Charged off</strong><br>
+                &#10060; <strong>Reported to EWS</strong> (blocks bank accounts up to 5 years)<br><br>
+                After closure, you can still pay at <strong>sofi.com/pay</strong> to clear the flag.
+              </div>
+              <button class="btn btn-danger">Deposit $142.50 Now</button>
+              <div style="text-align:center;margin-top:8px;"><button class="link">Call us: 1-855-456-7634</button></div>
+            </div>
+          </div>
+          <div class="push-preview">
+            <div class="push-label">Push Notification</div>
+            <div class="push-card">
+              <div class="push-top">
+                <div class="push-icon" style="background:var(--red);">!</div>
+                <span class="push-app">SoFi</span>
+                <span class="push-time">now</span>
+              </div>
+              <div class="push-title">Final notice: Account closure in 5 days</div>
+              <div class="push-body">Deposit $142.50 by Apr 11 to avoid permanent closure and EWS reporting (blocks bank accounts up to 5 years).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px 0 0;color:#9B9BB0;font-size:11px;">
+  EWS Charge-Off Recovery MVP Mockups &mdash; SoFi Bank, N.A. &mdash; Internal Use Only
+</div>
+
+</body>
+</html>

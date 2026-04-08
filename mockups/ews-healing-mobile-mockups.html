@@ -272,12 +272,11 @@
 
 <div class="page-header">
   <h1>EWS Charge-Off Recovery</h1>
-  <p>Logged-in (SoFi app) and logged-out (guest web) experiences for healing payments and disputes. MVP: ACH payment, phone call to pay, dispute by mail only.</p>
+  <p>Logged-in (SoFi app) experience for healing payments and disputes. MVP: ACH payment, phone call to pay, dispute by mail only.</p>
 </div>
 
 <div class="toc">
   <a href="#logged-in">Logged-In Experience</a>
-  <a href="#logged-out">Logged-Out (Guest) Experience</a>
   <a href="#dispute">Dispute (Mail Only)</a>
   <a href="#notifications">Pre-Charge-Off Notifications</a>
 </div>
@@ -477,210 +476,6 @@
 
 <div class="section-divider"></div>
 
-<!-- ============================== -->
-<!-- LOGGED-OUT (GUEST) EXPERIENCE  -->
-<!-- ============================== -->
-
-<div class="screen-group" id="logged-out">
-  <span class="screen-group-label">Logged-Out Experience</span>
-  <div class="screen-group-title">Guest Payment Portal</div>
-  <div class="screen-group-desc">For members who cannot log in (forgot credentials, no app access, directed by adverse action letter). They visit sofi.com/pay and look up their balance using a reference number or identity verification.</div>
-</div>
-
-<div class="flow-row">
-  <div class="screen-wrap">
-    <div class="screen-title">1. Landing Page</div>
-    <div class="screen-desc">Member arrives from a letter, email, or support call. Two lookup options.</div>
-    <div class="phone"><div class="phone-inner">
-      <span class="screen-tag">GUEST</span>
-      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
-      <div class="web-header">
-        <div class="web-logo">SoFi</div>
-        <div class="web-header-links"><a href="#">Help</a><a href="#">Log In</a></div>
-      </div>
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div style="text-align:center; padding:20px 0 8px;">
-            <div style="font-size:22px; font-weight:800; color:var(--black); line-height:1.3;">Pay Your Outstanding<br>Balance</div>
-            <div style="font-size:14px; color:var(--gray-500); margin-top:8px; line-height:1.5;">Resolve your charged-off balance and clear your Early Warning Services (EWS) record.</div>
-          </div>
-
-          <div class="card" style="border:2px solid var(--sofi-blue-light);">
-            <div class="card-title" style="display:flex; align-items:center; gap:8px;">&#128196; Look up with Reference Number</div>
-            <div style="font-size:13px; color:var(--gray-500); margin-bottom:14px;">Found on your letter or email from SoFi.</div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Reference number</label>
-              <input class="form-input" type="text" placeholder="e.g., EWS-2026-04893">
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Last 4 of SSN</label>
-              <input class="form-input" type="text" placeholder="••••" maxlength="4">
-            </div>
-            <button class="btn-coral">Look Up My Balance</button>
-          </div>
-
-          <div style="text-align:center; color:var(--gray-400); font-size:13px; font-weight:600; padding:4px 0;">OR</div>
-
-          <div class="card">
-            <div class="card-title" style="display:flex; align-items:center; gap:8px;">&#128100; Verify Your Identity</div>
-            <div style="font-size:13px; color:var(--gray-500); margin-bottom:14px;">Don't have a reference number? Look up using your personal info.</div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Full name</label>
-              <input class="form-input" type="text" placeholder="First and last name">
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Date of birth</label>
-              <input class="form-input" type="text" placeholder="MM/DD/YYYY">
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Last 4 of SSN</label>
-              <input class="form-input" type="text" placeholder="••••" maxlength="4">
-            </div>
-            <button class="btn-outline">Verify &amp; Look Up</button>
-          </div>
-
-          <div style="text-align:center; padding:8px 0;">
-            <button class="text-link">Have a SoFi account? Log in instead</button>
-          </div>
-        </div>
-      </div>
-    </div></div>
-  </div>
-
-  <div class="screen-wrap">
-    <div class="screen-title">2. Balance &amp; ACH Payment</div>
-    <div class="screen-desc">Identity verified. Member sees their charged-off balance and can pay via ACH.</div>
-    <div class="phone"><div class="phone-inner">
-      <span class="screen-tag">GUEST</span>
-      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
-      <div class="web-header">
-        <div class="web-logo">SoFi</div>
-        <div class="web-header-links"><a href="#">Help</a><a href="#">Log In</a></div>
-      </div>
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div class="step-indicator">
-            <div class="step-dot done"></div>
-            <div class="step-dot active"></div>
-            <div class="step-dot"></div>
-          </div>
-
-          <div class="info-box" style="text-align:center;">
-            <span class="lock-icon">&#128274;</span> Identity verified. Session expires in 15 minutes.
-          </div>
-
-          <div class="card" style="border-left:4px solid var(--red);">
-            <div style="font-size:13px; font-weight:600; color:var(--red); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Outstanding Balance</div>
-            <div style="font-size:36px; font-weight:800; color:var(--black); margin-bottom:4px;">$142.50</div>
-            <div class="divider"></div>
-            <div class="sum-row"><span class="sum-label">Account</span><span class="sum-value">Checking (...7823)</span></div>
-            <div class="sum-row"><span class="sum-label">Closed on</span><span class="sum-value">Jan 15, 2026</span></div>
-            <div class="sum-row"><span class="sum-label">Reported to</span><span class="sum-value">EWS</span></div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Pay via ACH Bank Transfer</div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Bank name</label>
-              <input class="form-input" type="text" placeholder="e.g., Chase, Bank of America">
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Routing number</label>
-              <input class="form-input" type="text" placeholder="9 digits" maxlength="9">
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Account number</label>
-              <input class="form-input" type="text" placeholder="Your checking or savings account number">
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Confirm account number</label>
-              <input class="form-input" type="text" placeholder="Re-enter account number">
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Email for receipt</label>
-              <input class="form-input" type="email" placeholder="you@email.com">
-            </div>
-            <div class="form-hint" style="margin-bottom:16px;"><span class="lock-icon">&#128274;</span> ACH transfers are processed securely. Funds debited in 1 to 3 business days.</div>
-            <button class="btn-coral">Pay $142.50</button>
-          </div>
-
-          <div style="text-align:center; padding:4px 0;">
-            <div style="font-size:13px; color:var(--gray-400); margin-bottom:8px;">or</div>
-            <button class="btn-outline" style="gap:8px;">&#128222; Call to Pay - 1-855-456-7634</button>
-            <div style="font-size:12px; color:var(--gray-500); margin-top:6px; line-height:1.4;">Speak to an agent who can process your payment. Mon to Fri, 8am to 8pm ET.</div>
-          </div>
-
-          <div style="text-align:center; padding:4px 0;">
-            <button class="text-link">Think this is wrong? Dispute by mail</button>
-          </div>
-        </div>
-      </div>
-    </div></div>
-  </div>
-
-  <div class="screen-wrap">
-    <div class="screen-title">3. Guest Confirmation</div>
-    <div class="screen-desc">Payment confirmed. Receipt emailed. No login needed.</div>
-    <div class="phone"><div class="phone-inner">
-      <span class="screen-tag">GUEST</span>
-      <div class="ios-status"><span class="time">9:42</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
-      <div class="web-header">
-        <div class="web-logo">SoFi</div>
-        <div class="web-header-links"><a href="#">Help</a></div>
-      </div>
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div class="step-indicator">
-            <div class="step-dot done"></div>
-            <div class="step-dot done"></div>
-            <div class="step-dot active"></div>
-          </div>
-
-          <div style="text-align:center; padding:24px 0 8px;">
-            <div class="success-icon">&#10003;</div>
-            <div style="font-size:22px; font-weight:800; color:var(--black); margin-bottom:4px;">Payment Received</div>
-            <div style="font-size:14px; color:var(--gray-500);">A receipt has been sent to j***n@email.com</div>
-          </div>
-
-          <div class="card">
-            <div class="sum-row"><span class="sum-label">Amount paid</span><span class="sum-value">$142.50</span></div>
-            <div class="sum-row"><span class="sum-label">Date</span><span class="sum-value">Apr 8, 2026</span></div>
-            <div class="sum-row"><span class="sum-label">Method</span><span class="sum-value">ACH Bank Transfer</span></div>
-            <div class="sum-row"><span class="sum-label">Confirmation #</span><span class="sum-value">EWS-2026-04893</span></div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">What happens next</div>
-            <div class="timeline-item">
-              <div class="timeline-dot">&#10003;</div>
-              <div class="timeline-text"><strong>Payment initiated</strong><br>ACH transfer submitted. Funds will be debited in 1 to 3 business days.</div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot pending">2</div>
-              <div class="timeline-text"><strong>Payment confirmed</strong><br>You will receive an email once the ACH transfer clears.</div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot pending">3</div>
-              <div class="timeline-text"><strong>EWS record updated</strong><br>Within 10 business days, your charge-off flag will be removed from the EWS database.</div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot pending">4</div>
-              <div class="timeline-text"><strong>Record cleared</strong><br>You will receive an email confirming your EWS record has been updated.</div>
-            </div>
-          </div>
-
-          <button class="btn-coral">Download Receipt</button>
-          <button class="btn-outline">Print This Page</button>
-
-          <div class="info-box" style="margin-top:4px;">
-            <strong>Keep your confirmation number.</strong> If you need to reference this payment, your confirmation number is <strong>EWS-2026-04893</strong>. You can also call SoFi at 1-855-456-7634.
-          </div>
-        </div>
-      </div>
-    </div></div>
-  </div>
-</div>
-
 <div class="section-divider"></div>
 
 <!-- ============================== -->
@@ -690,12 +485,12 @@
 <div class="screen-group" id="dispute">
   <span class="screen-group-label">Dispute Flow</span>
   <div class="screen-group-title">Dispute Initiation (Mail Only)</div>
-  <div class="screen-group-desc">Available from both logged-in and guest experiences. For MVP, members file disputes by mailing a written letter. Phase 2 adds a self-service form.</div>
+  <div class="screen-group-desc">For MVP, members file disputes by mailing a written letter. Phase 2 adds a self-service form.</div>
 </div>
 
 <div class="flow-row">
   <div class="screen-wrap">
-    <div class="screen-title">Dispute (In-App, MVP)</div>
+    <div class="screen-title">Dispute by Mail</div>
     <div class="screen-desc">Logged-in member taps "Dispute by mail" and sees mailing instructions.</div>
     <div class="phone"><div class="phone-inner">
       <span class="screen-tag">LOGGED IN</span>
@@ -754,70 +549,6 @@
     </div></div>
   </div>
 
-  <div class="screen-wrap">
-    <div class="screen-title">Dispute (Guest Portal)</div>
-    <div class="screen-desc">Guest clicks "Dispute by mail" from the balance page and sees the mailing address.</div>
-    <div class="phone"><div class="phone-inner">
-      <span class="screen-tag">GUEST</span>
-      <div class="ios-status"><span class="time">9:41</span><span class="icons">&#9679;&#9679;&#9679;</span></div>
-      <div class="web-header">
-        <div class="web-logo">SoFi</div>
-        <div class="web-header-links"><a href="#">Help</a></div>
-      </div>
-      <div class="scroll-content">
-        <div class="content-inner">
-          <div style="text-align:center; padding:16px 0 8px;">
-            <div style="font-size:22px; font-weight:800; color:var(--black); line-height:1.3;">Dispute Reported Data</div>
-            <div style="font-size:14px; color:var(--gray-500); margin-top:8px;">If you believe the information SoFi reported to EWS is inaccurate, you have the right to dispute it by mail.</div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Common dispute reasons</div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Wrong balance amount</div>
-              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Account is not mine (identity theft)</div>
-              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Already paid or settled</div>
-              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Incorrect closure reason</div>
-              <div style="font-size:14px; padding:10px 14px; background:var(--gray-100); border-radius:10px;">&#8226; Other data inaccuracy</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Mail your dispute to us</div>
-            <div style="font-size:14px; color:var(--gray-700); line-height:1.6; margin-bottom:16px;">
-              Send a written letter with your dispute details and supporting documentation to:
-            </div>
-            <div style="display:flex; gap:12px; align-items:flex-start;">
-              <div style="width:36px; height:36px; border-radius:50%; background:var(--sofi-blue-light); color:var(--sofi-blue); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">&#9993;</div>
-              <div>
-                <div style="font-size:15px; font-weight:700; color:var(--black);">SoFi Bank, N.A.</div>
-                <div style="font-size:14px; color:var(--gray-700); line-height:1.5;">2750 East Cottonwood Parkway #300<br>Cottonwood Heights, UT 84121</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card" style="background:var(--gray-100); box-shadow:none;">
-            <div class="card-title">What to include in your letter</div>
-            <div style="font-size:14px; color:var(--gray-700); line-height:1.7;">
-              &#10003; Your full legal name<br>
-              &#10003; Your SoFi account number or reference number<br>
-              &#10003; The specific data you believe is inaccurate<br>
-              &#10003; A brief explanation of why it is incorrect<br>
-              &#10003; Any supporting documents (copies, not originals)
-            </div>
-          </div>
-
-          <div class="info-box">
-            <strong>Your rights:</strong> Under the Fair Credit Reporting Act (FCRA), SoFi must investigate your dispute within 30 days and notify you of the outcome. You also have the right to add a personal statement to your EWS record.
-          </div>
-
-          <div style="text-align:center; padding:8px 0;">
-            <button class="text-link">&#8249; Back to balance</button>
-          </div>
-        </div>
-      </div>
-    </div></div>
-  </div>
 </div>
 
 <div class="section-divider"></div>

@@ -49,7 +49,6 @@
     border:1px solid rgba(255,255,255,0.1); transition:all 0.2s;
   }
   .toc a:hover { background:rgba(0,162,199,0.15); border-color:var(--sofi-blue); color:var(--sofi-blue); }
-  .toc a.active { background:var(--sofi-blue); color:#fff; border-color:var(--sofi-blue); }
 
   .section-label {
     display:flex; flex-direction:column; align-items:center; gap:8px; width:100%;
@@ -249,50 +248,6 @@
   }
   .tab.on { color:var(--sofi-blue); }
   .tab-i { font-size:20px; }
-
-  .req-container {
-    max-width:1200px; width:100%;
-    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
-    border-radius:16px; padding:28px 24px;
-  }
-  .req-heading {
-    font-size:17px; font-weight:700; color:#fff; margin-bottom:16px;
-    padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1);
-  }
-  .req-table-wrap { overflow-x:auto; }
-  .req-table {
-    width:100%; border-collapse:collapse; font-size:13px;
-  }
-  .req-table th {
-    text-align:left; padding:10px 12px; font-size:11px; font-weight:700;
-    text-transform:uppercase; letter-spacing:1px; color:#9B9BB0;
-    border-bottom:2px solid rgba(255,255,255,0.1); white-space:nowrap;
-  }
-  .req-table td {
-    padding:12px 12px; color:#ccc; border-bottom:1px solid rgba(255,255,255,0.05);
-    vertical-align:top; line-height:1.5;
-  }
-  .req-table td:first-child {
-    font-weight:700; color:var(--sofi-blue); width:36px; text-align:center;
-  }
-  .req-table td:nth-child(3) { color:#fff; font-weight:500; min-width:220px; }
-  .req-table tbody tr:hover { background:rgba(255,255,255,0.03); }
-
-  .cat-pill {
-    display:inline-block; font-size:11px; font-weight:700; padding:3px 10px;
-    border-radius:10px; white-space:nowrap;
-  }
-  .cat-vis { background:rgba(0,162,199,0.15); color:var(--sofi-blue); }
-  .cat-pay { background:rgba(46,125,50,0.15); color:#66BB6A; }
-  .cat-conf { background:rgba(124,77,255,0.15); color:#B39DDB; }
-  .cat-ews { background:rgba(211,47,47,0.15); color:#EF5350; }
-  .cat-notif { background:rgba(245,124,0,0.15); color:var(--amber); }
-  .cat-ops { background:rgba(255,255,255,0.1); color:#9B9BB0; }
-  .cat-comm { background:rgba(0,162,199,0.1); color:#4DD0E1; }
-  .cat-audit { background:rgba(255,255,255,0.06); color:#78909C; }
-  .cat-intake { background:rgba(124,77,255,0.15); color:#B39DDB; }
-  .cat-invest { background:rgba(245,124,0,0.15); color:var(--amber); }
-  .cat-rights { background:rgba(46,125,50,0.15); color:#66BB6A; }
 </style>
 </head>
 <body>
@@ -300,14 +255,14 @@
 <div class="page-header">
   <div class="subtitle">MVP - Ship by July 31, 2026</div>
   <h1>EWS Charge-Off Recovery Flows</h1>
-  <p>The minimum viable experience to start contributing charge-off data to EWS and stop paying ~$100K/month in excess fees. Covers logged-in (app), logged-out (guest portal), dispute, and pre-charge-off notifications.</p>
+  <p>The minimum viable experience to start contributing charge-off data to EWS and stop paying ~$100K/month in excess fees. One payment rail (ACH), phone call option, dispute via mail, and pre-charge-off notifications.</p>
 </div>
 
 <div class="toc">
   <a href="#logged-in">Logged-In (App)</a>
   <a href="#entry-paths">Guest Portal Entry Paths</a>
   <a href="#guest">Logged-Out (Guest)</a>
-  <a href="#dispute">Dispute</a>
+  <a href="#dispute">Dispute (Mail Only)</a>
   <a href="#notifications">Pre-Charge-Off Notifications</a>
 </div>
 
@@ -318,7 +273,7 @@
 <div class="section-label" id="logged-in">
   <span class="section-badge logged-in">Logged-In Experience</span>
   <div class="section-title">In-App Healing Flow</div>
-  <div class="section-desc">Member logs into SoFi app, sees charged-off balance in Banking tab, pays via debit card (Stripe).</div>
+  <div class="section-desc">Member logs into SoFi app, sees charged-off balance in Banking tab, pays via ACH bank transfer or calls an agent.</div>
 </div>
 
 <div class="flow-row">
@@ -351,10 +306,10 @@
                 Your Checking account was closed on <strong>Jan 15, 2026</strong> with an outstanding balance of <strong>$142.50</strong>.<br><br>
                 This has been reported to <strong>Early Warning Services (EWS)</strong> and may prevent you from opening bank accounts at other institutions for up to 5 years.
               </div>
-              <button class="btn btn-primary">Pay Now - $142.50</button>
+              <button class="btn btn-primary">Pay via Bank Transfer (ACH)</button>
               <button class="btn btn-outline" style="margin-top:6px;gap:8px;">&#128222; Call to Pay - 1-855-456-7634</button>
               <div style="text-align:center;margin-top:8px;">
-                <button class="link">Think this is wrong? Dispute this data</button>
+                <button class="link">Think this is wrong? Dispute by mail</button>
               </div>
             </div>
           </div>
@@ -381,10 +336,10 @@
     </div></div>
   </div>
 
-  <!-- Screen 2: Payment -->
+  <!-- Screen 2: ACH Payment -->
   <div class="screen-wrap">
-    <div class="screen-title">2. Payment</div>
-    <div class="screen-desc">Debit card entry. Pre-populated balance. Full payment only.</div>
+    <div class="screen-title">2. ACH Payment</div>
+    <div class="screen-desc">Bank account details for ACH transfer. Full payment only.</div>
     <div class="phone"><div class="phone-inner">
       <span class="tag in">IN-APP</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
@@ -403,16 +358,24 @@
             <div class="sum-r"><span class="sum-l">Amount due</span><span class="sum-v" style="color:var(--red)">$142.50</span></div>
           </div>
           <div class="card">
-            <div class="card-t">Debit Card</div>
+            <div class="card-t">Pay via ACH Bank Transfer</div>
             <div class="form-g">
-              <label class="form-l">Card number</label>
-              <input class="form-i" type="text" value="4532 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 8821">
+              <label class="form-l">Bank name</label>
+              <input class="form-i" type="text" placeholder="e.g., Chase, Bank of America">
             </div>
-            <div class="form-row">
-              <div class="form-g"><label class="form-l">Expiry</label><input class="form-i" type="text" value="09/27"></div>
-              <div class="form-g"><label class="form-l">CVV</label><input class="form-i" type="text" value="&bull;&bull;&bull;"></div>
+            <div class="form-g">
+              <label class="form-l">Routing number</label>
+              <input class="form-i" type="text" placeholder="9 digits" maxlength="9">
             </div>
-            <div class="form-h">&#128274; Processed securely by Stripe. Credit cards not accepted.</div>
+            <div class="form-g">
+              <label class="form-l">Account number</label>
+              <input class="form-i" type="text" placeholder="Your checking or savings account number">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Confirm account number</label>
+              <input class="form-i" type="text" placeholder="Re-enter account number">
+            </div>
+            <div class="form-h">&#128274; ACH transfers are processed securely. Funds will be debited within 1 to 3 business days.</div>
           </div>
           <div class="info-box">
             <strong>After you pay:</strong> Your EWS record will be updated within 10 business days. The charge-off will no longer block you from opening accounts at other banks.
@@ -446,19 +409,20 @@
           <div style="text-align:center;padding:16px 0 4px;">
             <div class="ok-icon">&#10003;</div>
             <div style="font-size:20px;font-weight:800;">Payment Received</div>
-            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Your payment is being processed.</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Your ACH transfer is being processed.</div>
           </div>
           <div class="card">
             <div class="sum-r"><span class="sum-l">Amount paid</span><span class="sum-v">$142.50</span></div>
-            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 6, 2026</span></div>
-            <div class="sum-r"><span class="sum-l">Card</span><span class="sum-v">Debit ending in 8821</span></div>
+            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 8, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Method</span><span class="sum-v">ACH Bank Transfer</span></div>
             <div class="sum-r"><span class="sum-l">Confirmation #</span><span class="sum-v">EWS-2026-04893</span></div>
           </div>
           <div class="card">
             <div class="card-t">What happens next</div>
-            <div class="tl-item"><div class="tl-dot done">&#10003;</div><div class="tl-text"><strong>Payment received</strong><br>Confirmation email sent.</div></div>
-            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>EWS record updated</strong><br>Within 10 business days, your charge-off flag will be removed.</div></div>
-            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>Record cleared</strong><br>You'll get an email when your EWS record is updated.</div></div>
+            <div class="tl-item"><div class="tl-dot done">&#10003;</div><div class="tl-text"><strong>Payment initiated</strong><br>ACH transfer submitted. Funds debited in 1 to 3 business days.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>Payment confirmed</strong><br>You will receive an email once the ACH transfer clears.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>EWS record updated</strong><br>Within 10 business days, your charge-off flag will be removed.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">4</div><div class="tl-text"><strong>Record cleared</strong><br>You'll get an email when your EWS record is updated.</div></div>
           </div>
           <button class="btn btn-primary">Done</button>
           <button class="btn btn-outline">Download Receipt</button>
@@ -534,7 +498,7 @@
 <div class="section-label" id="guest">
   <span class="section-badge guest">Logged-Out Experience</span>
   <div class="section-title">Guest Payment Portal (sofi.com/pay)</div>
-  <div class="section-desc">No login required. Member looks up balance with reference number or identity verification, pays via debit card, gets email receipt.</div>
+  <div class="section-desc">No login required. Member looks up balance with reference number or identity verification, pays via ACH bank transfer or calls an agent.</div>
 </div>
 
 <div class="flow-row">
@@ -587,10 +551,10 @@
     </div></div>
   </div>
 
-  <!-- Guest 2: Balance + Pay -->
+  <!-- Guest 2: Balance + ACH Pay -->
   <div class="screen-wrap">
-    <div class="screen-title">2. Balance &amp; Payment</div>
-    <div class="screen-desc">Identity verified. Balance displayed. Debit card payment.</div>
+    <div class="screen-title">2. Balance &amp; ACH Payment</div>
+    <div class="screen-desc">Identity verified. Balance displayed. Pay via ACH bank transfer.</div>
     <div class="phone"><div class="phone-inner">
       <span class="tag guest">GUEST</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
@@ -613,14 +577,28 @@
           </div>
 
           <div class="card">
-            <div class="card-t">Pay with Debit Card</div>
-            <div class="form-g"><label class="form-l">Card number</label><input class="form-i" type="text" placeholder="1234 5678 9012 3456"></div>
-            <div class="form-row">
-              <div class="form-g"><label class="form-l">Expiry</label><input class="form-i" type="text" placeholder="MM/YY"></div>
-              <div class="form-g"><label class="form-l">CVV</label><input class="form-i" type="text" placeholder="123"></div>
+            <div class="card-t">Pay via ACH Bank Transfer</div>
+            <div class="form-g">
+              <label class="form-l">Bank name</label>
+              <input class="form-i" type="text" placeholder="e.g., Chase, Bank of America">
             </div>
-            <div class="form-g"><label class="form-l">Email for receipt</label><input class="form-i" type="email" placeholder="you@email.com"></div>
-            <div class="form-h" style="margin-bottom:12px;">&#128274; Processed securely by Stripe. Credit cards not accepted.</div>
+            <div class="form-g">
+              <label class="form-l">Routing number</label>
+              <input class="form-i" type="text" placeholder="9 digits" maxlength="9">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Account number</label>
+              <input class="form-i" type="text" placeholder="Your checking or savings account number">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Confirm account number</label>
+              <input class="form-i" type="text" placeholder="Re-enter account number">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Email for receipt</label>
+              <input class="form-i" type="email" placeholder="you@email.com">
+            </div>
+            <div class="form-h" style="margin-bottom:12px;">&#128274; ACH transfers are processed securely. Funds debited in 1 to 3 business days.</div>
             <button class="btn btn-primary">Pay Now - $142.50</button>
           </div>
           <div style="text-align:center;padding:2px 0;">
@@ -628,7 +606,7 @@
             <button class="btn btn-outline" style="gap:8px;">&#128222; Call to Pay - 1-855-456-7634</button>
             <div style="font-size:11px;color:var(--gray-500);margin-top:6px;line-height:1.4;">Speak to an agent who can process your payment. Mon to Fri, 8am to 8pm ET.</div>
           </div>
-          <div style="text-align:center;"><button class="link">Think this is wrong? Dispute this data</button></div>
+          <div style="text-align:center;"><button class="link">Think this is wrong? Dispute by mail</button></div>
         </div>
       </div>
     </div></div>
@@ -655,15 +633,16 @@
           </div>
           <div class="card">
             <div class="sum-r"><span class="sum-l">Amount paid</span><span class="sum-v">$142.50</span></div>
-            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 6, 2026</span></div>
-            <div class="sum-r"><span class="sum-l">Card</span><span class="sum-v">Debit ending in 4412</span></div>
+            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 8, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Method</span><span class="sum-v">ACH Bank Transfer</span></div>
             <div class="sum-r"><span class="sum-l">Confirmation #</span><span class="sum-v">EWS-2026-04893</span></div>
           </div>
           <div class="card">
             <div class="card-t">What happens next</div>
-            <div class="tl-item"><div class="tl-dot done">&#10003;</div><div class="tl-text"><strong>Payment received</strong><br>Confirmation emailed.</div></div>
-            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>EWS record updated</strong><br>Within 10 business days.</div></div>
-            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>Record cleared</strong><br>You'll get an email when done.</div></div>
+            <div class="tl-item"><div class="tl-dot done">&#10003;</div><div class="tl-text"><strong>Payment initiated</strong><br>ACH transfer submitted. Funds debited in 1 to 3 business days.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>Payment confirmed</strong><br>You will receive an email once the transfer clears.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>EWS record updated</strong><br>Within 10 business days.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">4</div><div class="tl-text"><strong>Record cleared</strong><br>You'll get an email when done.</div></div>
           </div>
           <button class="btn btn-primary">Download Receipt</button>
           <button class="btn btn-outline">Print This Page</button>
@@ -679,19 +658,19 @@
 <div class="sep"></div>
 
 <!-- ============================================ -->
-<!-- DISPUTE                                       -->
+<!-- DISPUTE (MAIL ONLY)                           -->
 <!-- ============================================ -->
 
 <div class="section-label" id="dispute">
   <span class="section-badge dispute">Dispute Flow</span>
-  <div class="section-title">Dispute Initiation (MVP: Phone + Mail)</div>
-  <div class="section-desc">Available from both logged-in and guest experiences. Routes to phone/mail for MVP. Self-service form in Phase 2.</div>
+  <div class="section-title">Dispute Initiation (MVP: Mail Only)</div>
+  <div class="section-desc">Available from both logged-in and guest experiences. Members file disputes by mailing a written letter to SoFi. Self-service form in Phase 2.</div>
 </div>
 
 <div class="flow-row">
   <div class="screen-wrap">
     <div class="screen-title">In-App Dispute</div>
-    <div class="screen-desc">Logged-in member taps "Dispute this data."</div>
+    <div class="screen-desc">Logged-in member taps "Dispute by mail."</div>
     <div class="phone"><div class="phone-inner">
       <span class="tag in">IN-APP</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
@@ -715,14 +694,23 @@
           </div>
           <div class="card">
             <div class="card-t">How to file a dispute</div>
-            <div class="contact-row" style="margin-bottom:14px;">
-              <div class="contact-icon">&#128222;</div>
-              <div><div class="contact-name">Call us</div><div class="contact-detail">1-855-456-7634<br>Mon to Fri, 8am to 8pm ET</div></div>
-            </div>
-            <div class="divider"></div>
-            <div class="contact-row" style="margin-top:14px;">
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.5;margin-bottom:14px;">To dispute your EWS data, mail a written letter to the address below. Include your full name, account number, the specific data you are disputing, and any supporting documentation.</div>
+            <div class="contact-row">
               <div class="contact-icon">&#9993;</div>
-              <div><div class="contact-name">Write to us</div><div class="contact-detail">SoFi Bank, N.A.<br>2750 E Cottonwood Pkwy #300<br>Cottonwood Heights, UT 84121</div></div>
+              <div>
+                <div class="contact-name">Mail your dispute to</div>
+                <div class="contact-detail">SoFi Bank, N.A.<br>2750 E Cottonwood Pkwy #300<br>Cottonwood Heights, UT 84121</div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="background:var(--gray-100);border:none;">
+            <div class="card-t">What to include in your letter</div>
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.6;">
+              &#10003; Your full legal name<br>
+              &#10003; Your SoFi account number or reference number<br>
+              &#10003; The specific data you believe is inaccurate<br>
+              &#10003; A brief explanation of why it is incorrect<br>
+              &#10003; Any supporting documents (copies, not originals)
             </div>
           </div>
           <div class="info-box">
@@ -735,7 +723,7 @@
 
   <div class="screen-wrap">
     <div class="screen-title">Guest Dispute</div>
-    <div class="screen-desc">Guest clicks "Dispute" from the balance page.</div>
+    <div class="screen-desc">Guest clicks "Dispute by mail" from the balance page.</div>
     <div class="phone"><div class="phone-inner">
       <span class="tag guest">GUEST</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
@@ -747,7 +735,7 @@
         <div class="pad">
           <div style="text-align:center;padding:12px 0 4px;">
             <div style="font-size:20px;font-weight:800;">Dispute Reported Data</div>
-            <div style="font-size:13px;color:var(--gray-500);margin-top:6px;">If you believe the information SoFi reported to EWS is inaccurate, you have the right to dispute it.</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:6px;">If you believe the information SoFi reported to EWS is inaccurate, you have the right to dispute it by mail.</div>
           </div>
           <div class="card">
             <div class="card-t">Common dispute reasons</div>
@@ -760,15 +748,24 @@
             </div>
           </div>
           <div class="card">
-            <div class="card-t">Contact us to file a dispute</div>
-            <div class="contact-row" style="margin-bottom:14px;">
-              <div class="contact-icon">&#128222;</div>
-              <div><div class="contact-name">Call us</div><div class="contact-detail">1-855-456-7634<br>Mon to Fri, 8am to 8pm ET</div></div>
-            </div>
-            <div class="divider"></div>
-            <div class="contact-row" style="margin-top:14px;">
+            <div class="card-t">Mail your dispute to us</div>
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.5;margin-bottom:14px;">Send a written letter with your dispute details and supporting documentation to:</div>
+            <div class="contact-row">
               <div class="contact-icon">&#9993;</div>
-              <div><div class="contact-name">Write to us</div><div class="contact-detail">SoFi Bank, N.A.<br>2750 E Cottonwood Pkwy #300<br>Cottonwood Heights, UT 84121</div></div>
+              <div>
+                <div class="contact-name">SoFi Bank, N.A.</div>
+                <div class="contact-detail">2750 E Cottonwood Pkwy #300<br>Cottonwood Heights, UT 84121</div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="background:var(--gray-100);border:none;">
+            <div class="card-t">What to include in your letter</div>
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.6;">
+              &#10003; Your full legal name<br>
+              &#10003; Your SoFi account number or reference number<br>
+              &#10003; The specific data you believe is inaccurate<br>
+              &#10003; A brief explanation of why it is incorrect<br>
+              &#10003; Any supporting documents (copies, not originals)
             </div>
           </div>
           <div class="info-box">
@@ -908,7 +905,7 @@
 </div>
 
 <div style="text-align:center;padding:40px 0 0;color:#9B9BB0;font-size:11px;">
-  EWS Charge-Off Recovery MVP Mockups &mdash; SoFi Bank, N.A. &mdash; Internal Use Only
+  EWS Charge-Off Recovery MVP Mockups // SoFi Bank, N.A. // Internal Use Only
 </div>
 
 </body>

@@ -61,6 +61,7 @@
   .section-badge.guest { color:var(--amber); background:rgba(245,124,0,0.1); border:1px solid rgba(245,124,0,0.3); }
   .section-badge.dispute { color:#7C4DFF; background:rgba(124,77,255,0.1); border:1px solid rgba(124,77,255,0.3); }
   .section-badge.notif { color:var(--green); background:rgba(46,125,50,0.1); border:1px solid rgba(46,125,50,0.3); }
+  .section-badge.agent { color:#E91E63; background:rgba(233,30,99,0.1); border:1px solid rgba(233,30,99,0.3); }
   .section-title { font-size:22px; font-weight:800; color:#fff; }
   .section-desc { font-size:14px; color:#9B9BB0; text-align:center; max-width:700px; line-height:1.6; }
 
@@ -85,6 +86,9 @@
   .tag.in { background:rgba(0,162,199,0.8); }
   .tag.guest { background:rgba(245,124,0,0.8); }
   .tag.notif { background:rgba(46,125,50,0.8); }
+  .tag.agent-tag { background:rgba(233,30,99,0.8); }
+  .tag.primary { background:rgba(0,162,199,0.85); }
+  .tag.secondary { background:rgba(245,124,0,0.85); }
 
   .ios-bar {
     display:flex; justify-content:space-between; align-items:center;
@@ -99,14 +103,6 @@
   .nav-l { width:36px; font-size:20px; font-weight:300; cursor:pointer; }
   .nav-c { flex:1; text-align:center; font-size:16px; font-weight:600; }
   .nav-r { width:36px; }
-
-  .web-hdr {
-    background:var(--white); padding:14px 20px; display:flex; align-items:center;
-    justify-content:space-between; border-bottom:1px solid var(--gray-200);
-  }
-  .web-logo { font-size:18px; font-weight:800; color:var(--sofi-blue); }
-  .web-links { display:flex; gap:14px; }
-  .web-links a { font-size:12px; color:var(--gray-700); text-decoration:none; font-weight:500; }
 
   .scroll { flex:1; overflow-y:auto; padding:0 0 8px; }
   .pad { padding:14px; display:flex; flex-direction:column; gap:10px; }
@@ -168,6 +164,11 @@
     display:flex; align-items:center; justify-content:center;
     font-size:28px; color:var(--green); margin:0 auto 12px;
   }
+  .pending-icon {
+    width:56px; height:56px; border-radius:50%; background:var(--amber-bg);
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px; color:var(--amber); margin:0 auto 12px;
+  }
 
   .tl-item { display:flex; gap:10px; padding:6px 0; }
   .tl-dot {
@@ -176,6 +177,7 @@
   }
   .tl-dot.done { background:var(--green-bg); color:var(--green); }
   .tl-dot.wait { background:var(--gray-100); color:var(--gray-500); }
+  .tl-dot.active { background:var(--amber-bg); color:var(--amber); }
   .tl-text { font-size:13px; color:var(--gray-700); line-height:1.45; }
   .tl-text strong { color:var(--black); }
 
@@ -184,6 +186,14 @@
     font-size:12px; color:var(--sofi-blue-dark); line-height:1.5;
   }
   .info-box strong { font-weight:700; }
+
+  .copy-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 14px; background:var(--gray-100); border-radius:10px; margin-bottom:8px;
+  }
+  .copy-label { font-size:11px; font-weight:600; color:var(--gray-500); text-transform:uppercase; letter-spacing:0.5px; }
+  .copy-value { font-size:15px; font-weight:700; font-family:'SF Mono','Fira Code',monospace; letter-spacing:0.5px; }
+  .copy-btn { font-size:11px; font-weight:700; color:var(--sofi-blue); background:var(--white); border:1.5px solid var(--sofi-blue); border-radius:6px; padding:4px 10px; cursor:pointer; }
 
   .divider { height:1px; background:var(--gray-200); margin:6px 0; }
 
@@ -205,26 +215,6 @@
   .contact-name { font-size:14px; font-weight:700; }
   .contact-detail { font-size:13px; color:var(--gray-700); line-height:1.5; }
 
-  .entry-paths {
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-    border-radius:16px; padding:24px; max-width:900px; width:100%;
-  }
-  .entry-paths h3 { font-size:16px; font-weight:700; color:#fff; margin-bottom:16px; text-align:center; }
-  .path-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:12px; }
-  .path-card {
-    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08);
-    border-radius:12px; padding:16px; display:flex; gap:12px; align-items:flex-start;
-  }
-  .path-num {
-    width:28px; height:28px; border-radius:50%; background:var(--sofi-blue);
-    color:#fff; display:flex; align-items:center; justify-content:center;
-    font-size:12px; font-weight:800; flex-shrink:0;
-  }
-  .path-title { font-size:13px; font-weight:700; color:#fff; margin-bottom:4px; }
-  .path-desc { font-size:12px; color:#9B9BB0; line-height:1.5; }
-
-  .sep { width:100%; max-width:1200px; border-top:2px solid rgba(255,255,255,0.05); }
-
   .push-preview { background:var(--gray-100); border-radius:14px; padding:14px; }
   .push-label { font-size:11px; font-weight:700; color:var(--gray-500); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
   .push-card {
@@ -238,6 +228,24 @@
   .push-title { font-size:13px; font-weight:600; margin-bottom:2px; }
   .push-body { font-size:12px; color:var(--gray-700); line-height:1.4; }
 
+  .email-mock { background:#f7f7fa; border-radius:10px; overflow:hidden; font-size:12px; }
+  .email-header { background:var(--white); padding:12px 16px; border-bottom:1px solid var(--gray-100); }
+  .email-meta { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .email-avatar { width:28px; height:28px; border-radius:50%; background:var(--sofi-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; flex-shrink:0; }
+  .email-from { font-size:12px; font-weight:600; }
+  .email-to { font-size:10px; color:var(--gray-500); }
+  .email-subject { font-size:14px; font-weight:700; color:var(--dark); }
+  .email-body { background:var(--white); padding:16px; margin:8px; border-radius:8px; }
+  .email-body p { font-size:12px; line-height:1.6; color:var(--gray-700); margin:0 0 10px; }
+  .email-body p:last-child { margin-bottom:0; }
+  .email-body .em-bold { font-weight:700; color:var(--dark); }
+  .email-body .em-red { color:var(--red); font-weight:700; }
+  .email-cta { display:inline-block; background:var(--sofi-blue); color:#fff; padding:10px 24px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none; margin:8px 0; }
+  .email-cta.danger { background:var(--red); }
+  .email-footer { padding:12px 16px; text-align:center; font-size:10px; color:var(--gray-400); line-height:1.5; }
+  .email-divider { border:none; border-top:1px solid var(--gray-100); margin:10px 0; }
+  .notif-pair { display:flex; flex-direction:column; gap:12px; }
+
   .tab-bar {
     display:flex; background:var(--white); border-top:1px solid var(--gray-200);
     padding:6px 0 2px; flex-shrink:0;
@@ -248,6 +256,35 @@
   }
   .tab.on { color:var(--sofi-blue); }
   .tab-i { font-size:20px; }
+
+  .sep { width:100%; max-width:1200px; border-top:2px solid rgba(255,255,255,0.05); }
+
+  .rail-tag {
+    display:inline-flex; font-size:10px; font-weight:700; padding:2px 8px;
+    border-radius:4px; letter-spacing:0.5px; text-transform:uppercase;
+  }
+  .rail-tag.primary-tag { background:var(--sofi-blue-light); color:var(--sofi-blue); }
+  .rail-tag.secondary-tag { background:var(--amber-bg); color:var(--amber); }
+
+  .agent-card {
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px; padding:24px; max-width:480px; width:100%;
+  }
+  .agent-step { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .agent-step:last-child { border-bottom:none; }
+  .agent-num {
+    width:28px; height:28px; border-radius:50%; background:rgba(233,30,99,0.15);
+    color:#E91E63; display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:800; flex-shrink:0;
+  }
+  .agent-text { font-size:13px; color:#ccc; line-height:1.5; }
+  .agent-text strong { color:#fff; }
+  .agent-text em { color:#E91E63; font-style:normal; font-weight:700; }
+  .agent-script {
+    background:rgba(233,30,99,0.08); border:1px solid rgba(233,30,99,0.2);
+    border-radius:10px; padding:12px 14px; margin-top:8px;
+    font-size:12px; color:#ddd; line-height:1.5; font-style:italic;
+  }
 </style>
 </head>
 <body>
@@ -255,30 +292,30 @@
 <div class="page-header">
   <div class="subtitle">MVP - Ship by July 31, 2026</div>
   <h1>EWS Charge-Off Recovery Flows</h1>
-  <p>The minimum viable experience to start contributing charge-off data to EWS and stop paying ~$100K/month in excess fees. One payment rail (ACH), phone call option, dispute via mail, and pre-charge-off notifications. Logged-in (app) only.</p>
+  <p>In-app self-service with a single payment rail: ACH push from external bank (member-initiated, zero return risk). Dispute by mail. Pre-charge-off notifications. Debit card, agent-assisted payment, and guest portal deferred to Phase 2.</p>
 </div>
 
 <div class="toc">
-  <a href="#logged-in">Logged-In (App)</a>
+  <a href="#logged-in">In-App: ACH Push</a>
   <a href="#dispute">Dispute (Mail Only)</a>
-  <a href="#notifications">Pre-Charge-Off Notifications</a>
+  <a href="#notifications">Notifications (Email + Push)</a>
 </div>
 
 <!-- ============================================ -->
-<!-- LOGGED-IN                                     -->
+<!-- IN-APP: ACH PUSH (PRIMARY RAIL)               -->
 <!-- ============================================ -->
 
 <div class="section-label" id="logged-in">
-  <span class="section-badge logged-in">Logged-In Experience</span>
-  <div class="section-title">In-App Healing Flow</div>
-  <div class="section-desc">Member logs into SoFi app, sees charged-off balance in Banking tab, pays via ACH bank transfer or calls an agent.</div>
+  <span class="section-badge logged-in">In-App Experience</span>
+  <div class="section-title">ACH Push from External Bank</div>
+  <div class="section-desc">Member logs into SoFi app, sees charged-off balance in Banking tab, copies SoFi's routing/account info, sends payment from their bank, then confirms via "Confirm My Payment." Zero return risk to SoFi.</div>
 </div>
 
 <div class="flow-row">
   <!-- Screen 1: Banking Tab -->
   <div class="screen-wrap">
     <div class="screen-title">1. Banking Tab</div>
-    <div class="screen-desc">Charged-off balance card appears prominently.</div>
+    <div class="screen-desc">Charged-off balance card with bank transfer option.</div>
     <div class="phone"><div class="phone-inner">
       <span class="tag in">IN-APP</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
@@ -290,10 +327,6 @@
           <span style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">S</span>
         </div>
       </div>
-      <div style="background:var(--white);padding:2px 20px 16px;">
-        <div style="font-size:38px;font-weight:800;letter-spacing:-2px;">$4,218<span style="font-size:20px;font-weight:700;vertical-align:super;">.43</span></div>
-        <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Total Balance</div>
-      </div>
       <div class="scroll">
         <div class="pad">
           <div class="alert">
@@ -304,22 +337,20 @@
                 Your Checking account was closed on <strong>Jan 15, 2026</strong> with an outstanding balance of <strong>$142.50</strong>.<br><br>
                 This has been reported to <strong>Early Warning Services (EWS)</strong> and may prevent you from opening bank accounts at other institutions for up to 5 years.
               </div>
-              <button class="btn btn-primary">Pay via Bank Transfer (ACH)</button>
-              <button class="btn btn-outline" style="margin-top:6px;gap:8px;">&#128222; Call to Pay - 1-855-456-7634</button>
+              <button class="btn btn-primary">Deposit $142.50</button>
+              <div style="font-size:11px;color:var(--gray-500);text-align:center;margin-top:4px;">Get SoFi's account details to send payment from your bank</div>
               <div style="text-align:center;margin-top:8px;">
                 <button class="link">Think this is wrong? Dispute by mail</button>
               </div>
             </div>
           </div>
           <div class="card">
-            <div style="display:flex;justify-content:space-between;padding:6px 0;">
-              <div><div style="font-size:15px;font-weight:600;">Checking (...4521)</div><div style="font-size:12px;color:var(--gray-500);">SoFi Bank</div></div>
-              <div style="font-size:16px;font-weight:700;">$3,847.12</div>
-            </div>
-            <div class="divider"></div>
-            <div style="display:flex;justify-content:space-between;padding:6px 0;">
-              <div><div style="font-size:15px;font-weight:600;">Savings (...8832)</div><div style="font-size:12px;color:var(--gray-500);">SoFi Bank</div></div>
-              <div style="font-size:16px;font-weight:700;">$371.31</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <div><div style="font-size:15px;font-weight:600;">Checking (...7823)</div><div style="font-size:12px;color:var(--gray-500);">SoFi Bank</div></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:16px;font-weight:700;color:var(--red);">-$142.50</span>
+                <span style="font-size:10px;font-weight:700;color:var(--red);background:var(--red-bg);padding:2px 6px;border-radius:4px;">CLOSED</span>
+              </div>
             </div>
           </div>
         </div>
@@ -334,97 +365,250 @@
     </div></div>
   </div>
 
-  <!-- Screen 2: ACH Payment -->
+  <!-- Screen 2: Deposit -->
   <div class="screen-wrap">
-    <div class="screen-title">2. ACH Payment</div>
-    <div class="screen-desc">Bank account details for ACH transfer. Full payment only.</div>
+    <div class="screen-title">2. Deposit</div>
+    <div class="screen-desc">SoFi's routing/account info displayed. Member copies details and sends from their bank.</div>
     <div class="phone"><div class="phone-inner">
-      <span class="tag in">IN-APP</span>
+      <span class="tag primary">PRIMARY</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
       <div class="nav">
         <div class="nav-l">&#8249;</div>
-        <div class="nav-c">Pay Charged-Off Balance</div>
+        <div class="nav-c">Deposit</div>
         <div class="nav-r"></div>
       </div>
       <div class="scroll">
         <div class="pad">
           <div class="step-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
           <div class="card">
-            <div class="card-t">Payment Summary</div>
-            <div class="sum-r"><span class="sum-l">Account</span><span class="sum-v">Checking (...7823)</span></div>
-            <div class="sum-r"><span class="sum-l">Closed on</span><span class="sum-v">Jan 15, 2026</span></div>
-            <div class="sum-r"><span class="sum-l">Amount due</span><span class="sum-v" style="color:var(--red)">$142.50</span></div>
-          </div>
-          <div class="card">
-            <div class="card-t">Pay via ACH Bank Transfer</div>
-            <div class="form-g">
-              <label class="form-l">Bank name</label>
-              <input class="form-i" type="text" placeholder="e.g., Chase, Bank of America">
+            <div class="card-t">Send exactly $142.50 to SoFi</div>
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.5;margin-bottom:14px;">Use your other bank's app or website to send an ACH transfer, wire, or any method your bank supports.</div>
+            <div class="copy-row">
+              <div>
+                <div class="copy-label">Routing Number</div>
+                <div class="copy-value">026073150</div>
+              </div>
+              <button class="copy-btn">Copy</button>
             </div>
-            <div class="form-g">
-              <label class="form-l">Routing number</label>
-              <input class="form-i" type="text" placeholder="9 digits" maxlength="9">
+            <div class="copy-row">
+              <div>
+                <div class="copy-label">Account Number</div>
+                <div class="copy-value">8830042917</div>
+              </div>
+              <button class="copy-btn">Copy</button>
             </div>
-            <div class="form-g">
-              <label class="form-l">Account number</label>
-              <input class="form-i" type="text" placeholder="Your checking or savings account number">
+            <div class="copy-row">
+              <div>
+                <div class="copy-label">Amount</div>
+                <div class="copy-value" style="color:var(--red);">$142.50</div>
+              </div>
+              <button class="copy-btn">Copy</button>
             </div>
-            <div class="form-g">
-              <label class="form-l">Confirm account number</label>
-              <input class="form-i" type="text" placeholder="Re-enter account number">
+            <div class="copy-row">
+              <div>
+                <div class="copy-label">Reference (include in memo)</div>
+                <div class="copy-value" style="font-size:13px;">REF-7823A04291</div>
+              </div>
+              <button class="copy-btn">Copy</button>
             </div>
-            <div class="form-h">&#128274; ACH transfers are processed securely. Funds will be debited within 1 to 3 business days.</div>
           </div>
           <div class="info-box">
-            <strong>After you pay:</strong> Your EWS record will be updated within 10 business days. The charge-off will no longer block you from opening accounts at other banks.
+            <strong>After you send the payment from your bank, come back here and confirm.</strong> This helps us match your payment to your account faster.
           </div>
-          <button class="btn btn-primary" style="margin-top:4px;">Pay Now - $142.50</button>
-          <div style="text-align:center;padding:6px 0 0;">
-            <div style="font-size:12px;color:var(--gray-400);margin-bottom:6px;">or</div>
-            <button class="btn btn-outline" style="gap:8px;">&#128222; Call to Pay - 1-855-456-7634</button>
-            <div style="font-size:11px;color:var(--gray-500);margin-top:6px;line-height:1.4;">Speak to an agent who can process your payment. Mon to Fri, 8am to 8pm ET.</div>
+          <button class="btn btn-primary" style="margin-top:4px;">Confirm My Payment</button>
+          <div style="text-align:center;padding:4px 0;">
+            <button class="link">Copy all details</button>
           </div>
         </div>
       </div>
     </div></div>
   </div>
 
-  <!-- Screen 3: Confirmation -->
+  <!-- Screen 3: Confirm My Payment -->
   <div class="screen-wrap">
-    <div class="screen-title">3. Confirmation</div>
-    <div class="screen-desc">Payment received with clear next-steps timeline.</div>
+    <div class="screen-title">3. Confirm My Payment</div>
+    <div class="screen-desc">Member confirms details so SoFi can match the incoming transfer.</div>
     <div class="phone"><div class="phone-inner">
-      <span class="tag in">IN-APP</span>
+      <span class="tag primary">PRIMARY</span>
+      <div class="ios-bar"><span class="t">9:42</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l">&#8249;</div>
+        <div class="nav-c">Confirm My Payment</div>
+        <div class="nav-r"></div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="step-dots"><div class="dot ok"></div><div class="dot on"></div><div class="dot"></div></div>
+          <div class="card">
+            <div class="card-t">Help us find your payment</div>
+            <div style="font-size:13px;color:var(--gray-700);line-height:1.5;margin-bottom:14px;">Enter the details of the transfer you sent so we can match it to your account.</div>
+            <div class="form-g">
+              <label class="form-l">Date you sent the payment</label>
+              <input class="form-i" type="text" placeholder="MM/DD/YYYY" value="04/08/2026">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Amount sent</label>
+              <input class="form-i" type="text" placeholder="$0.00" value="$142.50">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Source bank name</label>
+              <input class="form-i" type="text" placeholder="e.g., Chase, Bank of America" value="Chase">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Source routing number (optional)</label>
+              <input class="form-i" type="text" placeholder="Helps us match faster">
+            </div>
+            <div class="form-g">
+              <label class="form-l">Confirmation number from your bank (optional)</label>
+              <input class="form-i" type="text" placeholder="Shown on your bank's receipt after transfer">
+            </div>
+            <div class="form-h">This information helps us match your payment to your account. We'll email you once we receive the funds (typically 1 to 3 business days).</div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:4px;">Submit</button>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Screen 4: ACH Push Pending (immediate) -->
+  <div class="screen-wrap">
+    <div class="screen-title">4. Payment Pending</div>
+    <div class="screen-desc">Shown immediately after confirming. ACH takes 1 to 3 days.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag primary">PRIMARY</span>
       <div class="ios-bar"><span class="t">9:42</span><span class="i">&#9679;&#9679;&#9679;</span></div>
       <div class="nav">
         <div class="nav-l"></div>
-        <div class="nav-c">Confirmation</div>
+        <div class="nav-c">Payment Status</div>
         <div class="nav-r"></div>
       </div>
       <div class="scroll">
         <div class="pad">
           <div class="step-dots"><div class="dot ok"></div><div class="dot ok"></div><div class="dot on"></div></div>
           <div style="text-align:center;padding:16px 0 4px;">
-            <div class="ok-icon">&#10003;</div>
-            <div style="font-size:20px;font-weight:800;">Payment Received</div>
-            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Your ACH transfer is being processed.</div>
+            <div class="pending-icon">&#9202;</div>
+            <div style="font-size:20px;font-weight:800;">Payment Pending</div>
+            <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">We're watching for your payment of $142.50</div>
           </div>
           <div class="card">
-            <div class="sum-r"><span class="sum-l">Amount paid</span><span class="sum-v">$142.50</span></div>
-            <div class="sum-r"><span class="sum-l">Date</span><span class="sum-v">Apr 8, 2026</span></div>
-            <div class="sum-r"><span class="sum-l">Method</span><span class="sum-v">ACH Bank Transfer</span></div>
+            <div class="sum-r"><span class="sum-l">Amount</span><span class="sum-v">$142.50</span></div>
+            <div class="sum-r"><span class="sum-l">Sent on</span><span class="sum-v">Apr 8, 2026</span></div>
+            <div class="sum-r"><span class="sum-l">Source bank</span><span class="sum-v">Chase</span></div>
             <div class="sum-r"><span class="sum-l">Confirmation #</span><span class="sum-v">EWS-2026-04893</span></div>
           </div>
           <div class="card">
             <div class="card-t">What happens next</div>
-            <div class="tl-item"><div class="tl-dot done">&#10003;</div><div class="tl-text"><strong>Payment initiated</strong><br>ACH transfer submitted. Funds debited in 1 to 3 business days.</div></div>
-            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>Payment confirmed</strong><br>You will receive an email once the ACH transfer clears.</div></div>
-            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>EWS record updated</strong><br>Within 10 business days, your charge-off flag will be removed.</div></div>
-            <div class="tl-item"><div class="tl-dot wait">4</div><div class="tl-text"><strong>Record cleared</strong><br>You'll get an email when your EWS record is updated.</div></div>
+            <div class="tl-item"><div class="tl-dot active">1</div><div class="tl-text"><strong>Waiting for funds</strong><br>Typically 1 to 3 business days for ACH transfers.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">2</div><div class="tl-text"><strong>Payment received</strong><br>We'll email you when your payment is received.</div></div>
+            <div class="tl-item"><div class="tl-dot wait">3</div><div class="tl-text"><strong>EWS record cleared</strong><br>Within 10 business days. We'll email you when your EWS record is cleared. Other banks will no longer see this charge-off when you apply for an account.</div></div>
           </div>
           <button class="btn btn-primary">Done</button>
-          <button class="btn btn-outline">Download Receipt</button>
         </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Screen 5: Banking Tab - Pending State (return visit) -->
+  <div class="screen-wrap">
+    <div class="screen-title">5. Banking Tab (Pending)</div>
+    <div class="screen-desc">When the member returns to the app, the balance card shows pending payment status.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag in">IN-APP</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l"></div>
+        <div class="nav-c">Banking</div>
+        <div class="nav-r" style="display:flex;gap:8px;justify-content:flex-end;">
+          <span style="font-size:16px;">&#128269;</span>
+          <span style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">S</span>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="alert" style="border-left-color:var(--amber);">
+            <div class="alert-in">
+              <div class="alert-badge amber">&#9202; Payment Pending</div>
+              <div class="alert-t">We're watching for your payment</div>
+              <div class="alert-b">
+                You confirmed a payment of <strong>$142.50</strong> on <strong>Apr 8, 2026</strong> from <strong>Chase</strong>.<br><br>
+                This typically takes <strong>1 to 3 business days</strong>. We'll email you when we receive the funds.
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0 4px;border-top:1px solid var(--gray-100);margin-top:4px;">
+                <span style="font-size:12px;color:var(--gray-500);">Confirmation #</span>
+                <span style="font-size:12px;font-weight:700;">EWS-2026-04893</span>
+              </div>
+              <button class="link" style="width:100%;text-align:center;">View payment details</button>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <div><div style="font-size:15px;font-weight:600;">Checking (...7823)</div><div style="font-size:12px;color:var(--gray-500);">SoFi Bank</div></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:16px;font-weight:700;color:var(--red);">-$142.50</span>
+                <span style="font-size:10px;font-weight:700;color:var(--red);background:var(--red-bg);padding:2px 6px;border-radius:4px;">CLOSED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab"><span class="tab-i">&#127968;</span>Home</div>
+        <div class="tab on"><span class="tab-i">&#128176;</span>Banking</div>
+        <div class="tab"><span class="tab-i">&#128179;</span>Credit card</div>
+        <div class="tab"><span class="tab-i">&#128200;</span>Invest</div>
+        <div class="tab"><span class="tab-i">&#127974;</span>Loans</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Screen 6: Banking Tab - Payment Complete -->
+  <div class="screen-wrap">
+    <div class="screen-title">6. Banking Tab (Resolved)</div>
+    <div class="screen-desc">After funds are received and EWS record is cleared. The charged-off balance is resolved.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag in">IN-APP</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="nav">
+        <div class="nav-l"></div>
+        <div class="nav-c">Banking</div>
+        <div class="nav-r" style="display:flex;gap:8px;justify-content:flex-end;">
+          <span style="font-size:16px;">&#128269;</span>
+          <span style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">S</span>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="pad">
+          <div class="alert" style="border-left-color:var(--green);">
+            <div class="alert-in">
+              <div class="alert-badge" style="background:var(--green-bg);color:var(--green);">&#10003; Balance Resolved</div>
+              <div class="alert-t">Your charged-off balance has been paid</div>
+              <div class="alert-b">
+                We received your payment of <strong>$142.50</strong> on <strong>Apr 10, 2026</strong>.<br><br>
+                Your EWS record has been cleared. Other banks will no longer see this charge-off when you apply for a new account.
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0 4px;border-top:1px solid var(--gray-100);margin-top:4px;">
+                <span style="font-size:12px;color:var(--gray-500);">Confirmation #</span>
+                <span style="font-size:12px;font-weight:700;">EWS-2026-04893</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <div><div style="font-size:15px;font-weight:600;">Checking (...7823)</div><div style="font-size:12px;color:var(--gray-500);">SoFi Bank</div></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:16px;font-weight:700;">$0.00</span>
+                <span style="font-size:10px;font-weight:700;color:var(--gray-500);background:var(--gray-50);padding:2px 6px;border-radius:4px;">CLOSED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab"><span class="tab-i">&#127968;</span>Home</div>
+        <div class="tab on"><span class="tab-i">&#128176;</span>Banking</div>
+        <div class="tab"><span class="tab-i">&#128179;</span>Credit card</div>
+        <div class="tab"><span class="tab-i">&#128200;</span>Invest</div>
+        <div class="tab"><span class="tab-i">&#127974;</span>Loans</div>
       </div>
     </div></div>
   </div>
@@ -439,7 +623,7 @@
 <div class="section-label" id="dispute">
   <span class="section-badge dispute">Dispute Flow</span>
   <div class="section-title">Dispute Initiation (MVP: Mail Only)</div>
-  <div class="section-desc">Members file disputes by mailing a written letter to SoFi. Self-service form in Phase 2.</div>
+  <div class="section-desc">Members file disputes by mailing a written letter to SoFi. Phone intake is NOT FCRA-compliant. Self-service form in Phase 2.</div>
 </div>
 
 <div class="flow-row">
@@ -495,7 +679,6 @@
       </div>
     </div></div>
   </div>
-
 </div>
 
 <div class="sep"></div>
@@ -504,119 +687,495 @@
 <!-- PRE-CHARGE-OFF NOTIFICATIONS                  -->
 <!-- ============================================ -->
 
+<!-- ============================================ -->
+<!-- PRE-CHARGE-OFF NOTIFICATIONS                  -->
+<!-- ============================================ -->
+
 <div class="section-label" id="notifications">
-  <span class="section-badge notif">Pre-Charge-Off</span>
-  <div class="section-title">EWS Implication Notifications</div>
-  <div class="section-desc">Updated push notifications and emails during the 57-day grace period that warn members about EWS consequences.</div>
+  <span class="section-badge notif">Notifications</span>
+  <div class="section-title">Full Notification Lifecycle</div>
+  <div class="section-desc">Email and push notifications across the entire journey: pre-charge-off warnings (57-day grace period), charge-off notice, payment confirmations, and EWS clearance. <strong>No pre-closure notifications exist today.</strong> All delivered via Braze.</div>
+</div>
+
+<!-- PRE-CHARGE-OFF: DAY 1-14 -->
+<div style="padding:8px 0 4px;"><span style="font-size:13px;font-weight:700;color:var(--sofi-blue);text-transform:uppercase;letter-spacing:1px;">&#9716; Pre-Charge-Off</span></div>
+<div class="flow-row">
+  <div class="screen-wrap">
+    <div class="screen-title">Day 1 to 14: Push</div>
+    <div class="screen-desc">First warning. Informational tone.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">PUSH</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div style="background:#000;min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;padding:60px 12px 20px;">
+        <div class="push-card" style="border-radius:16px;">
+          <div class="push-top">
+            <div class="push-icon" style="background:var(--sofi-blue);">S</div>
+            <span class="push-app">SoFi</span>
+            <span class="push-time">now</span>
+          </div>
+          <div class="push-title">Your account has a negative balance</div>
+          <div class="push-body">Your SoFi Checking account has a balance of -$142.50. Deposit funds to avoid account closure and EWS reporting.</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">Day 1 to 14: Email</div>
+    <div class="screen-desc">Full explanation of consequences.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">EMAIL</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar">S</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
+              </div>
+            </div>
+            <div class="email-subject">Your SoFi account has a negative balance</div>
+          </div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>Your SoFi Checking account (...7823) has a negative balance of <span class="em-red">-$142.50</span>.</p>
+            <p>Please deposit funds to bring your balance back to $0 as soon as possible.</p>
+            <p><span class="em-bold">What happens if this isn't resolved:</span></p>
+            <p>&#8226; Your account will be <span class="em-bold">permanently closed</span><br>
+               &#8226; The balance will be <span class="em-bold">charged off</span><br>
+               &#8226; Reported to <span class="em-bold">Early Warning Services (EWS)</span>, which may prevent you from opening bank accounts at other institutions for up to 5 years</p>
+            <div style="text-align:center;padding:6px 0;">
+              <a class="email-cta">Deposit Now</a>
+            </div>
+            <hr class="email-divider">
+            <p style="font-size:11px;color:var(--gray-500);">If you've already made a deposit, please disregard this message. It may take 1 to 3 business days for your deposit to be reflected.</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105<br>
+            <a style="color:var(--sofi-blue);text-decoration:none;">Unsubscribe</a> &middot; <a style="color:var(--sofi-blue);text-decoration:none;">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- PRE-CHARGE-OFF: DAY 15-45 -->
+  <div class="screen-wrap">
+    <div class="screen-title">Day 15 to 45: Push</div>
+    <div class="screen-desc">Escalation. Countdown with urgency.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">PUSH</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div style="background:#000;min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;padding:60px 12px 20px;">
+        <div class="push-card" style="border-radius:16px;">
+          <div class="push-top">
+            <div class="push-icon" style="background:var(--amber);">!</div>
+            <span class="push-app">SoFi</span>
+            <span class="push-time">now</span>
+          </div>
+          <div class="push-title">20 days left to resolve your balance</div>
+          <div class="push-body">Your -$142.50 balance must be resolved or your account will be closed and reported to EWS. Deposit now in the SoFi app.</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
 </div>
 
 <div class="flow-row">
   <div class="screen-wrap">
-    <div class="screen-title">Day 1 to 14: Initial</div>
-    <div class="screen-desc">First warning with EWS implications.</div>
+    <div class="screen-title">Day 15 to 45: Email</div>
+    <div class="screen-desc">Stronger consequences. Specific days remaining.</div>
     <div class="phone"><div class="phone-inner">
-      <span class="tag notif">NOTIFICATION</span>
+      <span class="tag notif">EMAIL</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
-      <div class="nav"><div class="nav-l"></div><div class="nav-c">Notifications</div><div class="nav-r"></div></div>
-      <div class="scroll">
-        <div class="pad">
-          <div class="alert" style="border-left-color:var(--sofi-blue);">
-            <div class="alert-in">
-              <div class="alert-badge blue">&#9888; Negative Balance</div>
-              <div class="alert-t">Your account has a negative balance of -$142.50</div>
-              <div class="alert-b">
-                Please deposit funds to bring your balance back to $0.<br><br>
-                <strong>If not resolved, your account will be closed and reported to Early Warning Services (EWS), which may prevent you from opening bank accounts at other institutions for up to 5 years.</strong>
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar">S</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
               </div>
-              <button class="btn btn-primary">Deposit Now</button>
             </div>
+            <div class="email-subject">Action required: 20 days to resolve your -$142.50 balance</div>
           </div>
-          <div class="push-preview">
-            <div class="push-label">Push Notification</div>
-            <div class="push-card">
-              <div class="push-top">
-                <div class="push-icon" style="background:var(--sofi-blue);">S</div>
-                <span class="push-app">SoFi</span>
-                <span class="push-time">now</span>
-              </div>
-              <div class="push-title">Your account has a negative balance</div>
-              <div class="push-body">-$142.50. Deposit now to avoid closure and EWS reporting, which could block future bank account applications.</div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>Your SoFi Checking account (...7823) still has an outstanding balance of <span class="em-red">-$142.50</span>.</p>
+            <p>You have <span class="em-bold">20 days</span> to bring your balance to $0. After that:</p>
+            <p>&#10060; Your account will be <span class="em-bold">permanently closed</span><br>
+               &#10060; The balance will be <span class="em-bold">charged off</span><br>
+               &#10060; Reported to <span class="em-bold">EWS</span> (may block new bank accounts for up to 5 years)</p>
+            <div style="text-align:center;padding:6px 0;">
+              <a class="email-cta">Deposit $142.50 Now</a>
             </div>
+            <p style="font-size:11px;color:var(--gray-500);">Open the SoFi app, go to Banking, and tap "Deposit" to make a payment from your external bank account.</p>
+            <hr class="email-divider">
+            <p style="font-size:11px;color:var(--gray-500);">Questions? Visit our <a style="color:var(--sofi-blue);text-decoration:none;">Help Center</a> or call 1-855-456-7634.</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105<br>
+            <a style="color:var(--sofi-blue);text-decoration:none;">Unsubscribe</a> &middot; <a style="color:var(--sofi-blue);text-decoration:none;">Privacy Policy</a>
           </div>
         </div>
       </div>
     </div></div>
   </div>
 
+  <!-- PRE-CHARGE-OFF: DAY 46-57 -->
   <div class="screen-wrap">
-    <div class="screen-title">Day 15 to 45: Escalation</div>
-    <div class="screen-desc">Countdown with stronger consequences language.</div>
+    <div class="screen-title">Day 46 to 57: Push</div>
+    <div class="screen-desc">Final warning. Urgent, specific deadline.</div>
     <div class="phone"><div class="phone-inner">
-      <span class="tag notif">NOTIFICATION</span>
+      <span class="tag notif">PUSH</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
-      <div class="nav"><div class="nav-l"></div><div class="nav-c">Notifications</div><div class="nav-r"></div></div>
-      <div class="scroll">
-        <div class="pad">
-          <div class="alert">
-            <div class="alert-in">
-              <div class="alert-badge red">&#9888; 20 Days Remaining</div>
-              <div class="alert-t">Your account will be closed if not resolved</div>
-              <div class="alert-b">
-                You have <strong>20 days</strong> to bring your balance to $0.<br><br>
-                After that, your account will be <strong>permanently closed</strong>, the balance charged off, and <strong>reported to EWS</strong>.<br><br>
-                An EWS flag can prevent you from opening accounts at other banks for <strong>up to 5 years</strong>.
-              </div>
-              <button class="btn btn-primary">Deposit $142.50 Now</button>
-              <div style="text-align:center;margin-top:8px;"><button class="link">Need help? Contact us</button></div>
-            </div>
+      <div style="background:#000;min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;padding:60px 12px 20px;">
+        <div class="push-card" style="border-radius:16px;">
+          <div class="push-top">
+            <div class="push-icon" style="background:var(--red);">!</div>
+            <span class="push-app">SoFi</span>
+            <span class="push-time">now</span>
           </div>
-          <div class="push-preview">
-            <div class="push-label">Email Subject</div>
-            <div class="push-card">
-              <div class="push-title">Action required: 20 days to resolve your -$142.50 balance</div>
-              <div class="push-body">Your account will be closed and reported to EWS if not resolved...</div>
-            </div>
-          </div>
+          <div class="push-title">Final notice: Account closure in 5 days</div>
+          <div class="push-body">Deposit $142.50 by Apr 11 to avoid permanent closure and EWS reporting. This cannot be undone. Open the SoFi app now.</div>
         </div>
       </div>
     </div></div>
   </div>
 
   <div class="screen-wrap">
-    <div class="screen-title">Day 46 to 57: Final Warning</div>
-    <div class="screen-desc">Last chance. Urgent tone with specific deadline.</div>
+    <div class="screen-title">Day 46 to 57: Email</div>
+    <div class="screen-desc">Last chance. Date-specific deadline.</div>
     <div class="phone"><div class="phone-inner">
-      <span class="tag notif">NOTIFICATION</span>
+      <span class="tag notif">EMAIL</span>
       <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
-      <div class="nav"><div class="nav-l"></div><div class="nav-c">Notifications</div><div class="nav-r"></div></div>
-      <div class="scroll">
-        <div class="pad">
-          <div class="alert" style="border-left-width:6px;">
-            <div class="alert-in">
-              <div class="alert-badge red" style="font-size:12px;">&#128680; FINAL NOTICE</div>
-              <div class="alert-t">Your account will be closed in 5 days</div>
-              <div class="alert-b">
-                If you do not deposit <strong>$142.50</strong> by <strong>April 11, 2026</strong>:<br><br>
-                &#10060; <strong>Permanently closed</strong><br>
-                &#10060; <strong>Charged off</strong><br>
-                &#10060; <strong>Reported to EWS</strong> (blocks bank accounts up to 5 years)<br><br>
-                After closure, you can still pay at <strong>sofi.com/pay</strong> to clear the flag.
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar" style="background:var(--red);">!</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
               </div>
-              <button class="btn btn-danger">Deposit $142.50 Now</button>
-              <div style="text-align:center;margin-top:8px;"><button class="link">Call us: 1-855-456-7634</button></div>
             </div>
+            <div class="email-subject" style="color:var(--red);">Final notice: Your account will be closed on April 11</div>
           </div>
-          <div class="push-preview">
-            <div class="push-label">Push Notification</div>
-            <div class="push-card">
-              <div class="push-top">
-                <div class="push-icon" style="background:var(--red);">!</div>
-                <span class="push-app">SoFi</span>
-                <span class="push-time">now</span>
-              </div>
-              <div class="push-title">Final notice: Account closure in 5 days</div>
-              <div class="push-body">Deposit $142.50 by Apr 11 to avoid permanent closure and EWS reporting (blocks bank accounts up to 5 years).</div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>This is your <span class="em-red">final notice</span>. Your SoFi Checking account (...7823) has an outstanding balance of <span class="em-red">-$142.50</span>.</p>
+            <p><span class="em-bold">If not resolved by April 11, 2026:</span></p>
+            <p>&#10060; Account <span class="em-bold">permanently closed</span><br>
+               &#10060; Balance <span class="em-bold">charged off</span><br>
+               &#10060; <span class="em-bold">Reported to EWS</span> (may block bank accounts at other institutions for up to 5 years)</p>
+            <p>This action <span class="em-bold">cannot be reversed</span>. After closure, you can still pay through the SoFi app to clear the EWS flag.</p>
+            <div style="text-align:center;padding:6px 0;">
+              <a class="email-cta danger">Deposit $142.50 Now</a>
             </div>
+            <hr class="email-divider">
+            <p style="font-size:11px;color:var(--gray-500);">Open the SoFi app, go to Banking, and tap "Deposit" to make a payment from your external bank account.</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105<br>
+            <a style="color:var(--sofi-blue);text-decoration:none;">Unsubscribe</a> &middot; <a style="color:var(--sofi-blue);text-decoration:none;">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- POST-CHARGE-OFF NOTIFICATIONS                 -->
+<!-- ============================================ -->
+
+<div style="padding:20px 0 4px;"><span style="font-size:13px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;">&#9888; Post-Charge-Off</span></div>
+<div class="flow-row">
+  <!-- DAY 57: ACCOUNT CLOSED -->
+  <div class="screen-wrap">
+    <div class="screen-title">Day 57: Account Closed (Push)</div>
+    <div class="screen-desc">Account is closed and reported to EWS.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">PUSH</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div style="background:#000;min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;padding:60px 12px 20px;">
+        <div class="push-card" style="border-radius:16px;">
+          <div class="push-top">
+            <div class="push-icon" style="background:var(--red);">&#10006;</div>
+            <span class="push-app">SoFi</span>
+            <span class="push-time">now</span>
+          </div>
+          <div class="push-title">Your account has been closed</div>
+          <div class="push-body">Your Checking account was closed with a balance of -$142.50 and reported to EWS. You can still pay to clear your record. Tap to learn more.</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="screen-wrap">
+    <div class="screen-title">Day 57: Account Closed (Email)</div>
+    <div class="screen-desc">Full closure notice with payment instructions and dispute info.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">EMAIL</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar" style="background:var(--red);">!</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
+              </div>
+            </div>
+            <div class="email-subject">Your SoFi Checking account has been closed</div>
+          </div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>Your SoFi Checking account (...7823) has been <span class="em-bold">permanently closed</span> with an outstanding balance of <span class="em-red">-$142.50</span>.</p>
+            <p>This balance has been <span class="em-bold">charged off</span> and <span class="em-bold">reported to Early Warning Services (EWS)</span>. An EWS record may prevent you from opening bank accounts at other financial institutions for up to 5 years.</p>
+            <p><span class="em-bold">You can still resolve this.</span> Pay your outstanding balance to clear your EWS record:</p>
+            <div style="text-align:center;padding:6px 0;">
+              <a class="email-cta">Pay in the SoFi App</a>
+            </div>
+            <p style="font-size:11px;">Open the SoFi app &#8594; Banking &#8594; tap "Deposit $142.50" to send a payment from your external bank.</p>
+            <hr class="email-divider">
+            <p><span class="em-bold">Your reference number: EWS-2026-04893</span></p>
+            <p style="font-size:11px;color:var(--gray-500);">Include this in the memo field of your bank transfer to help us match your payment.</p>
+            <hr class="email-divider">
+            <p><span class="em-bold">Believe this is an error?</span></p>
+            <p style="font-size:11px;color:var(--gray-500);">You have the right to dispute this information. Mail your dispute to:<br><br>
+            SoFi Bank, N.A.<br>
+            Attn: EWS Disputes<br>
+            234 1st Street, San Francisco, CA 94105</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105<br>
+            <a style="color:var(--sofi-blue);text-decoration:none;">Unsubscribe</a> &middot; <a style="color:var(--sofi-blue);text-decoration:none;">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PAYMENT CONFIRMATION NOTIFICATIONS            -->
+<!-- ============================================ -->
+
+<div style="padding:20px 0 4px;"><span style="font-size:13px;font-weight:700;color:var(--sofi-blue);text-transform:uppercase;letter-spacing:1px;">&#10003; Payment &amp; Resolution</span></div>
+<div class="flow-row">
+  <!-- PAYMENT CONFIRMED (PENDING) -->
+  <div class="screen-wrap">
+    <div class="screen-title">Payment Confirmed (Email)</div>
+    <div class="screen-desc">Sent immediately after member confirms their payment in-app.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">EMAIL</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar">S</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
+              </div>
+            </div>
+            <div class="email-subject">We're watching for your payment</div>
+          </div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>Thanks for confirming your payment. Here's what we have on file:</p>
+            <div style="background:var(--gray-50);padding:10px 12px;border-radius:8px;margin:8px 0;">
+              <p style="margin:0;font-size:11px;"><span class="em-bold">Amount:</span> $142.50</p>
+              <p style="margin:4px 0 0;font-size:11px;"><span class="em-bold">Sent on:</span> April 8, 2026</p>
+              <p style="margin:4px 0 0;font-size:11px;"><span class="em-bold">Source bank:</span> Chase</p>
+              <p style="margin:4px 0 0;font-size:11px;"><span class="em-bold">Confirmation #:</span> EWS-2026-04893</p>
+            </div>
+            <p><span class="em-bold">What happens next:</span></p>
+            <p>&#9716; <span class="em-bold">Waiting for funds</span> - ACH transfers typically take 1 to 3 business days.</p>
+            <p>We'll email you as soon as we receive your payment.</p>
+            <hr class="email-divider">
+            <p style="font-size:11px;color:var(--gray-500);">You can check your payment status anytime in the SoFi app under Banking.</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- PAYMENT RECEIVED -->
+  <div class="screen-wrap">
+    <div class="screen-title">Payment Received (Email)</div>
+    <div class="screen-desc">Sent when funds are received and applied to balance.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">EMAIL</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar" style="background:var(--green);">&#10003;</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
+              </div>
+            </div>
+            <div class="email-subject">Your payment of $142.50 has been received</div>
+          </div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>Great news! We've received your payment and applied it to your charged-off balance.</p>
+            <div style="background:var(--green-bg);padding:10px 12px;border-radius:8px;margin:8px 0;">
+              <p style="margin:0;font-size:11px;color:var(--green);"><span class="em-bold">&#10003; Payment received</span></p>
+              <p style="margin:4px 0 0;font-size:11px;"><span class="em-bold">Amount:</span> $142.50</p>
+              <p style="margin:4px 0 0;font-size:11px;"><span class="em-bold">Received:</span> April 10, 2026</p>
+              <p style="margin:4px 0 0;font-size:11px;"><span class="em-bold">Remaining balance:</span> $0.00</p>
+            </div>
+            <p><span class="em-bold">What happens next:</span></p>
+            <p>&#9716; We will now request that your <span class="em-bold">EWS record be cleared</span>. This typically takes up to <span class="em-bold">10 business days</span>.</p>
+            <p>We'll email you once your EWS record has been cleared.</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- PAYMENT RECEIVED: PUSH -->
+  <div class="screen-wrap">
+    <div class="screen-title">Payment Received (Push)</div>
+    <div class="screen-desc">Push notification when funds land.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">PUSH</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div style="background:#000;min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;padding:60px 12px 20px;">
+        <div class="push-card" style="border-radius:16px;">
+          <div class="push-top">
+            <div class="push-icon" style="background:var(--green);">&#10003;</div>
+            <span class="push-app">SoFi</span>
+            <span class="push-time">now</span>
+          </div>
+          <div class="push-title">Payment received: $142.50</div>
+          <div class="push-body">Your payment has been received and applied. We're now working to clear your EWS record (up to 10 business days). We'll let you know when it's done.</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="flow-row">
+  <!-- EWS RECORD CLEARED -->
+  <div class="screen-wrap">
+    <div class="screen-title">EWS Record Cleared (Email)</div>
+    <div class="screen-desc">Final email. EWS flag removed.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">EMAIL</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar" style="background:var(--green);">&#10003;</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
+              </div>
+            </div>
+            <div class="email-subject">Your EWS record has been cleared</div>
+          </div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>Your EWS record has been <span class="em-bold" style="color:var(--green);">successfully cleared</span>.</p>
+            <div style="background:var(--green-bg);padding:10px 12px;border-radius:8px;margin:8px 0;">
+              <p style="margin:0;font-size:12px;color:var(--green);font-weight:700;">&#10003; EWS Record Cleared</p>
+              <p style="margin:6px 0 0;font-size:11px;">Other banks will <span class="em-bold">no longer see this charge-off</span> when you apply for a new account.</p>
+            </div>
+            <p><span class="em-bold">What this means:</span></p>
+            <p>&#8226; Your charged-off balance of $142.50 has been fully paid<br>
+               &#8226; Your EWS record no longer reflects a charge-off from SoFi<br>
+               &#8226; This will not block you from opening accounts at other financial institutions</p>
+            <p style="font-size:11px;color:var(--gray-500);">Thank you for resolving this. If you have any questions, visit our <a style="color:var(--sofi-blue);text-decoration:none;">Help Center</a>.</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EWS CLEARED: PUSH -->
+  <div class="screen-wrap">
+    <div class="screen-title">EWS Record Cleared (Push)</div>
+    <div class="screen-desc">Final push notification.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">PUSH</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div style="background:#000;min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;padding:60px 12px 20px;">
+        <div class="push-card" style="border-radius:16px;">
+          <div class="push-top">
+            <div class="push-icon" style="background:var(--green);">&#10003;</div>
+            <span class="push-app">SoFi</span>
+            <span class="push-time">now</span>
+          </div>
+          <div class="push-title">Your EWS record has been cleared</div>
+          <div class="push-body">Your charge-off is resolved. Other banks will no longer see this when you apply for a new account.</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FOLLOW-UP: NO PAYMENT RECEIVED -->
+  <div class="screen-wrap">
+    <div class="screen-title">Follow-Up: No Payment (Email)</div>
+    <div class="screen-desc">Sent 5 business days after confirmation if no funds received.</div>
+    <div class="phone"><div class="phone-inner">
+      <span class="tag notif">EMAIL</span>
+      <div class="ios-bar"><span class="t">9:41</span><span class="i">&#9679;&#9679;&#9679;</span></div>
+      <div class="scroll" style="background:#f0f0f5;">
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-meta">
+              <div class="email-avatar" style="background:var(--amber);">?</div>
+              <div>
+                <div class="email-from">SoFi Bank</div>
+                <div class="email-to">to s***a@gmail.com</div>
+              </div>
+            </div>
+            <div class="email-subject">We haven't received your payment yet</div>
+          </div>
+          <div class="email-body">
+            <p>Hi Shweta,</p>
+            <p>On April 8, you confirmed a payment of <span class="em-bold">$142.50</span>, but we haven't received the funds yet.</p>
+            <p><span class="em-bold">What to do:</span></p>
+            <p>&#8226; Check with your bank (Chase) to confirm the transfer was completed<br>
+               &#8226; Verify the routing number (<span class="em-bold">031101334</span>) and account number were entered correctly<br>
+               &#8226; If the transfer failed, you can try again in the SoFi app</p>
+            <div style="text-align:center;padding:6px 0;">
+              <a class="email-cta">Check Status in App</a>
+            </div>
+            <hr class="email-divider">
+            <p style="font-size:11px;color:var(--gray-500);">Your EWS record remains active until we receive and process your payment. If you need help, visit our <a style="color:var(--sofi-blue);text-decoration:none;">Help Center</a> or call 1-855-456-7634.</p>
+          </div>
+          <div class="email-footer">
+            SoFi Bank, N.A. Member FDIC<br>
+            234 1st Street, San Francisco, CA 94105
           </div>
         </div>
       </div>
@@ -625,7 +1184,8 @@
 </div>
 
 <div style="text-align:center;padding:40px 0 0;color:#9B9BB0;font-size:11px;">
-  EWS Charge-Off Recovery MVP Mockups // SoFi Bank, N.A. // Internal Use Only
+  EWS Charge-Off Recovery MVP Mockups // SoFi Bank, N.A. // Internal Use Only<br>
+  <span style="color:#555;margin-top:4px;display:inline-block;">Debit card, agent-assisted payment, and guest portal (sofi.com/pay) deferred to Phase 2.</span>
 </div>
 
 </body>

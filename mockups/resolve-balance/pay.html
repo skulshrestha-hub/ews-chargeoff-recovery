@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pay from your bank (mock)">
+  <title>Pay from your bank | SoFi</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="logo" href="index.html">SoFi</a>
+      <nav class="header-nav" aria-label="Account">
+        <span class="user-pill">Alex M. · Signed in</span>
+        <a href="index.html">Banking</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="content">
+      <nav class="step-nav" aria-label="Steps">
+        <a href="index.html">1 Overview</a>
+        <span class="sep" aria-hidden="true">·</span>
+        <a href="pay.html" aria-current="page">2 Pay</a>
+        <span class="sep" aria-hidden="true">·</span>
+        <a href="confirm.html">3 Confirm</a>
+      </nav>
+
+      <h1 class="page-title">Pay from your bank</h1>
+      <p class="lede">
+        Send an ACH transfer from your external bank using SoFi&apos;s deposit instructions. You initiate the transfer; we do not pull from your bank.
+      </p>
+
+      <div class="copy-block">
+        <div class="copy-block__label">Routing number</div>
+        <div class="copy-row">
+          <span class="copy-value" id="routing">031101334</span>
+          <button type="button" class="copy-btn" data-copy="routing">Copy</button>
+        </div>
+      </div>
+
+      <div class="copy-block">
+        <div class="copy-block__label">Account number</div>
+        <div class="copy-row">
+          <span class="copy-value" id="account">9900123456789012</span>
+          <button type="button" class="copy-btn" data-copy="account">Copy</button>
+        </div>
+      </div>
+
+      <section class="card" aria-labelledby="steps-heading">
+        <h2 id="steps-heading">Steps</h2>
+        <ol class="tl">
+          <li>
+            <span class="tl-num" aria-hidden="true">1</span>
+            <span>Log in to your other bank&apos;s website or app.</span>
+          </li>
+          <li>
+            <span class="tl-num" aria-hidden="true">2</span>
+            <span>Add SoFi as a payee or external account using the routing and account numbers above.</span>
+          </li>
+          <li>
+            <span class="tl-num" aria-hidden="true">3</span>
+            <span>Send <strong>$127.43</strong> (exactly this amount).</span>
+          </li>
+        </ol>
+      </section>
+
+      <p class="note">
+        <strong>Timing:</strong> ACH transfers can take a few business days. Come back to confirm after you send the payment so we can match it when it posts.
+      </p>
+
+      <p>
+        <a class="btn btn--primary" href="confirm.html">I sent the payment</a>
+      </p>
+      <p>
+        <a class="btn btn--secondary" href="index.html">Back to overview</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Help</a>
+      </div>
+      <p>Mock pages for product review. Not a live SoFi product.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll(".copy-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = btn.getAttribute("data-copy");
+        var el = document.getElementById(id);
+        if (!el) return;
+        var text = el.textContent.trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            var prev = btn.textContent;
+            btn.textContent = "Copied";
+            setTimeout(function () { btn.textContent = prev; }, 1500);
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

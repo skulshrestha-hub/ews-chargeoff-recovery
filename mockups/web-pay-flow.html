@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EWS Healing: Web Self-Serve (Mock)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --black: #1A1A1A;
+    --gray-900: #333333;
+    --gray-700: #555555;
+    --gray-500: #888888;
+    --gray-200: #E0E0E0;
+    --gray-100: #F0F0F0;
+    --bg: #F7F7F7;
+    --white: #FFFFFF;
+    --sofi-blue: #00A2C7;
+    --sofi-blue-dark: #008DAD;
+    --sofi-blue-light: #E5F6FA;
+    --green: #2E7D32;
+    --green-bg: #E8F5E9;
+    --red: #D32F2F;
+    --red-bg: #FFEBEE;
+    --amber: #F57C00;
+    --amber-bg: #FFF3E0;
+    --chrome-bg: #E8E8ED;
+    --chrome-bar: #F6F6F8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #12121a;
+    color: var(--black);
+    padding: 40px 24px 80px;
+  }
+
+  .page-head {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+  .page-head .kicker {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sofi-blue);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .page-head h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .page-head p {
+    font-size: 14px;
+    color: #9B9BB0;
+    line-height: 1.65;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .gallery {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .row-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .flow-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .screen-cap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .cap-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .cap-desc {
+    font-size: 12px;
+    color: #9B9BB0;
+    text-align: center;
+    max-width: 300px;
+    line-height: 1.45;
+  }
+
+  /* Browser window */
+  .browser {
+    background: var(--chrome-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 24px 48px rgba(0,0,0,0.45);
+    display: flex;
+    flex-direction: column;
+  }
+  .browser.desktop { width: 360px; }
+  .browser.wide { width: min(100%, 1120px); }
+
+  .b-top {
+    background: var(--chrome-bar);
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .dots { display: flex; gap: 6px; flex-shrink: 0; }
+  .dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .dots span:nth-child(1) { background: #FF5F57; }
+  .dots span:nth-child(2) { background: #FEBC2E; }
+  .dots span:nth-child(3) { background: #28C840; }
+
+  .omnibar {
+    flex: 1;
+    background: #fff;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--gray-700);
+    border: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .lock {
+    font-size: 11px;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+  .url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+  }
+
+  .b-body {
+    background: var(--bg);
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Web app shell inside browser */
+  .web-header {
+    background: var(--white);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--sofi-blue);
+    letter-spacing: -0.5px;
+  }
+  .web-header .user {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-700);
+  }
+
+  .web-main {
+    padding: 20px;
+    flex: 1;
+    overflow: auto;
+  }
+  .web-main.narrow { padding: 14px; }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-500);
+  }
+  .stepper .on { color: var(--sofi-blue); }
+  .stepper .sep-dot { color: var(--gray-200); }
+
+  .h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .sub {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .alert-banner {
+    background: var(--red-bg);
+    border-left: 4px solid var(--red);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .alert-banner .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+  .alert-banner p {
+    font-size: 13px;
+    color: var(--gray-900);
+    line-height: 1.45;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    margin-bottom: 14px;
+  }
+  .card h2 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .sum-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13px;
+  }
+  .sum-row:last-child {
+    border-bottom: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding-top: 12px;
+  }
+  .sum-row .muted { color: var(--gray-700); font-weight: 500; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 26px;
+    cursor: default;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--sofi-blue);
+    color: #fff;
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--black);
+    border: 2px solid var(--gray-200);
+    margin-top: 10px;
+  }
+
+  .info {
+    background: var(--sofi-blue-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--sofi-blue-dark);
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+
+  .copy-block {
+    background: var(--gray-100);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .copy-block .lbl {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+  }
+  .copy-block .val {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .copy-row-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .mini-btn {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sofi-blue);
+    background: var(--white);
+    border: 1.5px solid var(--sofi-blue);
+    border-radius: 6px;
+    padding: 5px 10px;
+    flex-shrink: 0;
+  }
+
+  .tl {
+    margin-top: 8px;
+  }
+  .tl-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.45;
+  }
+  .tl-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--sofi-blue-light);
+    color: var(--sofi-blue);
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .form-l {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .form-i {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 12px;
+  }
+
+  .ok {
+    text-align: center;
+    padding: 8px 0 4px;
+  }
+  .ok-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
+  .ok h2 { font-size: 18px; margin-bottom: 6px; }
+  .ok p { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+
+  .desktop .web-main .h1 { font-size: 18px; }
+  .desktop .sub { font-size: 12px; }
+
+  .wide-flow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 1100px) {
+    .wide-flow { grid-template-columns: 1fr; }
+  }
+  .wide .b-body { min-height: 520px; }
+
+  .footer-note {
+    max-width: 720px;
+    margin: 40px auto 0;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="kicker">Mock</div>
+  <h1>Web self-serve: resolve charged-off balance</h1>
+  <p>
+    Desktop and mobile web use the same URL after sign-in. Member copies routing and account numbers,
+    sends an ACH push from their external bank, then returns to confirm amount and date so Ops can match the payment.
+  </p>
+</div>
+
+<div class="gallery">
+
+  <div>
+    <div class="row-label">Desktop web (three steps at a glance)</div>
+    <div class="browser wide">
+      <div class="b-top">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="omnibar">
+          <span class="lock" title="HTTPS">&#128274;</span>
+          <span class="url">https://www.sofi.com/banking/resolve-balance</span>
+        </div>
+      </div>
+      <div class="b-body">
+        <div class="web-header">
+          <span class="logo">SoFi</span>
+          <span class="user">Alex M. &middot; Signed in</span>
+        </div>
+        <div class="web-main">
+          <div class="wide-flow">
+            <!-- Panel 1 -->
+            <div>
+              <div class="stepper"><span class="on">1 Overview</span><span class="sep-dot">&middot;</span><span>Pay</span><span class="sep-dot">&middot;</span><span>Confirm</span></div>
+              <div class="alert-banner">
+                <div class="badge">Account status</div>
+                <p>This account was charged off. Pay the full amount below so we can report your account as healed to Early Warning Services.</p>
+              </div>
+              <div class="card">
+                <h2>Amount due</h2>
+                <div class="sum-row"><span class="muted">Checking &middot;&middot;&middot; 4821</span><span>$127.43</span></div>
+                <div class="sum-row"><span>Total to resolve</span><span>$127.43</span></div>
+              </div>
+              <button type="button" class="btn btn-primary">Continue to payment</button>
+              <p class="info"><strong>Note:</strong> Disputes are handled by mail only. This page is for payment.</p>
+            </div>
+            <!-- Panel 2 -->
+            <div>
+              <div class="stepper"><span>Overview</span><span class="sep-dot">&middot;</span><span class="on">2 Pay</span><span class="sep-dot">&middot;</span><span>Confirm</span></div>
+              <h1 class="h1">Pay from your bank</h1>
+              <p class="sub">Send an ACH transfer from your external bank using SoFi&apos;s deposit instructions. You stay in control; we do not pull from your bank.</p>
+              <div class="copy-block">
+                <div class="lbl">Routing number</div>
+                <div class="copy-row-flex"><span class="val">031101334</span><span class="mini-btn">Copy</span></div>
+              </div>
+              <div class="copy-block">
+                <div class="lbl">Account number</div>
+                <div class="copy-row-flex"><span class="val">9900123456789012</span><span class="mini-btn">Copy</span></div>
+              </div>
+              <div class="card" style="margin-bottom:0;">
+                <h2>Steps</h2>
+                <div class="tl">
+                  <div class="tl-item"><span class="tl-num">1</span><span>Log in to your other bank&apos;s website or app.</span></div>
+                  <div class="tl-item"><span class="tl-num">2</span><span>Add SoFi as a payee using the numbers above.</span></div>
+                  <div class="tl-item"><span class="tl-num">3</span><span>Send <strong>$127.43</strong> (exactly this amount).</span></div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" style="margin-top:14px;">I sent the payment</button>
+            </div>
+            <!-- Panel 3 -->
+            <div>
+              <div class="stepper"><span>Overview</span><span class="sep-dot">&middot;</span><span>Pay</span><span class="sep-dot">&middot;</span><span class="on">3 Confirm</span></div>
+              <h1 class="h1">Confirm your payment</h1>
+              <p class="sub">We use this to match your transfer to your account when funds arrive.</p>
+              <label class="form-l">Payment date</label>
+              <input class="form-i" type="text" value="April 10, 2026" readonly>
+              <label class="form-l">Amount</label>
+              <input class="form-i" type="text" value="$127.43" readonly>
+              <label class="form-l">Sending bank (optional)</label>
+              <input class="form-i" type="text" placeholder="e.g. Chase" readonly>
+              <button type="button" class="btn btn-primary">Submit confirmation</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="row-label">Mobile web (single column, same flow)</div>
+    <div class="flow-row">
+      <div class="screen-cap">
+        <div class="cap-title">Overview</div>
+        <div class="cap-desc">Full-width alert and amount due after sign-in.</div>
+        <div class="browser desktop">
+          <div class="b-top">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <div class="omnibar">
+              <span class="lock">&#128274;</span>
+              <span class="url">sofi.com/banking/resolve-balance</span>
+            </div>
+          </div>
+          <div class="b-body" style="min-height: 560px;">
+            <div class="web-header">
+              <span class="logo">SoFi</span>
+              <span class="user" style="font-size:11px;">Signed in</span>
+            </div>
+            <div class="web-main narrow">
+              <div class="stepper" style="font-size:10px;"><span class="on">1</span><span class="sep-dot">&middot;</span><span>2</span><span class="sep-dot">&middot;</span><span>3</span></div>
+              <div class="alert-banner">
+                <div class="badge">Charged off</div>
+                <p>Pay the full amount so we can report your account as healed to EWS.</p>
+              </div>
+              <div class="card">
+                <h2>Amount due</h2>
+                <div class="sum-row"><span class="muted">&middot;&middot;&middot; 4821</span><span>$127.43</span></div>
+                <div class="sum-row"><span>Total</span><span>$127.43</span></div>
+              </div>
+              <button type="button" class="btn btn-primary">Continue</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-cap">
+        <div class="cap-title">Pay</div>
+        <div class="cap-desc">Copy-paste routing and account; numbered steps stay on one scroll.</div>
+        <div class="browser desktop">
+          <div class="b-top">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <div class="omnibar">
+              <span class="lock">&#128274;</span>
+              <span class="url">sofi.com/banking/resolve-balance/pay</span>
+            </div>
+          </div>
+          <div class="b-body" style="min-height: 560px;">
+            <div class="web-header">
+              <span class="logo">SoFi</span>
+              <span class="user" style="font-size:11px;">Signed in</span>
+            </div>
+            <div class="web-main narrow">
+              <div class="stepper" style="font-size:10px;"><span>1</span><span class="sep-dot">&middot;</span><span class="on">2</span><span class="sep-dot">&middot;</span><span>3</span></div>
+              <h1 class="h1" style="font-size:17px;">Pay from your bank</h1>
+              <p class="sub" style="font-size:12px;">ACH push only. Copy each field into your other bank.</p>
+              <div class="copy-block">
+                <div class="lbl">Routing</div>
+                <div class="copy-row-flex"><span class="val" style="font-size:13px;">031101334</span><span class="mini-btn">Copy</span></div>
+              </div>
+              <div class="copy-block">
+                <div class="lbl">Account</div>
+                <div class="copy-row-flex"><span class="val" style="font-size:11px;">9900123456789012</span><span class="mini-btn">Copy</span></div>
+              </div>
+              <div class="card">
+                <h2>Steps</h2>
+                <div class="tl-item"><span class="tl-num">1</span><span>Open your other bank.</span></div>
+                <div class="tl-item"><span class="tl-num">2</span><span>Add payee with numbers above.</span></div>
+                <div class="tl-item"><span class="tl-num">3</span><span>Send <strong>$127.43</strong>.</span></div>
+              </div>
+              <button type="button" class="btn btn-primary">I sent the payment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-cap">
+        <div class="cap-title">Confirm</div>
+        <div class="cap-desc">Member confirms date and amount for GL matching.</div>
+        <div class="browser desktop">
+          <div class="b-top">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <div class="omnibar">
+              <span class="lock">&#128274;</span>
+              <span class="url">sofi.com/banking/resolve-balance/confirm</span>
+            </div>
+          </div>
+          <div class="b-body" style="min-height: 560px;">
+            <div class="web-header">
+              <span class="logo">SoFi</span>
+              <span class="user" style="font-size:11px;">Signed in</span>
+            </div>
+            <div class="web-main narrow">
+              <div class="stepper" style="font-size:10px;"><span>1</span><span class="sep-dot">&middot;</span><span>2</span><span class="sep-dot">&middot;</span><span class="on">3</span></div>
+              <h1 class="h1" style="font-size:17px;">Confirm payment</h1>
+              <p class="sub" style="font-size:12px;">Helps us match your transfer when it posts.</p>
+              <label class="form-l">Date</label>
+              <input class="form-i" type="text" value="Apr 10, 2026" readonly>
+              <label class="form-l">Amount</label>
+              <input class="form-i" type="text" value="$127.43" readonly>
+              <button type="button" class="btn btn-primary">Submit</button>
+              <div class="ok" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gray-200);">
+                <div class="ok-icon" style="width:44px;height:44px;font-size:22px;">&#10003;</div>
+                <h2 style="font-size:15px;">After submit</h2>
+                <p style="font-size:12px;">Confirmation screen (not shown) with next steps.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="footer-note">
+  Static HTML mock for discussion. URLs and copy are placeholders. Align with Compliance and Legal before shipping.
+  Open this file in a browser, or use the repo&apos;s GitHub Pages flow if configured.
+</p>
+
+</body>
+</html>

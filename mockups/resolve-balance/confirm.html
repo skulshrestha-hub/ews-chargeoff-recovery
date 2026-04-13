@@ -44,8 +44,8 @@
           <span>$127.43</span>
         </div>
         <div class="sum-row">
-          <span class="muted">Payment method</span>
-          <span id="cardMask">Debit card ····4242</span>
+          <span class="muted">Debit card number</span>
+          <span id="cardMask">····4242</span>
         </div>
         <div class="sum-row">
           <span>Total charge</span>
@@ -67,7 +67,7 @@
       </form>
 
       <p>
-        <a class="btn btn--secondary" href="pay.html">Back to card details</a>
+        <a class="btn btn--secondary" href="pay.html">Back to debit card details</a>
       </p>
     </div>
   </main>
@@ -91,7 +91,7 @@
       try {
         last4 = sessionStorage.getItem("mockCardLast4") || last4;
       } catch (e) {}
-      el.textContent = "Debit card ····" + last4;
+      el.textContent = "····" + last4;
     })();
   </script>
 </body>

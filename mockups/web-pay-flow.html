@@ -444,8 +444,8 @@
   <div class="kicker">Mock</div>
   <h1>Web self-serve: resolve charged-off balance</h1>
   <p>
-    Desktop and mobile web use the same URL after sign-in. Member copies routing and account numbers,
-    sends an ACH push from their external bank, then returns to confirm amount and date so Ops can match the payment.
+    Desktop and mobile web use the same URL after sign-in. Member pays the full balance with a debit card
+    processed by Stripe, then sees a success screen when the charge completes.
   </p>
 </div>
 
@@ -470,7 +470,7 @@
           <div class="wide-flow">
             <!-- Panel 1 -->
             <div>
-              <div class="stepper"><span class="on">1 Overview</span><span class="sep-dot">&middot;</span><span>Pay</span><span class="sep-dot">&middot;</span><span>Confirm</span></div>
+              <div class="stepper"><span class="on">1 Overview</span><span class="sep-dot">&middot;</span><span>Pay</span><span class="sep-dot">&middot;</span><span>Review</span></div>
               <div class="alert-banner">
                 <div class="badge">Account status</div>
                 <p>This account was charged off. Pay the full amount below so we can report your account as healed to Early Warning Services.</p>
@@ -485,39 +485,31 @@
             </div>
             <!-- Panel 2 -->
             <div>
-              <div class="stepper"><span>Overview</span><span class="sep-dot">&middot;</span><span class="on">2 Pay</span><span class="sep-dot">&middot;</span><span>Confirm</span></div>
-              <h1 class="h1">Pay from your bank</h1>
-              <p class="sub">Send an ACH transfer from your external bank using SoFi&apos;s deposit instructions. You stay in control; we do not pull from your bank.</p>
-              <div class="copy-block">
-                <div class="lbl">Routing number</div>
-                <div class="copy-row-flex"><span class="val">031101334</span><span class="mini-btn">Copy</span></div>
+              <div class="stepper"><span>Overview</span><span class="sep-dot">&middot;</span><span class="on">2 Pay</span><span class="sep-dot">&middot;</span><span>Review</span></div>
+              <h1 class="h1">Debit card</h1>
+              <p class="sub">Visa or Mastercard debit only. Charged through Stripe (mock fields).</p>
+              <label class="form-l">Card number</label>
+              <input class="form-i" type="text" value="4242 4242 4242 4242" readonly style="margin-bottom:8px;">
+              <div style="display:flex;gap:8px;">
+                <div style="flex:1;"><label class="form-l">Exp</label><input class="form-i" type="text" value="12/28" readonly></div>
+                <div style="flex:1;"><label class="form-l">CVC</label><input class="form-i" type="text" value="123" readonly></div>
               </div>
-              <div class="copy-block">
-                <div class="lbl">Account number</div>
-                <div class="copy-row-flex"><span class="val">9900123456789012</span><span class="mini-btn">Copy</span></div>
-              </div>
-              <div class="card" style="margin-bottom:0;">
-                <h2>Steps</h2>
-                <div class="tl">
-                  <div class="tl-item"><span class="tl-num">1</span><span>Log in to your other bank&apos;s website or app.</span></div>
-                  <div class="tl-item"><span class="tl-num">2</span><span>Add SoFi as a payee using the numbers above.</span></div>
-                  <div class="tl-item"><span class="tl-num">3</span><span>Send <strong>$127.43</strong> (exactly this amount).</span></div>
-                </div>
-              </div>
-              <button type="button" class="btn btn-primary" style="margin-top:14px;">I sent the payment</button>
+              <label class="form-l">Billing ZIP</label>
+              <input class="form-i" type="text" value="94107" readonly>
+              <p class="info" style="margin-top:10px;font-size:11px;"><strong>Stripe</strong> tokenizes the card in production.</p>
+              <button type="button" class="btn btn-primary" style="margin-top:14px;">Continue to review</button>
             </div>
             <!-- Panel 3 -->
             <div>
-              <div class="stepper"><span>Overview</span><span class="sep-dot">&middot;</span><span>Pay</span><span class="sep-dot">&middot;</span><span class="on">3 Confirm</span></div>
-              <h1 class="h1">Confirm your payment</h1>
-              <p class="sub">We use this to match your transfer to your account when funds arrive.</p>
-              <label class="form-l">Payment date</label>
-              <input class="form-i" type="text" value="April 10, 2026" readonly>
-              <label class="form-l">Amount</label>
-              <input class="form-i" type="text" value="$127.43" readonly>
-              <label class="form-l">Sending bank (optional)</label>
-              <input class="form-i" type="text" placeholder="e.g. Chase" readonly>
-              <button type="button" class="btn btn-primary">Submit confirmation</button>
+              <div class="stepper"><span>Overview</span><span class="sep-dot">&middot;</span><span>Pay</span><span class="sep-dot">&middot;</span><span class="on">3 Review</span></div>
+              <h1 class="h1">Review and pay</h1>
+              <p class="sub">Authorize Stripe to charge your debit card for the full balance.</p>
+              <div class="card" style="margin-bottom:10px;padding:12px;">
+                <div class="sum-row" style="padding:6px 0;font-size:12px;"><span>Amount</span><span>$127.43</span></div>
+                <div class="sum-row" style="padding:6px 0;font-size:12px;border:none;"><span>Card</span><span>····4242</span></div>
+              </div>
+              <label class="form-l" style="font-size:11px;">I authorize SoFi to charge $127.43.</label>
+              <button type="button" class="btn btn-primary">Pay $127.43</button>
             </div>
           </div>
         </div>
@@ -563,7 +555,7 @@
 
       <div class="screen-cap">
         <div class="cap-title">Pay</div>
-        <div class="cap-desc">Copy-paste routing and account; numbered steps stay on one scroll.</div>
+        <div class="cap-desc">Debit card fields and Stripe note; then review and pay.</div>
         <div class="browser desktop">
           <div class="b-top">
             <div class="dots"><span></span><span></span><span></span></div>
@@ -579,31 +571,24 @@
             </div>
             <div class="web-main narrow">
               <div class="stepper" style="font-size:10px;"><span>1</span><span class="sep-dot">&middot;</span><span class="on">2</span><span class="sep-dot">&middot;</span><span>3</span></div>
-              <h1 class="h1" style="font-size:17px;">Pay from your bank</h1>
-              <p class="sub" style="font-size:12px;">ACH push only. Copy each field into your other bank.</p>
-              <div class="copy-block">
-                <div class="lbl">Routing</div>
-                <div class="copy-row-flex"><span class="val" style="font-size:13px;">031101334</span><span class="mini-btn">Copy</span></div>
+              <h1 class="h1" style="font-size:17px;">Debit card</h1>
+              <p class="sub" style="font-size:12px;">Stripe. Visa or Mastercard debit.</p>
+              <label class="form-l">Card</label>
+              <input class="form-i" type="text" value="4242 ···· ···· 4242" readonly style="font-size:12px;margin-bottom:6px;">
+              <div style="display:flex;gap:6px;">
+                <input class="form-i" type="text" value="12/28" readonly style="flex:1;font-size:12px;">
+                <input class="form-i" type="text" value="123" readonly style="width:56px;font-size:12px;">
               </div>
-              <div class="copy-block">
-                <div class="lbl">Account</div>
-                <div class="copy-row-flex"><span class="val" style="font-size:11px;">9900123456789012</span><span class="mini-btn">Copy</span></div>
-              </div>
-              <div class="card">
-                <h2>Steps</h2>
-                <div class="tl-item"><span class="tl-num">1</span><span>Open your other bank.</span></div>
-                <div class="tl-item"><span class="tl-num">2</span><span>Add payee with numbers above.</span></div>
-                <div class="tl-item"><span class="tl-num">3</span><span>Send <strong>$127.43</strong>.</span></div>
-              </div>
-              <button type="button" class="btn btn-primary">I sent the payment</button>
+              <p class="info" style="margin-top:8px;font-size:10px;"><strong>Stripe</strong></p>
+              <button type="button" class="btn btn-primary">Continue</button>
             </div>
           </div>
         </div>
       </div>
 
       <div class="screen-cap">
-        <div class="cap-title">Confirm</div>
-        <div class="cap-desc">Member confirms date and amount for GL matching.</div>
+        <div class="cap-title">Review</div>
+        <div class="cap-desc">Summary, authorization, Pay $127.43.</div>
         <div class="browser desktop">
           <div class="b-top">
             <div class="dots"><span></span><span></span><span></span></div>
@@ -619,13 +604,11 @@
             </div>
             <div class="web-main narrow">
               <div class="stepper" style="font-size:10px;"><span>1</span><span class="sep-dot">&middot;</span><span>2</span><span class="sep-dot">&middot;</span><span class="on">3</span></div>
-              <h1 class="h1" style="font-size:17px;">Confirm payment</h1>
-              <p class="sub" style="font-size:12px;">Helps us match your transfer when it posts.</p>
-              <label class="form-l">Date</label>
-              <input class="form-i" type="text" value="Apr 10, 2026" readonly>
-              <label class="form-l">Amount</label>
-              <input class="form-i" type="text" value="$127.43" readonly>
-              <button type="button" class="btn btn-primary">Submit</button>
+              <h1 class="h1" style="font-size:17px;">Review</h1>
+              <p class="sub" style="font-size:12px;">Authorize Stripe charge.</p>
+              <div class="sum-row" style="font-size:12px;padding:8px 0;"><span>Due</span><span>$127.43</span></div>
+              <div class="sum-row" style="font-size:12px;padding:8px 0;"><span>Card</span><span>····4242</span></div>
+              <button type="button" class="btn btn-primary">Pay $127.43</button>
               <div class="ok" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gray-200);">
                 <div class="ok-icon" style="width:44px;height:44px;font-size:22px;">&#10003;</div>
                 <h2 style="font-size:15px;">After submit</h2>

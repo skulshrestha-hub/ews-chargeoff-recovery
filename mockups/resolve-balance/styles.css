@@ -491,3 +491,49 @@ main {
 .list-plain li:last-child {
   margin-bottom: 0;
 }
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 400px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stripe-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--gray-100);
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+.stripe-foot strong {
+  color: #635bff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.checkbox-line {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--gray-900);
+}
+
+.checkbox-line input {
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}

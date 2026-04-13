@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Pay from your bank (mock)">
-  <title>Pay from your bank | SoFi</title>
+  <meta name="description" content="Pay with debit card via Stripe (mock)">
+  <title>Pay with debit card | SoFi</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -25,54 +25,48 @@
         <span class="sep" aria-hidden="true">·</span>
         <a href="pay.html" aria-current="page">2 Pay</a>
         <span class="sep" aria-hidden="true">·</span>
-        <a href="confirm.html">3 Confirm</a>
+        <a href="confirm.html">3 Review</a>
       </nav>
 
-      <h1 class="page-title">Pay from your bank</h1>
+      <h1 class="page-title">Pay with your debit card</h1>
       <p class="lede">
-        Send an ACH transfer from your external bank using SoFi&apos;s deposit instructions. You initiate the transfer; we do not pull from your bank.
+        Pay the full balance with a Visa or Mastercard <strong>debit</strong> card. In production, the card is tokenized and charged through <strong>Stripe</strong> (this page uses mock fields only).
       </p>
 
-      <div class="copy-block">
-        <div class="copy-block__label">Routing number</div>
-        <div class="copy-row">
-          <span class="copy-value" id="routing">031101334</span>
-          <button type="button" class="copy-btn" data-copy="routing">Copy</button>
+      <section class="card" aria-labelledby="card-heading">
+        <h2 id="card-heading">Card details</h2>
+        <p class="form-hint" style="margin-bottom: 14px;">
+          Placeholder inputs for design review. Live flows would use Stripe Elements, Payment Element, or Checkout so card data never touches SoFi servers.
+        </p>
+        <div class="form-group">
+          <label for="cardnumber">Card number</label>
+          <input type="text" id="cardnumber" name="cardnumber" inputmode="numeric" autocomplete="off" placeholder="4242 4242 4242 4242" maxlength="19">
         </div>
-      </div>
-
-      <div class="copy-block">
-        <div class="copy-block__label">Account number</div>
-        <div class="copy-row">
-          <span class="copy-value" id="account">9900123456789012</span>
-          <button type="button" class="copy-btn" data-copy="account">Copy</button>
+        <div class="form-row-2">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="exp">Expiration</label>
+            <input type="text" id="exp" name="exp" placeholder="MM / YY" autocomplete="off" maxlength="7">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cvc">CVC</label>
+            <input type="text" id="cvc" name="cvc" inputmode="numeric" placeholder="123" autocomplete="off" maxlength="4">
+          </div>
         </div>
-      </div>
-
-      <section class="card" aria-labelledby="steps-heading">
-        <h2 id="steps-heading">Steps</h2>
-        <ol class="tl">
-          <li>
-            <span class="tl-num" aria-hidden="true">1</span>
-            <span>Log in to your other bank&apos;s website or app.</span>
-          </li>
-          <li>
-            <span class="tl-num" aria-hidden="true">2</span>
-            <span>Add SoFi as a payee or external account using the routing and account numbers above.</span>
-          </li>
-          <li>
-            <span class="tl-num" aria-hidden="true">3</span>
-            <span>Send <strong>$127.43</strong> (exactly this amount).</span>
-          </li>
-        </ol>
+        <div class="form-group">
+          <label for="zip">Billing ZIP</label>
+          <input type="text" id="zip" name="zip" inputmode="numeric" placeholder="94107" autocomplete="postal-code" maxlength="10">
+        </div>
+        <div class="stripe-foot">
+          <span>Secured with</span> <strong>Stripe</strong>
+        </div>
       </section>
 
       <p class="note">
-        <strong>Timing:</strong> ACH transfers can take a few business days. Come back to confirm after you send the payment so we can match it when it posts.
+        <strong>Debit only:</strong> Credit cards are not accepted for this recovery payment in this mock. Align final rules with Compliance and Treasury.
       </p>
 
       <p>
-        <a class="btn btn--primary" href="confirm.html">I sent the payment</a>
+        <a class="btn btn--primary" href="confirm.html" id="continueReview">Continue to review</a>
       </p>
       <p>
         <a class="btn btn--secondary" href="index.html">Back to overview</a>
@@ -92,21 +86,19 @@
   </footer>
 
   <script>
-    document.querySelectorAll(".copy-btn").forEach(function (btn) {
+    (function () {
+      var btn = document.getElementById("continueReview");
+      var cardInput = document.getElementById("cardnumber");
+      if (!btn) return;
       btn.addEventListener("click", function () {
-        var id = btn.getAttribute("data-copy");
-        var el = document.getElementById(id);
-        if (!el) return;
-        var text = el.textContent.trim();
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(function () {
-            var prev = btn.textContent;
-            btn.textContent = "Copied";
-            setTimeout(function () { btn.textContent = prev; }, 1500);
-          });
-        }
+        var raw = (cardInput && cardInput.value) || "";
+        var digits = raw.replace(/\D/g, "");
+        var last4 = digits.length >= 4 ? digits.slice(-4) : "4242";
+        try {
+          sessionStorage.setItem("mockCardLast4", last4);
+        } catch (e) {}
       });
-    });
+    })();
   </script>
 </body>
 </html>

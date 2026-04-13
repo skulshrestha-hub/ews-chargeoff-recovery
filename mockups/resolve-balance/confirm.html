@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Confirm your payment (mock)">
-  <title>Confirm payment | SoFi</title>
+  <meta name="description" content="Review and pay with debit card (mock)">
+  <title>Review payment | SoFi</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -25,36 +25,49 @@
         <span class="sep" aria-hidden="true">·</span>
         <a href="pay.html">2 Pay</a>
         <span class="sep" aria-hidden="true">·</span>
-        <a href="confirm.html" aria-current="page">3 Confirm</a>
+        <a href="confirm.html" aria-current="page">3 Review</a>
       </nav>
 
-      <h1 class="page-title">Confirm your payment</h1>
+      <h1 class="page-title">Review your payment</h1>
       <p class="lede">
-        Tell us when you sent the transfer and for how much. We use this to match incoming funds to your charged-off balance.
+        Confirm the amount and authorize Stripe to charge your debit card. You will see a receipt on the next screen after a successful payment.
       </p>
 
-      <form class="card" action="success.html" method="get" aria-labelledby="form-heading">
-        <h2 id="form-heading" class="visually-hidden">Payment details</h2>
-        <div class="form-group">
-          <label for="date">Payment sent on</label>
-          <input type="date" id="date" name="date" value="2026-04-10" required>
+      <section class="card" aria-labelledby="summary-heading">
+        <h2 id="summary-heading">Summary</h2>
+        <div class="sum-row">
+          <span class="muted">SoFi Checking · · · 4821</span>
+          <span>Charged off</span>
         </div>
-        <div class="form-group">
-          <label for="amount">Amount</label>
-          <input type="text" id="amount" name="amount" inputmode="decimal" value="127.43" required>
-          <p class="form-hint">Must match the amount due: $127.43</p>
+        <div class="sum-row">
+          <span class="muted">Amount due</span>
+          <span>$127.43</span>
         </div>
-        <div class="form-group">
-          <label for="bank">Sending bank <span style="font-weight:400;color:var(--gray-500)">(optional)</span></label>
-          <input type="text" id="bank" name="bank" placeholder="e.g. Chase, Bank of America" autocomplete="organization">
+        <div class="sum-row">
+          <span class="muted">Payment method</span>
+          <span id="cardMask">Debit card ····4242</span>
+        </div>
+        <div class="sum-row">
+          <span>Total charge</span>
+          <span>$127.43</span>
+        </div>
+      </section>
+
+      <form action="success.html" method="get" aria-labelledby="auth-heading">
+        <div class="card">
+          <h2 id="auth-heading" class="visually-hidden">Authorization</h2>
+          <label class="checkbox-line">
+            <input type="checkbox" name="authorized" value="1" required>
+            <span>I authorize SoFi to charge my debit card <strong>$127.43</strong> through Stripe for this charged-off balance.</span>
+          </label>
         </div>
         <p>
-          <button type="submit" class="btn btn--primary">Submit confirmation</button>
+          <button type="submit" class="btn btn--primary">Pay $127.43</button>
         </p>
       </form>
 
       <p>
-        <a class="btn btn--secondary" href="pay.html">Back to payment instructions</a>
+        <a class="btn btn--secondary" href="pay.html">Back to card details</a>
       </p>
     </div>
   </main>
@@ -69,5 +82,17 @@
       <p>Mock pages for product review. Not a live SoFi product.</p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var el = document.getElementById("cardMask");
+      if (!el) return;
+      var last4 = "4242";
+      try {
+        last4 = sessionStorage.getItem("mockCardLast4") || last4;
+      } catch (e) {}
+      el.textContent = "Debit card ····" + last4;
+    })();
+  </script>
 </body>
 </html>

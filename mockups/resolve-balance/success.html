@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Confirmation received (mock)">
-  <title>We received your confirmation | SoFi</title>
+  <meta name="description" content="Payment successful (mock)">
+  <title>Payment successful | SoFi</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,17 +22,17 @@
     <div class="content">
       <div class="success-block">
         <div class="success-icon" aria-hidden="true">&#10003;</div>
-        <h2>We received your confirmation</h2>
+        <h2>Payment successful</h2>
         <p>
-          When your payment posts to our bank, we will apply it to your charged-off balance. You will get an email when the balance is resolved or if we need more information.
+          Stripe authorized and captured your debit card payment. We will apply it to your charged-off balance and email you when your account is fully resolved for EWS reporting.
         </p>
       </div>
 
       <section class="card">
         <h2>What happens next</h2>
         <ul class="list-plain">
-          <li>ACH transfers may take a few business days.</li>
-          <li>Keep your confirmation from your bank in case we need to trace the payment.</li>
+          <li>Keep your Stripe or bank receipt in case you need to reference the transaction.</li>
+          <li>If a charge fails in production, you would return to the pay step with an error from Stripe.</li>
           <li>Questions? Use Help or call the number on your account notice.</li>
         </ul>
       </section>

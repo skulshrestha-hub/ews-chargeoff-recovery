@@ -55,10 +55,13 @@
 
       <form action="success.html" method="get" aria-labelledby="auth-heading">
         <div class="card">
-          <h2 id="auth-heading" class="visually-hidden">Authorization</h2>
-          <label class="checkbox-line">
+          <h2 id="auth-heading" style="font-size:1rem;font-weight:700;margin-bottom:12px;">Authorization</h2>
+          <div class="auth-box">
+            I authorize SoFi to initiate a one-time charge to my selected debit card for the amount of <strong>$127.43</strong> toward my charged-off account ending in 4821. No recurring charges will be initiated as a result of this authorization. Funds received will be applied to the outstanding charged-off balance and SoFi will report my account status to Early Warning Services (EWS) upon confirmation of payment receipt. This authorization is limited solely to this single transaction.
+          </div>
+          <label class="checkbox-line" style="margin-top:14px;">
             <input type="checkbox" name="authorized" value="1" required>
-            <span>I authorize SoFi to charge my debit card <strong>$127.43</strong> through Stripe for this charged-off balance.</span>
+            <span>I agree to the above EWS Recovery Payment Terms and Conditions.</span>
           </label>
         </div>
         <p>

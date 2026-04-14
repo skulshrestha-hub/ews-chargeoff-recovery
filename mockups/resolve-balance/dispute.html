@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dispute information on your account (mock)">
+  <title>Dispute information | SoFi</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .form-preview {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .form-preview__header {
+      background: var(--gray-100);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pdf-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #E53935;
+      color: #fff;
+      font-size: 0.625rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+    .form-preview__title {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--black);
+    }
+    .form-preview__subtitle {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    .form-section {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .form-section:last-child {
+      border-bottom: none;
+    }
+    .form-section__label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--sofi-blue);
+      margin-bottom: 10px;
+    }
+    .field-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .field-row:last-child {
+      margin-bottom: 0;
+    }
+    .field-item {
+      flex: 1;
+      min-width: 120px;
+    }
+    .field-item label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 4px;
+    }
+    .field-item .field-line {
+      height: 34px;
+      border-bottom: 1.5px solid var(--gray-200);
+      background: var(--gray-100);
+      border-radius: 6px 6px 0 0;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      font-size: 0.8125rem;
+      color: var(--gray-400);
+    }
+    .field-item.full { flex: 0 0 100%; }
+
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .checkbox-list label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--gray-900);
+      cursor: default;
+    }
+    .checkbox-list input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .explain-field {
+      width: 100%;
+      min-height: 72px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.875rem;
+      color: var(--gray-400);
+      font-family: inherit;
+      resize: none;
+      margin-top: 10px;
+      background: var(--gray-100);
+    }
+
+    .sig-row {
+      display: flex;
+      gap: 16px;
+    }
+    .sig-row .field-item:first-child { flex: 2; }
+    .sig-row .field-item:last-child { flex: 1; }
+
+    .mail-card {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      margin-bottom: 16px;
+    }
+    .mail-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--sofi-blue-light);
+      color: var(--sofi-blue);
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mail-card h2 {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+    }
+    .mail-card p {
+      font-size: 0.8125rem;
+      color: var(--gray-700);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .address-block {
+      font-style: normal;
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--gray-100);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      display: block;
+    }
+
+    .steps-list {
+      counter-reset: steps;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .steps-list li {
+      counter-increment: steps;
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 0.875rem;
+      color: var(--gray-700);
+      line-height: 1.45;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .steps-list li::before {
+      content: counter(steps);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--sofi-blue-light);
+      color: var(--sofi-blue);
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      background: var(--sofi-blue);
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-download:hover {
+      background: var(--sofi-blue-dark);
+      text-decoration: none;
+    }
+    .btn-download svg {
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="logo" href="index.html">SoFi</a>
+      <nav class="header-nav" aria-label="Account">
+        <span class="user-pill">Alex M. · Signed in</span>
+        <a href="index.html">Banking</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="content">
+      <h1 class="page-title">Dispute this information</h1>
+      <p class="lede">
+        If you believe the information on this account is inaccurate, you have the right to dispute it. Download the form below, fill it out, and mail it to SoFi. We will respond within 30 days.
+      </p>
+
+      <div class="card" style="margin-bottom: 16px;">
+        <ol class="steps-list">
+          <li>Download the dispute form below.</li>
+          <li>Fill it out on your device or print and complete by hand.</li>
+          <li>Mail the completed form to the address on the form.</li>
+          <li>Keep a copy for your records. We will respond within 30 days.</li>
+        </ol>
+      </div>
+
+      <!-- Form preview -->
+      <div class="form-preview">
+        <div class="form-preview__header">
+          <div class="pdf-icon">PDF</div>
+          <div>
+            <div class="form-preview__title">Dispute a Problem with Your Account</div>
+            <div class="form-preview__subtitle">SoFi Bank · Fillable PDF · 1 page</div>
+          </div>
+        </div>
+
+        <!-- Section 1 -->
+        <div class="form-section">
+          <div class="form-section__label">1. Your information</div>
+          <div class="field-row">
+            <div class="field-item full">
+              <label>Full name</label>
+              <div class="field-line">Alex Martinez</div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-item">
+              <label>Date of birth</label>
+              <div class="field-line"></div>
+            </div>
+            <div class="field-item">
+              <label>Last 4 SSN</label>
+              <div class="field-line"></div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-item full">
+              <label>Address</label>
+              <div class="field-line"></div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-item">
+              <label>Phone</label>
+              <div class="field-line"></div>
+            </div>
+            <div class="field-item">
+              <label>Email</label>
+              <div class="field-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="form-section">
+          <div class="form-section__label">2. Account details</div>
+          <div class="field-row">
+            <div class="field-item">
+              <label>Account number (last 4)</label>
+              <div class="field-line">4821</div>
+            </div>
+            <div class="field-item">
+              <label>Full balance shown</label>
+              <div class="field-line">$127.43</div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-item">
+              <label>Charged-off amount</label>
+              <div class="field-line">$127.43</div>
+            </div>
+            <div class="field-item">
+              <label>When did the issue happen?</label>
+              <div class="field-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="form-section">
+          <div class="form-section__label">3. What is the issue?</div>
+          <div class="checkbox-list">
+            <label><input type="checkbox" disabled> Account does not belong to me</label>
+            <label><input type="checkbox" disabled> Personal information is incorrect</label>
+            <label><input type="checkbox" disabled> Balance or amount is incorrect</label>
+            <label><input type="checkbox" disabled> I already paid or resolved this</label>
+            <label><input type="checkbox" disabled> Account status is incorrect</label>
+            <label><input type="checkbox" disabled> Fraud or identity theft</label>
+            <label><input type="checkbox" disabled> Something else</label>
+          </div>
+          <textarea class="explain-field" disabled placeholder="Explain what is wrong (required)"></textarea>
+        </div>
+
+        <!-- Signature -->
+        <div class="form-section">
+          <div class="sig-row">
+            <div class="field-item">
+              <label>Signature</label>
+              <div class="field-line"></div>
+            </div>
+            <div class="field-item">
+              <label>Date</label>
+              <div class="field-line"></div>
+            </div>
+          </div>
+          <p style="font-size:0.75rem;color:var(--gray-500);margin-top:12px;line-height:1.5;">
+            You have the right to dispute inaccurate information. We will respond within 30 days.
+          </p>
+        </div>
+      </div>
+
+      <!-- Mail address -->
+      <div class="mail-card">
+        <div class="mail-icon">&#9993;</div>
+        <div>
+          <h2>Mail your completed form to</h2>
+          <address class="address-block">
+            SoFi Bank Disputes<br>
+            750 East Cottonwood Parkway, Suite 300<br>
+            Cottonwood Heights, UT 84121
+          </address>
+        </div>
+      </div>
+
+      <a class="btn-download" href="SoFi_Dispute_Form.pdf" download="SoFi_Dispute_Form.pdf">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download dispute form (PDF)
+      </a>
+
+      <p>
+        <a class="btn btn--secondary" href="index.html" style="margin-top:10px;">Back to overview</a>
+      </p>
+
+      <p class="note" style="margin-top:16px;">
+        <strong>Not disputing?</strong> If the information is correct and you want to resolve your balance, <a href="pay.html">pay with your debit card</a>.
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Help</a>
+      </div>
+      <p>Mock pages for product review. Not a live SoFi product.</p>
+    </div>
+  </footer>
+</body>
+</html>

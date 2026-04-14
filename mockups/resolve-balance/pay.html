@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Pay with debit card via Stripe (mock)">
+  <meta name="description" content="Enter debit card details (mock)">
   <title>Pay with debit card | SoFi</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -30,43 +30,54 @@
 
       <h1 class="page-title">Pay with your debit card</h1>
       <p class="lede">
-        Pay the full balance with a Visa or Mastercard <strong>debit</strong> card. In production, the card is tokenized and charged through <strong>Stripe</strong> (this page uses mock fields only).
+        Pay the full balance with a Visa or Mastercard <strong>debit</strong> card. Your payment of <strong>$127.43</strong> will be charged to the card below.
       </p>
 
       <section class="card" aria-labelledby="card-heading">
         <h2 id="card-heading">Debit card details</h2>
-        <p class="form-hint" style="margin-bottom: 14px;">
-          Placeholder inputs for design review. Live flows would use Stripe Elements, Payment Element, or Checkout so debit card data never touches SoFi servers.
-        </p>
         <div class="form-group">
           <label for="cardnumber">Debit card number</label>
-          <input type="text" id="cardnumber" name="cardnumber" inputmode="numeric" autocomplete="off" placeholder="4242 4242 4242 4242" maxlength="19">
+          <input type="text" id="cardnumber" name="cardnumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 1234 1234 1234" maxlength="19">
         </div>
         <div class="form-row-2">
           <div class="form-group" style="margin-bottom: 0;">
-            <label for="exp">Expiration</label>
-            <input type="text" id="exp" name="exp" placeholder="MM / YY" autocomplete="off" maxlength="7">
+            <label for="exp">Expiration date</label>
+            <input type="text" id="exp" name="exp" placeholder="MM / YY" autocomplete="cc-exp" maxlength="7">
           </div>
           <div class="form-group" style="margin-bottom: 0;">
-            <label for="cvc">CVC</label>
-            <input type="text" id="cvc" name="cvc" inputmode="numeric" placeholder="123" autocomplete="off" maxlength="4">
+            <label for="cvc">Security code</label>
+            <input type="text" id="cvc" name="cvc" inputmode="numeric" placeholder="CVC" autocomplete="cc-csc" maxlength="4">
           </div>
         </div>
-        <div class="form-group">
-          <label for="zip">Billing ZIP</label>
-          <input type="text" id="zip" name="zip" inputmode="numeric" placeholder="94107" autocomplete="postal-code" maxlength="10">
+        <div class="form-row-2" style="margin-top: 16px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="country">Country</label>
+            <select id="country" name="country" autocomplete="country">
+              <option selected>United States</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="zip">Zip code</label>
+            <input type="text" id="zip" name="zip" inputmode="numeric" placeholder="12345" autocomplete="postal-code" maxlength="10">
+          </div>
         </div>
         <div class="stripe-foot">
           <span>Secured with</span> <strong>Stripe</strong>
         </div>
       </section>
 
-      <p class="note">
-        <strong>Debit only:</strong> Credit cards are not accepted for this recovery payment in this mock. Align final rules with Compliance and Treasury.
-      </p>
+      <div class="card">
+        <div class="auth-box">
+          By clicking &ldquo;Review payment&rdquo; below, I authorize SoFi Bank, N.A. to charge my debit card in the amount of <strong>$127.43</strong> as a one-time payment toward my charged-off account ending in 4821. I understand this payment is for the full amount due to resolve my account status with Early Warning Services (EWS). I acknowledge that SoFi will report my account as healed to EWS upon confirmation of receipt of this payment, and that this transaction is final and non-refundable except as required by applicable law. Payment processing is facilitated through Stripe, Inc. and is subject to Stripe&rsquo;s terms of service. This authorization applies only to this single transaction and does not establish any future recurring charge.
+        </div>
+        <label class="checkbox-line" id="authLabel">
+          <input type="checkbox" id="authCheck" name="authorized" value="1">
+          <span>I agree to the above authorization and payment terms.</span>
+        </label>
+      </div>
 
       <p>
-        <a class="btn btn--primary" href="confirm.html" id="continueReview">Continue to review</a>
+        <a class="btn btn--primary" href="confirm.html" id="reviewPaymentBtn">Review payment</a>
       </p>
       <p>
         <a class="btn btn--secondary" href="index.html">Back to overview</a>
@@ -87,16 +98,16 @@
 
   <script>
     (function () {
-      var btn = document.getElementById("continueReview");
+      var btn = document.getElementById("reviewPaymentBtn");
       var cardInput = document.getElementById("cardnumber");
       if (!btn) return;
-      btn.addEventListener("click", function () {
+      btn.addEventListener("click", function (e) {
         var raw = (cardInput && cardInput.value) || "";
         var digits = raw.replace(/\D/g, "");
         var last4 = digits.length >= 4 ? digits.slice(-4) : "4242";
         try {
           sessionStorage.setItem("mockCardLast4", last4);
-        } catch (e) {}
+        } catch (err) {}
       });
     })();
   </script>

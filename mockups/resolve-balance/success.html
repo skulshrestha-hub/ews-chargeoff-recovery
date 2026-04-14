@@ -6,6 +6,28 @@
   <meta name="description" content="Payment successful (mock)">
   <title>Payment successful | SoFi</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .conf-id {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--black);
+      background: var(--gray-100);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: block;
+      margin-top: 6px;
+      word-break: break-all;
+    }
+    .conf-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray-500);
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -24,15 +46,40 @@
         <div class="success-icon" aria-hidden="true">&#10003;</div>
         <h2>Payment successful</h2>
         <p>
-          Stripe authorized and captured your debit card payment. We will apply it to your charged-off balance and email you when your account is fully resolved for EWS reporting.
+          Your debit card was charged <strong>$127.43</strong>. We will apply this payment to your charged-off balance and report your account as healed to Early Warning Services. You will receive an email confirmation shortly.
         </p>
       </div>
 
       <section class="card">
+        <span class="conf-label">Payment confirmation</span>
+        <span class="conf-id" id="confId">EWS-2026-XXXXXXXX</span>
+      </section>
+
+      <section class="card">
+        <h2>Payment details</h2>
+        <div class="sum-row">
+          <span class="muted">Amount charged</span>
+          <span>$127.43</span>
+        </div>
+        <div class="sum-row">
+          <span class="muted">Debit card number</span>
+          <span id="cardMaskSuccess">····4242</span>
+        </div>
+        <div class="sum-row">
+          <span class="muted">Date</span>
+          <span id="payDate"></span>
+        </div>
+        <div class="sum-row">
+          <span class="muted">Status</span>
+          <span style="color: var(--green); font-weight: 700;">Approved</span>
+        </div>
+      </section>
+
+      <section class="card">
         <h2>What happens next</h2>
         <ul class="list-plain">
-          <li>Keep your Stripe or bank receipt in case you need to reference the transaction.</li>
-          <li>If a charge fails in production, you would return to the pay step with an error from Stripe.</li>
+          <li>Keep your confirmation ID above for your records.</li>
+          <li>We will report your account as healed to EWS within 5 business days of payment clearance.</li>
           <li>Questions? Use Help or call the number on your account notice.</li>
         </ul>
       </section>
@@ -53,5 +100,26 @@
       <p>Mock pages for product review. Not a live SoFi product.</p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var rand = Math.random().toString(36).slice(2, 10).toUpperCase();
+      var confEl = document.getElementById("confId");
+      if (confEl) confEl.textContent = "EWS-2026-" + rand;
+
+      var maskEl = document.getElementById("cardMaskSuccess");
+      if (maskEl) {
+        var last4 = "4242";
+        try { last4 = sessionStorage.getItem("mockCardLast4") || last4; } catch (e) {}
+        maskEl.textContent = "····" + last4;
+      }
+
+      var dateEl = document.getElementById("payDate");
+      if (dateEl) {
+        var d = new Date();
+        dateEl.textContent = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+      }
+    })();
+  </script>
 </body>
 </html>

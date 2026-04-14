@@ -34,6 +34,7 @@
 **Slack channel:** #ews-data-contribution
 
 **Changelog:**
+- Apr 13, 2026 (v6): Payment method decision re-opened. Two finalists: debit card via Stripe (SoFi Plus model) vs. ACH push. TabaPay ruled out (Collections does not recommend extending; separate interface, harder to reconcile, trying to move away from it). Per Shahar Ronen: self-serve is the primary flow; agent phone payment does not scale at volume. Web self-serve (sofi.com) elevated to primary surface over app-only (members may have deleted app or have no install; web reaches everyone via email/SMS link). Agent role limited to directing members to web URL. Mocks updated to reflect debit card via Stripe on web. Discovery Q1 and Q2 updated.
 - Apr 9, 2026 (v5): Removed phasing. This is a single-phase delivery (MVP = final scope). All former "Phase 2" items (debit card, guest portal, agent-assisted payment, etc.) moved to Future Considerations appendix. Updated all sections throughout.
 - Apr 8, 2026 (v4): Simplified MVP to ACH push only. Deferred debit card payment and agent-assisted payment. MVP is in-app self-service with a single rail (ACH push from external bank). Updated all sections: TL;DR, In-Scope, Recommended Solution, experience flows, user stories, decisions, payment rails, scope, edge cases, and mockups.
 - Apr 8, 2026 (v3): Restructured PRD section order (TL;DR, Background, Problem Statement, Data, Scope, Current Experience, then Proposed Solution). MVP is in-app only + agent fallback. Updated all references throughout.
@@ -44,7 +45,11 @@
 
 ## TL;DR
 
-Today, members whose Money C&S accounts are charged off (57 days negative) have no way to repay or dispute. This blocks SoFi from reporting charge-off data to EWS, costing **~$100K/month** in excess fees and risking loss of the **New Account Risk** product by **Dec 31, 2026**. By **July 31, 2026**, we plan to launch a self-service payment experience in the SoFi app via ACH push from external bank (member-initiated, zero return risk), dispute intake via mail, and begin EWS reporting to satisfy EWS contractual requirements and give charged-off members a path to heal their record.
+Today, members whose Money C&S accounts are charged off (57 days negative) have no way to repay or dispute. This blocks SoFi from reporting charge-off data to EWS, costing **~$100K/month** in excess fees and risking loss of the **New Account Risk** product by **Dec 31, 2026**. By **July 31, 2026**, we plan to launch one payment rail, dispute intake via mail, and begin EWS reporting to satisfy EWS contractual requirements and provide a healing and dispute avenue to charged-off members.
+
+**Payment method (open decision as of Apr 13):** We are down to two finalists: **debit card via Stripe** (SoFi Plus precedent) vs. **ACH push from external bank**. TabaPay is ruled out. See Discovery Question 1 and Payment Method Options.
+
+**Primary surface:** **Web self-serve (sofi.com)**, not app-only. Web reaches every member via email or SMS link regardless of app install status. Agent phone payment is not the primary path and does not scale at volume (per Shahar Ronen, Apr 13).
 
 
 ---
@@ -177,9 +182,8 @@ The scope of this PRD will include a minimum set of capabilities that allows us 
 
 | # | Capability | Why it's required | What "done" looks like |
 |---|---|---|---|
-| 1 | **Balance lookup (in-app)** | Members must be able to see what they owe. | Logged-in: charged-off balance card in Banking tab showing amount owed, closure date, and EWS impact. |
-| 2 | **Payment collection: ACH push (primary)** | UDAAP: cannot report charge-offs without a repayment path. Zero return risk to SoFi. Michelle Malavolta's explicit recommendation. | In-app flow displays SoFi routing number + recovery account number. Member initiates transfer from their bank (ACH, wire, or FedNow). Member confirms payment via "Confirm My Payment" form in the app. SoFi reconciles against incoming GL. |
-| 3 | ~~**Payment collection: debit card**~~ | *Not in scope.* See Future Considerations. | N/A |
+| 1 | **Balance lookup (web + in-app)** | Members must be able to see what they owe. Web is the primary surface (works regardless of app install status). | Authenticated web page (sofi.com/banking/resolve-balance) and in-app Banking tab both show charged-off balance, closure date, and EWS impact. |
+| 2 | **Payment collection via web self-serve (rail TBD: debit card via Stripe OR ACH push)** | UDAAP: cannot report charge-offs without a repayment path. **Open decision as of Apr 13.** Two finalists: debit card via Stripe (SoFi Plus precedent, near-instant, Stripe Elements handles PCI) vs. ACH push (zero return risk, no new infra). TabaPay ruled out. | Web self-serve primary (sofi.com). Member authenticates, sees balance, pays. Works regardless of app install. |
 | 4 | **EWS healing report** | Contractual: must update EWS within 10 business days of payment. | Healed account status submitted to EWS via batch file or API within 10 business days. |
 | 5 | **Dispute intake (mail + indirect via EWS)** | FCRA: members have a statutory right to dispute furnished data. Direct disputes by mail only (FCRA-compliant). | Member can file dispute by mail. Joe Conlon's team investigates. Indirect disputes received via EWS portal. Investigation completed within 30 days. |
 | 6 | **Dispute flags in EWS data** | EWS Operating Rules: disputed records must be flagged while under investigation. For direct disputes (30 calendar day investigation window), SoFi must notify EWS at the start of the investigation (via compliance portal) so the flag appears in the next daily contribution file. If SoFi notifies at the start, EWS suppresses the record on day 30 if no resolution is received; if SoFi notifies upon completion, EWS suppresses/updates immediately. For indirect disputes, EWS opens the case and adds the banner within 5 business days. If no resolution is provided within 30 days of the flag, EWS automatically removes the reporting. | "Consumer Disputes Debt" indicator set in contribution file during investigation. Removed on resolution. |
@@ -189,7 +193,7 @@ The scope of this PRD will include a minimum set of capabilities that allows us 
 
 ### What is NOT included
 
-Debit card payments, agent-assisted payment, partial payments, payment plans, credit card payments, ACH pull (SoFi-originated), self-service dispute forms, proactive outreach, account revival, collections, logged-out guest portal (sofi.com/pay), unique account numbers per member, or AI-assisted reconciliation. See Future Considerations.
+Agent-assisted payment processing, partial payments, payment plans, credit card payments, ACH pull (SoFi-originated), self-service dispute forms, proactive outreach, account revival, collections, unique account numbers per member, or AI-assisted reconciliation. See Future Considerations. Note: web self-serve (sofi.com) and debit card via Stripe are now IN scope as the primary payment path (rail TBD).
 
 ### Who is affected
 
@@ -556,7 +560,7 @@ _Source: "FCRA Dispute Process - 2025.pdf" and "EWS Data Contributions Data disp
 
 ---
 
-## Recommended Solution: Authenticated In-App Pay Page (ACH Push)
+## Recommended Solution: Web Self-Serve Pay Page (Payment Rail TBD)
 
 ### The problem in one sentence
 
@@ -564,7 +568,7 @@ SoFi needs to collect payments from members whose accounts are closed and cannot
 
 ### The solution: authenticated in-app payment experience
 
-The payment experience lives in the SoFi app with a single payment rail: ACH push from external bank (member-initiated). The member logs in, sees their charged-off balance in the Banking tab, and follows the bank transfer flow. Because the session is tied to the member's account, **payment context is automatically solved.**
+The payment experience lives on **sofi.com** (web self-serve, authenticated). Per Shahar Ronen (Apr 13), web is the primary surface because it reaches members regardless of app install status and does not rely on phone/agent volume. The member authenticates on the web, sees their charged-off balance, and completes payment. **Payment rail is an open decision:** debit card via Stripe or ACH push from external bank. Payment context is automatically solved because the member is authenticated.
 
 ```
                     ┌─────────────────────────────┐
@@ -627,7 +631,7 @@ The payment experience lives in the SoFi app with a single payment rail: ACH pus
                     └──────────────────────────────┘
 ```
 
-### Why ACH push only?
+### Why self-serve web, and which rail? (Apr 13 update)
 
 | Factor | ACH Push from External Bank |
 |---|---|
@@ -1745,9 +1749,12 @@ This appendix consolidates all payment rail options discussed across working ses
 
 ### Recommendation (updated Apr 9)
 
-**What ships (July 31):** ACH push from external bank as the sole payment rail via the authenticated in-app experience. Member sees SoFi routing/account info, sends funds from their bank, confirms via "Confirm My Payment." Zero return risk. No debit card or agent payment processing.
+**Decision pending (Apr 13):** Two finalists under active evaluation:
 
-**Not in scope but documented for reference:** Debit card (TabaPay/Stripe), guest portal (sofi.com/pay), PayNearMe. See Future Considerations.
+1. **Debit card via Stripe** on web (sofi.com) as primary surface. Near-instant, member-friendly, SoFi Plus precedent. Stripe Elements handles PCI. ~2.9% + $0.30 per transaction.
+2. **ACH push from external bank** on web (sofi.com) as primary surface. Zero return risk. No new payment infra. Member confirms via form for GL matching. 1 to 3 business days.
+
+**What is NOT in scope regardless of rail choice:** Agent-assisted payment processing, TabaPay, ACH pull, check, credit card, PayNearMe. See Future Considerations.
 
 ---
 

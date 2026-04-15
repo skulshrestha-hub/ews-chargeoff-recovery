@@ -4,9 +4,96 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Dispute information on your account (mock)">
-  <title>Dispute information | SoFi</title>
+  <title>Dispute this information | SoFi</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    .dispute-type-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .dispute-tab {
+      flex: 1;
+      min-width: 140px;
+      padding: 12px 14px;
+      background: var(--white);
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--gray-700);
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .dispute-tab.active {
+      border-color: var(--sofi-blue);
+      color: var(--sofi-blue);
+      background: var(--sofi-blue-light);
+    }
+    .dispute-tab .tab-sub {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--gray-500);
+      margin-top: 3px;
+    }
+    .dispute-tab.active .tab-sub {
+      color: var(--sofi-blue-dark);
+    }
+
+    .dispute-panel { display: none; }
+    .dispute-panel.active { display: block; }
+
+    .timeline-row {
+      display: flex;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 0.875rem;
+      line-height: 1.45;
+    }
+    .timeline-row:last-child { border-bottom: none; }
+    .timeline-badge {
+      flex-shrink: 0;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      height: fit-content;
+      margin-top: 1px;
+    }
+    .badge-blue { background: var(--sofi-blue-light); color: var(--sofi-blue-dark); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); }
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+
+    .req-list {
+      margin: 0;
+      padding-left: 1.25rem;
+      font-size: 0.875rem;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+    .req-list li { margin-bottom: 6px; }
+    .req-list li:last-child { margin-bottom: 0; }
+
+    .type-badge {
+      display: inline-flex;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .type-badge.direct { background: var(--sofi-blue-light); color: var(--sofi-blue-dark); }
+    .type-badge.indirect { background: var(--amber-bg); color: var(--amber); }
+    .type-badge.idtheft { background: var(--red-bg); color: var(--red); }
+
     .form-preview {
       background: var(--white);
       border-radius: 16px;
@@ -23,218 +110,81 @@
       gap: 12px;
     }
     .pdf-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: #E53935;
-      color: #fff;
-      font-size: 0.625rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      letter-spacing: 0.02em;
+      width: 36px; height: 36px; border-radius: 8px; background: #E53935; color: #fff;
+      font-size: 0.625rem; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
     }
-    .form-preview__title {
-      font-size: 0.9375rem;
-      font-weight: 700;
-      color: var(--black);
-    }
-    .form-preview__subtitle {
-      font-size: 0.75rem;
-      color: var(--gray-500);
-      margin-top: 2px;
-    }
-
+    .form-preview__title { font-size: 0.9375rem; font-weight: 700; color: var(--black); }
+    .form-preview__subtitle { font-size: 0.75rem; color: var(--gray-500); margin-top: 2px; }
     .form-section {
       padding: 18px 20px;
       border-bottom: 1px solid var(--gray-100);
     }
-    .form-section:last-child {
-      border-bottom: none;
-    }
+    .form-section:last-child { border-bottom: none; }
     .form-section__label {
-      font-size: 0.6875rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--sofi-blue);
-      margin-bottom: 10px;
+      font-size: 0.6875rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--sofi-blue); margin-bottom: 10px;
     }
-    .field-row {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-    .field-row:last-child {
-      margin-bottom: 0;
-    }
-    .field-item {
-      flex: 1;
-      min-width: 120px;
-    }
-    .field-item label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--gray-700);
-      margin-bottom: 4px;
-    }
+    .field-row { display: flex; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+    .field-row:last-child { margin-bottom: 0; }
+    .field-item { flex: 1; min-width: 120px; }
+    .field-item label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-700); margin-bottom: 4px; }
     .field-item .field-line {
-      height: 34px;
-      border-bottom: 1.5px solid var(--gray-200);
-      background: var(--gray-100);
-      border-radius: 6px 6px 0 0;
-      padding: 0 10px;
-      display: flex;
-      align-items: center;
-      font-size: 0.8125rem;
-      color: var(--gray-400);
+      height: 34px; border-bottom: 1.5px solid var(--gray-200); background: var(--gray-100);
+      border-radius: 6px 6px 0 0; padding: 0 10px; display: flex; align-items: center;
+      font-size: 0.8125rem; color: var(--gray-400);
     }
     .field-item.full { flex: 0 0 100%; }
-
-    .checkbox-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .checkbox-list label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.875rem;
-      color: var(--gray-900);
-      cursor: default;
-    }
-    .checkbox-list input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
+    .checkbox-list { display: flex; flex-direction: column; gap: 8px; }
+    .checkbox-list label { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; color: var(--gray-900); cursor: default; }
+    .checkbox-list input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; }
     .explain-field {
-      width: 100%;
-      min-height: 140px;
-      border: 1.5px solid var(--gray-200);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.875rem;
-      color: var(--gray-400);
-      font-family: inherit;
-      resize: none;
-      margin-top: 10px;
-      background: var(--gray-100);
+      width: 100%; min-height: 140px; border: 1.5px solid var(--gray-200);
+      border-radius: 8px; padding: 10px 12px; font-size: 0.875rem; color: var(--gray-400);
+      font-family: inherit; resize: none; margin-top: 10px; background: var(--gray-100);
     }
-
-    .sig-row {
-      display: flex;
-      gap: 16px;
+    .char-note {
+      font-size: 0.6875rem; color: var(--gray-500); margin-top: 4px; line-height: 1.4;
     }
+    .sig-row { display: flex; gap: 16px; }
     .sig-row .field-item:first-child { flex: 2; }
     .sig-row .field-item:last-child { flex: 1; }
 
     .mail-card {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      background: var(--white);
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      margin-bottom: 16px;
+      display: flex; gap: 14px; align-items: flex-start; background: var(--white);
+      border-radius: 16px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px;
     }
     .mail-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--sofi-blue-light);
-      color: var(--sofi-blue);
-      font-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      width: 40px; height: 40px; border-radius: 50%; background: var(--sofi-blue-light);
+      color: var(--sofi-blue); font-size: 1.25rem; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
     }
-    .mail-card h2 {
-      font-size: 0.9375rem;
-      font-weight: 700;
-      margin: 0 0 4px;
-    }
-    .mail-card p {
-      font-size: 0.8125rem;
-      color: var(--gray-700);
-      line-height: 1.5;
-      margin: 0;
-    }
+    .mail-card h2 { font-size: 0.9375rem; font-weight: 700; margin: 0 0 4px; }
+    .mail-card p { font-size: 0.8125rem; color: var(--gray-700); line-height: 1.5; margin: 0; }
     .address-block {
-      font-style: normal;
-      font-size: 0.875rem;
-      font-weight: 600;
-      line-height: 1.6;
-      color: var(--black);
-      background: var(--gray-100);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-top: 10px;
-      display: block;
+      font-style: normal; font-size: 0.875rem; font-weight: 600; line-height: 1.6;
+      color: var(--black); background: var(--gray-100); border-radius: 10px;
+      padding: 12px 14px; margin-top: 10px; display: block;
     }
-
-    .steps-list {
-      counter-reset: steps;
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .btn-download {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+      padding: 15px 20px; font-size: 1rem; font-weight: 700; font-family: inherit;
+      background: var(--sofi-blue); color: #fff; border: none; border-radius: 28px;
+      text-decoration: none; cursor: pointer;
     }
+    .btn-download:hover { background: var(--sofi-blue-dark); text-decoration: none; }
+    .btn-download svg { flex-shrink: 0; }
+    .steps-list { counter-reset: steps; list-style: none; padding: 0; margin: 0; }
     .steps-list li {
-      counter-increment: steps;
-      display: flex;
-      gap: 12px;
-      padding: 10px 0;
-      font-size: 0.875rem;
-      color: var(--gray-700);
-      line-height: 1.45;
+      counter-increment: steps; display: flex; gap: 12px; padding: 10px 0;
+      font-size: 0.875rem; color: var(--gray-700); line-height: 1.45;
       border-bottom: 1px solid var(--gray-100);
     }
     .steps-list li:last-child { border-bottom: none; }
     .steps-list li::before {
-      content: counter(steps);
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--sofi-blue-light);
-      color: var(--sofi-blue);
-      font-size: 0.75rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .btn-download {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 15px 20px;
-      font-size: 1rem;
-      font-weight: 700;
-      font-family: inherit;
-      background: var(--sofi-blue);
-      color: #fff;
-      border: none;
-      border-radius: 28px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .btn-download:hover {
-      background: var(--sofi-blue-dark);
-      text-decoration: none;
-    }
-    .btn-download svg {
-      flex-shrink: 0;
+      content: counter(steps); width: 24px; height: 24px; border-radius: 50%;
+      background: var(--sofi-blue-light); color: var(--sofi-blue); font-size: 0.75rem;
+      font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
   </style>
 </head>
@@ -253,149 +203,276 @@
     <div class="content">
       <h1 class="page-title">Dispute this information</h1>
       <p class="lede">
-        If you believe the information on this account is inaccurate, you have the right to dispute it. Download the form below, fill it out, and mail it to SoFi. We will respond within 30 days.
+        You have the right to dispute any data SoFi has reported to Early Warning Services (EWS) that you believe is inaccurate. Disputes can be submitted in two ways. Select one below.
       </p>
 
-      <div class="card" style="margin-bottom: 16px;">
-        <ol class="steps-list">
-          <li><a href="SoFi_Dispute_Form.pdf" download="SoFi_Dispute_Form.pdf" style="color:var(--sofi-blue);font-weight:700;">Download the dispute form (PDF)</a>.</li>
-          <li>Fill it out on your device or print and complete by hand.</li>
-          <li>Mail the completed form to the address on the form.</li>
-          <li>Keep a copy for your records. We will respond within 30 days.</li>
-        </ol>
+      <!-- Type tabs -->
+      <div class="dispute-type-tabs" role="tablist" aria-label="Dispute type">
+        <button class="dispute-tab active" role="tab" aria-selected="true" aria-controls="panel-direct" onclick="switchTab('direct', this)">
+          Direct dispute
+          <div class="tab-sub">Mail to SoFi directly</div>
+        </button>
+        <button class="dispute-tab" role="tab" aria-selected="false" aria-controls="panel-indirect" onclick="switchTab('indirect', this)">
+          Indirect dispute
+          <div class="tab-sub">Submit through EWS</div>
+        </button>
+        <button class="dispute-tab" role="tab" aria-selected="false" aria-controls="panel-idtheft" onclick="switchTab('idtheft', this)">
+          Identity theft
+          <div class="tab-sub">Not your account</div>
+        </button>
       </div>
 
-      <!-- Form preview -->
-      <div class="form-preview">
-        <div class="form-preview__header">
-          <div class="pdf-icon">PDF</div>
+      <!-- ===== DIRECT ===== -->
+      <div id="panel-direct" class="dispute-panel active" role="tabpanel">
+        <span class="type-badge direct">Direct dispute to SoFi</span>
+
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:12px;">How to file</h2>
+          <ol class="steps-list">
+            <li><a href="SoFi_Dispute_Form.pdf" download="SoFi_Dispute_Form.pdf" style="color:var(--sofi-blue);font-weight:700;">Download the dispute form (PDF)</a>.</li>
+            <li>Fill in all required fields. Your written statement must be <strong>700 characters or fewer</strong>. If longer, SoFi will contact you for a shorter version before processing.</li>
+            <li>Mail the completed form to the address below. Keep a copy for your records.</li>
+            <li>SoFi will notify Early Warning Services and suppress your record while we investigate.</li>
+            <li>You will receive our written response within <strong>5 days of review completion</strong>.</li>
+          </ol>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:10px;">What to include</h2>
+          <ul class="req-list">
+            <li>Your full name</li>
+            <li>Your Social Security Number</li>
+            <li>Account and routing number for the record being disputed</li>
+            <li>A written statement describing the data you are disputing (700 characters max)</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:10px;">Review timelines</h2>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-blue">30 days</span>
+            <span>Standard review deadline from date of receipt.</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-blue">21 days</span>
+            <span>For Maine residents.</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-amber">45 days</span>
+            <span>If you provide new information during the investigation, the review window extends to 45 days.</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-green">5 days</span>
+            <span>SoFi will send you a written response within 5 days of completing the review, including outcome details and your rights (including the right to submit a rebuttal statement if your dispute is not upheld).</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-red">5 bus. days</span>
+            <span>If your dispute is determined to be frivolous or irrelevant (e.g. duplicate submission or insufficient information), SoFi will notify you within 5 business days with the reason and what additional information is needed.</span>
+          </div>
+        </div>
+
+        <!-- Form preview -->
+        <div class="form-preview">
+          <div class="form-preview__header">
+            <div class="pdf-icon">PDF</div>
+            <div>
+              <div class="form-preview__title">Dispute a Problem with Your Account</div>
+              <div class="form-preview__subtitle">SoFi Bank &middot; Fillable PDF &middot; 1 page</div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section__label">1. Your information</div>
+            <div class="field-row">
+              <div class="field-item full"><label>Full name</label><div class="field-line">Alex Martinez</div></div>
+            </div>
+            <div class="field-row">
+              <div class="field-item"><label>Date of birth</label><div class="field-line"></div></div>
+              <div class="field-item"><label>Last 4 SSN</label><div class="field-line"></div></div>
+            </div>
+            <div class="field-row">
+              <div class="field-item full"><label>Address</label><div class="field-line"></div></div>
+            </div>
+            <div class="field-row">
+              <div class="field-item"><label>Phone</label><div class="field-line"></div></div>
+              <div class="field-item"><label>Email</label><div class="field-line"></div></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section__label">2. Account details</div>
+            <div class="field-row">
+              <div class="field-item full"><label>Closed account number (last 4)</label><div class="field-line">4821</div></div>
+            </div>
+            <div class="field-row">
+              <div class="field-item"><label>Full balance shown</label><div class="field-line">$127.43</div></div>
+              <div class="field-item"><label>Charged-off amount</label><div class="field-line">$127.43</div></div>
+            </div>
+            <div class="field-row">
+              <div class="field-item full"><label>When did the issue happen? (optional)</label><div class="field-line"></div></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section__label">3. What is the issue?</div>
+            <div class="checkbox-list">
+              <label><input type="checkbox" disabled> Account does not belong to me</label>
+              <label><input type="checkbox" disabled> Personal information is incorrect</label>
+              <label><input type="checkbox" disabled> Balance or amount is incorrect</label>
+              <label><input type="checkbox" disabled> I already paid or resolved this</label>
+              <label><input type="checkbox" disabled> Account status is incorrect</label>
+              <label><input type="checkbox" disabled> Fraud or identity theft</label>
+              <label><input type="checkbox" disabled> Something else</label>
+            </div>
+            <textarea class="explain-field" disabled placeholder="Explain what is wrong (required)"></textarea>
+            <p class="char-note">Maximum 700 characters. If your statement is longer, SoFi will contact you to shorten it before the dispute can be submitted to EWS.</p>
+          </div>
+          <div class="form-section">
+            <div class="sig-row">
+              <div class="field-item"><label>Signature</label><div class="field-line"></div></div>
+              <div class="field-item"><label>Date</label><div class="field-line"></div></div>
+            </div>
+            <p style="font-size:0.75rem;color:var(--gray-500);margin-top:12px;line-height:1.5;">
+              You have the right to dispute inaccurate information. We will respond within 30 days.
+            </p>
+          </div>
+        </div>
+
+        <div class="mail-card">
+          <div class="mail-icon">&#9993;</div>
           <div>
-            <div class="form-preview__title">Dispute a Problem with Your Account</div>
-            <div class="form-preview__subtitle">SoFi Bank · Fillable PDF · 1 page</div>
+            <h2>Mail your completed form to</h2>
+            <p>Use this address only for EWS data disputes. Do not use for general correspondence.</p>
+            <address class="address-block">
+              SoFi Bank &mdash; EWS Data Disputes<br>
+              750 East Cottonwood Parkway, Suite 300<br>
+              Cottonwood Heights, UT 84121
+            </address>
           </div>
         </div>
 
-        <!-- Section 1 -->
-        <div class="form-section">
-          <div class="form-section__label">1. Your information</div>
-          <div class="field-row">
-            <div class="field-item full">
-              <label>Full name</label>
-              <div class="field-line">Alex Martinez</div>
-            </div>
+        <a class="btn-download" href="SoFi_Dispute_Form.pdf" download="SoFi_Dispute_Form.pdf">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download dispute form (PDF)
+        </a>
+      </div>
+
+      <!-- ===== INDIRECT ===== -->
+      <div id="panel-indirect" class="dispute-panel" role="tabpanel">
+        <span class="type-badge indirect">Indirect dispute via EWS</span>
+
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:12px;">How indirect disputes work</h2>
+          <p style="font-size:0.9375rem;color:var(--gray-700);margin-bottom:14px;line-height:1.55;">
+            If you submitted a dispute directly to Early Warning Services instead of SoFi, EWS will forward it to us through their compliance portal and secure email. You do not need to take any additional action once you have filed with EWS.
+          </p>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-blue">5 bus. days</span>
+            <span>EWS sends SoFi all documentation from you via secure email within 5 business days of your submission.</span>
           </div>
-          <div class="field-row">
-            <div class="field-item">
-              <label>Date of birth</label>
-              <div class="field-line"></div>
-            </div>
-            <div class="field-item">
-              <label>Last 4 SSN</label>
-              <div class="field-line"></div>
-            </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-blue">30 days</span>
+            <span>SoFi must complete its investigation and provide a final result back to EWS within 30 calendar days from the date you submitted the dispute. EWS will include a due date in its notification to SoFi.</span>
           </div>
-          <div class="field-row">
-            <div class="field-item full">
-              <label>Address</label>
-              <div class="field-line"></div>
-            </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-amber">21 days</span>
+            <span>For Maine residents, the deadline is 21 calendar days.</span>
           </div>
-          <div class="field-row">
-            <div class="field-item">
-              <label>Phone</label>
-              <div class="field-line"></div>
-            </div>
-            <div class="field-item">
-              <label>Email</label>
-              <div class="field-line"></div>
-            </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-green">5 days</span>
+            <span>You will receive a written response within 5 days of SoFi completing the review, including outcome and your rights.</span>
           </div>
         </div>
 
-        <!-- Section 2 -->
-        <div class="form-section">
-          <div class="form-section__label">2. Account details</div>
-          <div class="field-row">
-            <div class="field-item full">
-              <label>Closed account number (last 4)</label>
-              <div class="field-line">4821</div>
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="field-item">
-              <label>Full balance shown</label>
-              <div class="field-line">$127.43</div>
-            </div>
-            <div class="field-item">
-              <label>Charged-off amount</label>
-              <div class="field-line">$127.43</div>
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="field-item full">
-              <label>When did the issue happen? (optional)</label>
-              <div class="field-line"></div>
-            </div>
-          </div>
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:10px;">What SoFi does internally</h2>
+          <ul class="req-list">
+            <li>Designated SoFi representatives are registered on the EWS compliance portal to review and respond to disputes.</li>
+            <li>SoFi representatives are added to the EWS secure email distribution list for notifications.</li>
+            <li>SoFi will conduct a reasonable investigation and respond via the compliance portal or secure email.</li>
+            <li>If SoFi cannot validate the data, the record will be removed.</li>
+            <li>If SoFi does not respond by the due date, EWS will automatically suppress the record.</li>
+          </ul>
         </div>
 
-        <!-- Section 3 -->
-        <div class="form-section">
-          <div class="form-section__label">3. What is the issue?</div>
-          <div class="checkbox-list">
-            <label><input type="checkbox" disabled> Account does not belong to me</label>
-            <label><input type="checkbox" disabled> Personal information is incorrect</label>
-            <label><input type="checkbox" disabled> Balance or amount is incorrect</label>
-            <label><input type="checkbox" disabled> I already paid or resolved this</label>
-            <label><input type="checkbox" disabled> Account status is incorrect</label>
-            <label><input type="checkbox" disabled> Fraud or identity theft</label>
-            <label><input type="checkbox" disabled> Something else</label>
-          </div>
-          <textarea class="explain-field" disabled placeholder="Explain what is wrong (required)"></textarea>
-        </div>
+        <p class="note">
+          <strong>To file with EWS directly:</strong> Contact Early Warning Services consumer services. You can reach them at the number or address shown on any adverse action notice you received. SoFi will be notified and respond within the required window.
+        </p>
+      </div>
 
-        <!-- Signature -->
-        <div class="form-section">
-          <div class="sig-row">
-            <div class="field-item">
-              <label>Signature</label>
-              <div class="field-line"></div>
-            </div>
-            <div class="field-item">
-              <label>Date</label>
-              <div class="field-line"></div>
-            </div>
-          </div>
-          <p style="font-size:0.75rem;color:var(--gray-500);margin-top:12px;line-height:1.5;">
-            You have the right to dispute inaccurate information. We will respond within 30 days.
+      <!-- ===== IDENTITY THEFT ===== -->
+      <div id="panel-idtheft" class="dispute-panel" role="tabpanel">
+        <span class="type-badge idtheft">Identity theft dispute</span>
+
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:12px;">When to use this</h2>
+          <p style="font-size:0.9375rem;color:var(--gray-700);line-height:1.55;">
+            Use this dispute type if you believe someone opened this account or incurred charges without your knowledge or consent during the disputed time period.
           </p>
         </div>
-      </div>
 
-      <!-- Mail address -->
-      <div class="mail-card">
-        <div class="mail-icon">&#9993;</div>
-        <div>
-          <h2>Mail your completed form to</h2>
-          <address class="address-block">
-            SoFi Bank Disputes<br>
-            750 East Cottonwood Parkway, Suite 300<br>
-            Cottonwood Heights, UT 84121
-          </address>
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:10px;">What to include</h2>
+          <ul class="req-list">
+            <li>A statement alleging identity theft during the time frame of the disputed activity.</li>
+            <li>A statement that the record(s), transaction(s), or inquiry(s) are not yours.</li>
+            <li>A copy of an accepted identity theft report. Accepted forms include:
+              <ul style="margin-top:6px;padding-left:1rem;">
+                <li>FTC Identity Theft affidavit (identitytheft.gov)</li>
+                <li>Police department report</li>
+                <li>Identity theft report filed with a state Attorney General</li>
+                <li>US Postal Inspection Service report</li>
+              </ul>
+            </li>
+          </ul>
         </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:10px;">What happens after you file</h2>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-red">Step 1</span>
+            <span>SoFi places an ID theft flag on the record and stops furnishing related information to EWS while the investigation is open.</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-blue">Step 2</span>
+            <span>If EWS determines the dispute qualifies, they place a block on the applicable record in their system and submit an investigation request to SoFi.</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-green">If upheld</span>
+            <span>SoFi agrees the dispute is valid. The EWS block remains in place and the record stays suppressed.</span>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-badge badge-amber">If denied</span>
+            <span>SoFi determines the reported information is accurate, provides supporting documentation to EWS. EWS unblocks the record and notifies you that it was reinserted.</span>
+          </div>
+        </div>
+
+        <div class="mail-card">
+          <div class="mail-icon">&#9993;</div>
+          <div>
+            <h2>Submit identity theft disputes by mail</h2>
+            <p>Include your identity theft report and all required documentation.</p>
+            <address class="address-block">
+              SoFi Bank &mdash; EWS Data Disputes<br>
+              750 East Cottonwood Parkway, Suite 300<br>
+              Cottonwood Heights, UT 84121
+            </address>
+          </div>
+        </div>
+
+        <a class="btn-download" href="SoFi_Dispute_Form.pdf" download="SoFi_Dispute_Form.pdf">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download dispute form (PDF)
+        </a>
       </div>
 
-      <a class="btn-download" href="SoFi_Dispute_Form.pdf" download="SoFi_Dispute_Form.pdf">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Download dispute form (PDF)
-      </a>
-
-      <p>
-        <a class="btn btn--secondary" href="index.html" style="margin-top:10px;">Back to overview</a>
+      <p style="margin-top: 16px;">
+        <a class="btn btn--secondary" href="index.html">Back to overview</a>
       </p>
 
       <p class="note" style="margin-top:16px;">
@@ -414,5 +491,20 @@
       <p>Mock pages for product review. Not a live SoFi product.</p>
     </div>
   </footer>
+
+  <script>
+    function switchTab(type, el) {
+      document.querySelectorAll('.dispute-tab').forEach(function(t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.dispute-panel').forEach(function(p) {
+        p.classList.remove('active');
+      });
+      el.classList.add('active');
+      el.setAttribute('aria-selected', 'true');
+      document.getElementById('panel-' + type).classList.add('active');
+    }
+  </script>
 </body>
 </html>

@@ -212,10 +212,6 @@
           Direct dispute
           <div class="tab-sub">Mail to SoFi directly</div>
         </button>
-        <button class="dispute-tab" role="tab" aria-selected="false" aria-controls="panel-indirect" onclick="switchTab('indirect', this)">
-          Indirect dispute
-          <div class="tab-sub">Submit through EWS</div>
-        </button>
         <button class="dispute-tab" role="tab" aria-selected="false" aria-controls="panel-idtheft" onclick="switchTab('idtheft', this)">
           Identity theft
           <div class="tab-sub">Not your account</div>
@@ -230,7 +226,7 @@
           <h2 style="margin-bottom:12px;">How to file</h2>
           <ol class="steps-list">
             <li><a href="SoFi_Dispute_Form.pdf" download="SoFi_Dispute_Form.pdf" style="color:var(--sofi-blue);font-weight:700;">Download the dispute form (PDF)</a>.</li>
-            <li>Fill in all required fields. Your written statement must be <strong>700 characters or fewer</strong>. If longer, SoFi will contact you for a shorter version before processing.</li>
+            <li>Fill in all required fields.</li>
             <li>Mail the completed form to the address below. Keep a copy for your records.</li>
             <li>SoFi will notify Early Warning Services and suppress your record while we investigate.</li>
             <li>You will receive our written response within <strong>5 days of review completion</strong>.</li>
@@ -250,23 +246,23 @@
         <div class="card" style="margin-bottom:16px;">
           <h2 style="margin-bottom:10px;">Review timelines</h2>
           <div class="timeline-row">
-            <span class="timeline-badge badge-blue">30 days</span>
+            <span class="timeline-badge badge-blue">30 calendar days</span>
             <span>Standard review deadline from date of receipt.</span>
           </div>
           <div class="timeline-row">
-            <span class="timeline-badge badge-blue">21 days</span>
+            <span class="timeline-badge badge-blue">21 calendar days</span>
             <span>For Maine residents.</span>
           </div>
           <div class="timeline-row">
-            <span class="timeline-badge badge-amber">45 days</span>
-            <span>If you provide new information during the investigation, the review window extends to 45 days.</span>
+            <span class="timeline-badge badge-amber">45 calendar days</span>
+            <span>If you provide new information during the investigation, the review window extends to 45 calendar days.</span>
           </div>
           <div class="timeline-row">
-            <span class="timeline-badge badge-green">5 days</span>
-            <span>SoFi will send you a written response within 5 days of completing the review, including outcome details and your rights (including the right to submit a rebuttal statement if your dispute is not upheld).</span>
+            <span class="timeline-badge badge-green">5 calendar days</span>
+            <span>SoFi will send you a written response within 5 calendar days of completing the review, including outcome details and your rights (including the right to submit a rebuttal statement if your dispute is not upheld).</span>
           </div>
           <div class="timeline-row">
-            <span class="timeline-badge badge-red">5 bus. days</span>
+            <span class="timeline-badge badge-red">5 business days</span>
             <span>If your dispute is determined to be frivolous or irrelevant (e.g. duplicate submission or insufficient information), SoFi will notify you within 5 business days with the reason and what additional information is needed.</span>
           </div>
         </div>
@@ -322,7 +318,6 @@
               <label><input type="checkbox" disabled> Something else</label>
             </div>
             <textarea class="explain-field" disabled placeholder="Explain what is wrong (required)"></textarea>
-            <p class="char-note">Maximum 700 characters. If your statement is longer, SoFi will contact you to shorten it before the dispute can be submitted to EWS.</p>
           </div>
           <div class="form-section">
             <div class="sig-row">
@@ -356,49 +351,6 @@
           </svg>
           Download dispute form (PDF)
         </a>
-      </div>
-
-      <!-- ===== INDIRECT ===== -->
-      <div id="panel-indirect" class="dispute-panel" role="tabpanel">
-        <span class="type-badge indirect">Indirect dispute via EWS</span>
-
-        <div class="card" style="margin-bottom:16px;">
-          <h2 style="margin-bottom:12px;">How indirect disputes work</h2>
-          <p style="font-size:0.9375rem;color:var(--gray-700);margin-bottom:14px;line-height:1.55;">
-            If you submitted a dispute directly to Early Warning Services instead of SoFi, EWS will forward it to us through their compliance portal and secure email. You do not need to take any additional action once you have filed with EWS.
-          </p>
-          <div class="timeline-row">
-            <span class="timeline-badge badge-blue">5 bus. days</span>
-            <span>EWS sends SoFi all documentation from you via secure email within 5 business days of your submission.</span>
-          </div>
-          <div class="timeline-row">
-            <span class="timeline-badge badge-blue">30 days</span>
-            <span>SoFi must complete its investigation and provide a final result back to EWS within 30 calendar days from the date you submitted the dispute. EWS will include a due date in its notification to SoFi.</span>
-          </div>
-          <div class="timeline-row">
-            <span class="timeline-badge badge-amber">21 days</span>
-            <span>For Maine residents, the deadline is 21 calendar days.</span>
-          </div>
-          <div class="timeline-row">
-            <span class="timeline-badge badge-green">5 days</span>
-            <span>You will receive a written response within 5 days of SoFi completing the review, including outcome and your rights.</span>
-          </div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px;">
-          <h2 style="margin-bottom:10px;">What SoFi does internally</h2>
-          <ul class="req-list">
-            <li>Designated SoFi representatives are registered on the EWS compliance portal to review and respond to disputes.</li>
-            <li>SoFi representatives are added to the EWS secure email distribution list for notifications.</li>
-            <li>SoFi will conduct a reasonable investigation and respond via the compliance portal or secure email.</li>
-            <li>If SoFi cannot validate the data, the record will be removed.</li>
-            <li>If SoFi does not respond by the due date, EWS will automatically suppress the record.</li>
-          </ul>
-        </div>
-
-        <p class="note">
-          <strong>To file with EWS directly:</strong> Contact Early Warning Services consumer services. You can reach them at the number or address shown on any adverse action notice you received. SoFi will be notified and respond within the required window.
-        </p>
       </div>
 
       <!-- ===== IDENTITY THEFT ===== -->

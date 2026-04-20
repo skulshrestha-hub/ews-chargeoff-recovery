@@ -283,10 +283,14 @@ main {
   font-size: 0.8125rem;
   color: var(--gray-700);
   line-height: 1.6;
-  max-height: 140px;
+  max-height: min(55vh, 420px);
   overflow-y: auto;
   margin-bottom: 14px;
   border: 1px solid var(--gray-200);
+}
+
+.auth-box p:last-child {
+  margin-bottom: 0;
 }
 
 .note strong {

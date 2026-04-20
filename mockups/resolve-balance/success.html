@@ -46,13 +46,13 @@
         <div class="success-icon" aria-hidden="true">&#10003;</div>
         <h2>Payment successful</h2>
         <p>
-          Your debit card was charged <strong>$127.43</strong>. We will apply this payment to your charged-off balance and report your account as healed to Early Warning Services. You will receive an email confirmation shortly.
+          Your debit card was charged <strong>$127.43</strong>. We will apply this payment to your charged-off balance. You will receive an email confirmation shortly.
         </p>
       </div>
 
       <section class="card">
         <span class="conf-label">Payment confirmation</span>
-        <span class="conf-id" id="confId">EWS-2026-XXXXXXXX</span>
+        <span class="conf-id" id="confId">PAY-2026-XXXXXXXX</span>
       </section>
 
       <section class="card">
@@ -79,7 +79,8 @@
         <h2>What happens next</h2>
         <ul class="list-plain">
           <li>Keep your confirmation ID above for your records.</li>
-          <li>We will report your account as healed to EWS within 5 business days of payment clearance.</li>
+          <li>After your payment clears, we will update reporting to applicable consumer reporting agencies where applicable.</li>
+          <li>This closed account cannot be reopened. A new SoFi account is not guaranteed and is subject to our policies and your deposit account agreement.</li>
           <li>Questions? Use Help or call the number on your account notice.</li>
         </ul>
       </section>
@@ -105,7 +106,7 @@
     (function () {
       var rand = Math.random().toString(36).slice(2, 10).toUpperCase();
       var confEl = document.getElementById("confId");
-      if (confEl) confEl.textContent = "EWS-2026-" + rand;
+      if (confEl) confEl.textContent = "PAY-2026-" + rand;
 
       var maskEl = document.getElementById("cardMaskSuccess");
       if (maskEl) {
